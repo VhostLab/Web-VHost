@@ -1,0 +1,44 @@
+---
+export interface Props {
+  titulo: string;
+  descripcion: string;
+  imagen: string;
+  alt?: string;
+  url: string;
+  boton?: string;
+}
+const {
+  titulo,
+  descripcion,
+  imagen,
+  alt = "",
+  url,
+  boton = "Ver tienda"
+} = Astro.props as Props;
+---
+
+<div class="w-full max-w-md h-[28rem] bg-[#111111] rounded-2xl shadow-xl overflow-hidden flex flex-col transition-colors duration-300 mx-auto">
+  {/* Imagen en la mitad superior */}
+  <div class="h-1/2 w-full flex items-center justify-center bg-muted overflow-hidden">
+    <img 
+      src={imagen}
+      alt={alt || titulo}
+      class="object-cover w-full h-full"
+      draggable="false"
+      loading="lazy"
+    />
+  </div>
+  {/* Nombre, descripción y botón en la parte inferior */}
+  <div class="h-1/2 flex flex-col justify-between p-7">
+    <div>
+      <h3 class="text-2xl font-poppins font-bold mb-2 text-white">{titulo}</h3>
+      <p class="text-gray-300 text-sm mb-4 font-karla">{descripcion}</p>
+    </div>
+    <a 
+      href={url}
+      class="block mt-auto px-6 py-2 rounded-full bg-secondary text-white font-semibold font-poppins text-center shadow hover:bg-[#ffb000] transition-colors focus:outline-none focus:ring-2 focus:ring-secondary"
+    >
+      {boton}
+    </a>
+  </div>
+</div>

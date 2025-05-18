@@ -1,0 +1,159 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import "../styles/global.css";
+import HeroContacto from '../components/HeroContacto.astro';
+import FAQSection from '../components/FAQSection.astro';
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
+  { question: '¿Cuánto tarda en llegar mi servidor?', answer: 'La instalación es instantánea tras el pago.' },
+  { question: '¿Por qué debería elegir Vhost?', answer: 'Ofrecemos hardware premium y soporte 24/7 a precios competitivos.' },
+  { question: '¿Se puede instalar mods o plugins en los servidores?', answer: 'Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.' },
+  { question: '¿Los servidores funcionan con Minecraft Bedrock?', answer: 'Sí, soportamos tanto Java Edition como Bedrock Edition.' },
+  { question: '¿Puedo subir mi propio mundo al servidor?', answer: 'Puedes subir tu mundo directamente desde la sección Archivos.' },
+  { question: '¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?', answer: 'Sí, ofrecemos migración gratuita de tu servidor actual.' },
+  { question: '¿Qué plan debería elegir?', answer: 'Depende de tu uso; revisa las características de cada plan para decidir.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.' },
+];
+---
+
+<MainLayout title="Contacto">
+  <HeroContacto />
+
+<section id="support-options" class="bg-primary text-white py-28 px-6">
+  <div class="max-w-5xl mx-auto text-center mb-16" data-aos="fade-up" data-aos-duration="700">
+    <h2 class="text-4xl md:text-5xl font-bold font-poppins mb-4">Nuestras opciones de soporte</h2>
+    <p class="text-gray-400 text-lg font-poppins max-w-2xl mx-auto">
+      Elige el canal que prefieras para ponerte en contacto con nosotros.<br />
+      ¡Estamos aquí para ayudarte!
+    </p>
+  </div>
+
+  <div class="space-y-6 max-w-3xl mx-auto">
+    <!-- Discord -->
+    <a
+      href="https://discord.gg/Ykr85wevrj"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="100"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fab fa-discord text-3xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Discord</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Consulta a la comunidad o staff en nuestro Discord oficial.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="far fa-clock text-green-500 text-base"></i>
+        <span class="text-white text-sm font-bold">24/7</span>
+        <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+      </div>
+    </a>
+
+    <!-- Tickets -->
+    <a
+      href="https://billing.vhost.tech"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fas fa-paper-plane text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Crear un ticket de asistencia</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Crea un ticket y obtén ayuda de un representante.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
+
+    <!-- Email -->
+    <a
+      href="mailto:vhostts3@gmail.com"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="300"
+    >
+      <div class="flex items-center gap-5">
+        <i class="far fa-envelope text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Email</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Para consultas más formales, puedes escribirnos por correo electrónico.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
+
+    <!-- Redes sociales -->
+    <a
+      href="https://x.com/VhostTS3"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fas fa-hashtag text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Redes Sociales</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">También estamos disponibles en nuestras redes sociales.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
+  </div>
+</section>
+
+
+<section class="bg-[#0b0b0b] text-white py-24 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+      <!-- Texto a la izquierda -->
+      <div>
+        <h2 class="text-4xl md:text-5xl font-bold font-poppins mb-4">
+          Un equipo que entiende tus necesidades
+        </h2>
+        <p class="text-gray-400 text-lg font-poppins max-w-xl">
+          Somos jugadores como tú, y hemos pasado por los mismos errores. Nuestro soporte está enfocado en ayudarte de forma rápida, real y cercana. Habla con alguien que realmente entiende lo que haces.
+        </p>
+      </div>
+  
+      <!-- Imagen a la derecha -->
+      <div class="flex justify-center md:justify-end">
+        <img
+          src="/images/VhostNPC.png" 
+          alt="Equipo de soporte"
+          class="w-72 md:w-[22rem] object-contain pointer-events-none"
+        />
+      </div>
+    </div>
+  </section>
+  
+
+
+
+  
+  
+  
+
+  <script is:inline>
+    document.querySelector('a[href="#support-options"]')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const section = document.getElementById('support-options');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+    <FAQSection
+    items={faqs}
+    inviteLink="https://discord.gg/Ykr85wevrj"
+    backgroundClass="bg-primary"
+  />
+
+  
+  
+</MainLayout>
+

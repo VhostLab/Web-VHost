@@ -1,0 +1,134 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import "../styles/global.css";
+import HeroTienda from '../components/HeroTienda.astro';
+import CardCategorias from '../components/tienda/CardCategorias.astro';
+import FAQSection from '../components/FAQSection.astro';
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
+  { question: '¿Cuánto tarda en llegar mi servidor?', answer: 'La instalación es instantánea tras el pago.' },
+  { question: '¿Por qué debería elegir Vhost?', answer: 'Ofrecemos hardware premium y soporte 24/7 a precios competitivos.' },
+  { question: '¿Se puede instalar mods o plugins en los servidores?', answer: 'Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.' },
+  { question: '¿Los servidores funcionan con Minecraft Bedrock?', answer: 'Sí, soportamos tanto Java Edition como Bedrock Edition.' },
+  { question: '¿Puedo subir mi propio mundo al servidor?', answer: 'Puedes subir tu mundo directamente desde la sección Archivos.' },
+  { question: '¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?', answer: 'Sí, ofrecemos migración gratuita de tu servidor actual.' },
+  { question: '¿Qué plan debería elegir?', answer: 'Depende de tu uso; revisa las características de cada plan para decidir.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.' },
+];
+const juegos = [
+  { 
+    nombre: "Minecraft",
+    ruta: "/tienda/minecraft",
+    imagen: "/images/tienda/minecraft.png",
+    alt: "Ilustración de Minecraft",
+    desc: "Hosting de mundos, mods y plugins, Bedrock y Java." 
+  },
+  { 
+    nombre: "GTA V",
+    ruta: "/tienda/gtav",
+    imagen: "/images/tienda/gta.jpg",
+    alt: "Logo de GTA V",
+    desc: "Roleplay FiveM, máxima estabilidad y rendimiento."
+  },
+  { 
+    nombre: "Rust",
+    ruta: "/tienda/rust",
+    imagen: "/images/tienda/rust.jpg",
+    alt: "Logo de Rust",
+    desc: "Wipes automáticos, protección Anti-DDoS y backups."
+  },
+  { 
+    nombre: "Ark: Survival Evolved",
+    ruta: "/tienda/ark",
+    imagen: "/images/tienda/ark.jpg",
+    alt: "Logo de Ark",
+    desc: "Para tribus, mods, mapas y aventuras sin límites."
+  },
+  { 
+    nombre: "Counter-Strike",
+    ruta: "/tienda/counterstrike",
+    imagen: "/images/tienda/cs.jpg",
+    alt: "Logo de Counter-Strike",
+    desc: "GO, Source, 1.6. Latencia baja y gestión avanzada."
+  },
+  { 
+    nombre: "Valheim",
+    ruta: "/tienda/Valheim",
+    imagen: "/images/tienda/val.jpg",
+    alt: "Logo de Valheim",
+    desc: "Aventura vikinga, explora y sobrevive con amigos.",
+  },
+];
+
+const servicios = [
+  {
+    nombre: "TeamSpeak",
+    ruta: "/tienda/teamspeak",
+    imagen: "/images/tienda/ts.png",
+    alt: "Logo de TeamSpeak",
+    desc: "El clásico de la voz gaming para clanes y e-sports. Estable, seguro y personalizable."
+  },
+  {
+    nombre: "Discord Bot",
+    ruta: "/tienda/discordbots",
+    imagen: "/images/tienda/discord.webp",
+    alt: "Icono de Discord Bot",
+    desc: "Hosting 24/7 para tus bots de Discord con soporte a NodeJS, Python, y mucho más."
+  }
+];
+
+---
+
+<MainLayout title="Tienda de Servidores" description="Elige el juego y descubre nuestros planes de hosting para servidores de Minecraft, GTA V, Rust, Ark y Counter-Strike. Calidad, protección y soporte 24/7 en Vhost.">
+
+  <HeroTienda 
+    titulo="Tienda"
+    imagenFondo="/images/tienda/tiendafondo.png"
+  />
+
+  {/* Categorías de Juegos */}
+  <main id="categorias" class="bg-[#0b0b0b] text-white py-10 px-4">
+    <section class="max-w-4xl mx-auto text-center mb-12">
+      <h2 class="text-3xl font-bold font-poppins mb-2">Categorías de Juegos</h2>
+      <p class="text-base text-gray-400 font-poppins">
+        Todos nuestros juegos soportan plugins, mods y administración sencilla.<br /> Haz clic en el juego para descubrir más.
+      </p>
+    </section>
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+      {juegos.map(juego => (
+        <CardCategorias
+          titulo={juego.nombre}
+          descripcion={juego.desc}
+          imagen={juego.imagen}
+          alt={juego.alt}
+          url={juego.ruta}
+          boton="Ver tienda"
+        />
+      ))}
+    </section>
+
+    {/* Otros tipos de Hosting */}
+    <section class="max-w-4xl mx-auto text-center mb-12">
+      <h2 class="text-3xl font-bold font-poppins mb-4">Otros Tipos de Hosting</h2>
+      <p class="text-base text-gray-400 font-poppins mb-8">
+        También puedes automatizar o comunicar tu comunidad con estos servicios:
+      </p>
+    </section>
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-6xl mx-auto mb-16">
+      {servicios.map(servicio => (
+        <CardCategorias
+          titulo={servicio.nombre}
+          descripcion={servicio.desc}
+          imagen={servicio.imagen}
+          alt={servicio.alt}
+          url={servicio.ruta}
+          boton="Ver planes"
+        />
+      ))}
+    </section>
+  </main>
+
+  <FAQSection items={faqs} inviteLink="https://discord.gg/Ykr85wevrj" />
+
+</MainLayout>

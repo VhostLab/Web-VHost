@@ -1,0 +1,127 @@
+---
+const { currentPath } = Astro.props;
+---
+
+<div class="md:hidden relative">
+  <!-- Botón hamburguesa -->
+  <button
+    id="menu-toggle"
+    aria-label="Toggle menu"
+    class="text-white focus:outline-none"
+  >
+    <svg
+      id="icon-open"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Overlay menú full-screen con fondo opaco del color principal -->
+  <div
+    id="mobile-menu"
+    class="hidden fixed inset-0 z-50 flex bg-primary p-0 overflow-auto"
+  >
+    <!-- Franja naranja al borde izquierdo -->
+    <div class="w-2 bg-gradient-to-b from-orange-600 to-orange-400"></div>
+
+    <!-- Contenido del menú ocupa el resto de la pantalla -->
+    <div class="flex-1 p-6 relative">
+      <!-- Botón cerrar en esquina superior derecha -->
+      <button
+        id="menu-close"
+        aria-label="Close menu"
+        class="absolute top-4 right-6 text-white focus:outline-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <ul class="mt-12 space-y-4">
+        <li><a href="/" class="block text-lg font-poppins font-bold text-white">INICIO</a></li>
+        <li><a href="/tienda" class="block text-lg font-poppins font-bold text-white">TIENDA</a></li>
+        <li><a href="/partners" class="block text-lg font-poppins font-bold text-white">PARTNERS</a></li>
+        <li><a href="/contacto" class="block text-lg font-poppins font-extrabold text-white">SOPORTE</a></li>
+
+        <!-- CLIENTES como dropdown -->
+        <li>
+          <details>
+            <summary class="flex justify-between items-center cursor-pointer text-white font-poppins font-extrabold text-lg">
+              CLIENTES
+              <svg class="w-5 h-5 ml-1 transform transition-transform duration-200"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 9l-7 7-7-7"/>
+              </svg>
+            </summary>
+            <ul class="mt-2 pl-4 space-y-2">
+              <li>
+                <a href="https://billing.vhost.tech"
+                   target="_blank"
+                   class="block text-white text-sm font-semibold">
+                  ÁREA DE CLIENTES
+                </a>
+              </li>
+              <li>
+                <a href="https://panel.vhost.tech"
+                   target="_blank"
+                   class="block text-white text-sm font-semibold">
+                  PANEL JUEGOS
+                </a>
+              </li>
+              <li>
+                <a href="https://status.vhost.tech"
+                   target="_blank"
+                   class="block text-white text-sm font-semibold">
+                  ESTADO SERVIDORES
+                </a>
+              </li>
+              <li>
+                <a href="https://discord.gg/Ykr85wevrj"
+                   target="_blank"
+                   class="block text-white text-sm font-semibold">
+                  DISCORD
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script is:inline>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const closeBtn = document.getElementById('menu-close');
+    const menu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('icon-open');
+
+    toggleBtn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+    });
+    closeBtn.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+    });
+
+    // Rotación del icono al abrir/cerrar detalle
+    document.querySelectorAll('details > summary').forEach(summary => {
+      summary.addEventListener('click', () => {
+        const svg = summary.querySelector('svg');
+        svg.classList.toggle('rotate-180');
+      });
+    });
+  </script>
+</div>

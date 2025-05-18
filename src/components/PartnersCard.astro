@@ -1,0 +1,68 @@
+---
+// src/components/PartnersCard.astro
+export interface Props {
+  name: string;
+  role: string;
+  imageSrc: string;
+  // Hacemos opcionales las URLs de redes
+  twitchUrl?: string;
+  twitterUrl?: string;
+  youtubeUrl?: string;
+  tiktokUrl?: string;
+  instagramUrl?: string;
+}
+const {
+  name,
+  role,
+  imageSrc,
+  twitchUrl,
+  twitterUrl,
+  youtubeUrl,
+  tiktokUrl,
+  instagramUrl
+} = Astro.props as Props;
+---
+
+<div class="bg-[#161616] rounded-lg shadow-lg overflow-hidden w-64 transform hover:scale-105 transition-transform">
+  <!-- Imagen -->
+  <div class="w-full h-64 overflow-hidden">
+    <img src={imageSrc} alt={name} class="object-cover w-full h-full" loading="lazy" />
+  </div>
+
+  <!-- Contenido -->
+  <div class="p-4 text-center">
+    <h3 class="text-xl font-bold text-white capitalize mb-2">{name.replace('_', ' ')}</h3>
+    <span class="inline-block bg-secondary text-white text-sm font-bold px-4 py-1 rounded-md">
+      {role}
+    </span>
+
+    <!-- Sólo renderizamos cada icono si su URL existe -->
+    <div class="flex justify-center space-x-4 mt-4">
+      {twitchUrl && (
+        <a href={twitchUrl} target="_blank" rel="noopener" class="text-white hover:text-secondary">
+          <i class="fab fa-twitch fa-lg"></i>
+        </a>
+      )}
+      {twitterUrl && (
+        <a href={twitterUrl} target="_blank" rel="noopener" class="text-white hover:text-secondary">
+          <i class="fab fa-twitter fa-lg"></i>
+        </a>
+      )}
+      {youtubeUrl && (
+        <a href={youtubeUrl} target="_blank" rel="noopener" class="text-white hover:text-secondary">
+          <i class="fab fa-youtube fa-lg"></i>
+        </a>
+      )}
+      {tiktokUrl && (
+        <a href={tiktokUrl} target="_blank" rel="noopener" class="text-white hover:text-secondary">
+          <i class="fab fa-tiktok fa-lg"></i>
+        </a>
+      )}
+      {instagramUrl && (
+        <a href={instagramUrl} target="_blank" rel="noopener" class="text-white hover:text-secondary">
+          <i class="fab fa-instagram fa-lg"></i>
+        </a>
+      )}
+    </div>
+  </div>
+</div>
