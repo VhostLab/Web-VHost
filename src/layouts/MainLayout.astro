@@ -1,10 +1,10 @@
 ---
 // src/layouts/MainLayout.astro
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import ScrollToTop from '../components/ScrollToTop.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ScrollToTop from '../components/layout/ScrollToTop.astro';
 const { title, description = 'Vhost Hosting Services' } = Astro.props;
-import DiscordStatus from '../components/DiscordStatus.astro';
+import DiscordStatus from '../components/layout/DiscordStatus.astro';
 ---
 
 <!DOCTYPE html>
@@ -55,7 +55,7 @@ import DiscordStatus from '../components/DiscordStatus.astro';
 
   <Footer class="mt-auto" />
 <div class="hidden md:block">
-  <ScrollToTop />
+  <layout/ScrollToTop />
   <DiscordStatus />
 </div>
 
