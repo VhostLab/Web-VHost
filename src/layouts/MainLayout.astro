@@ -1,0 +1,71 @@
+---
+// src/layouts/MainLayout.astro
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ScrollToTop from '../components/layout/ScrollToTop.astro';
+const { title, description = 'Vhost Hosting Services' } = Astro.props;
+import DiscordStatus from '../components/layout/DiscordStatus.astro';
+---
+
+<!DOCTYPE html>
+<html lang="es" class="bg-[#101010] text-white">
+<head>
+    <!-- Favicon y PWA Manifest -->
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/web-app-manifest-192x192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon/web-app-manifest-512x512.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+    <!-- Fallback .ico -->
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    rel="stylesheet"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Meta Tags SEO Básicos -->
+  <title>{title} | Vhost</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#101010" />
+
+ 
+
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://tudominio.com/images/og-image.jpg" />
+  <meta property="og:url" content={Astro.url.href} />
+</head>
+<body class="min-h-screen flex flex-col bg-[#101010] text-gray-100">
+  <Header />
+
+  <main class="fade-content flex-grow">
+    <slot />
+  </main>
+
+  <Footer class="mt-auto" />
+<div class="hidden md:block">
+  <layout/ScrollToTop />
+  <DiscordStatus />
+</div>
+
+  <!-- Evitar FOUC -->
+  <script is:inline>
+    document.documentElement.classList.remove('bg-[#101010]');
+    document.documentElement.classList.add('bg-primary');
+  </script>
+
+  <!-- Slide-up observer -->
+  <script type="module" src="/scripts/slide-up.js"></script>
+</body>
+</html>

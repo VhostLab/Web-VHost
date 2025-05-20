@@ -1,0 +1,143 @@
+---
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQ[];
+  inviteLink: string;
+  backgroundClass?: string;
+}
+
+const { items, inviteLink, backgroundClass } = Astro.props as Props;
+
+// Partimos el array en dos columnas iguales
+const half = Math.ceil(items.length / 2);
+const firstColumn = items.slice(0, half);
+const secondColumn = items.slice(half);
+---
+
+<!-- VERSIÓN ESCRITORIO (≥768px) -->
+<section class={`faq-section py-20 ${backgroundClass ?? 'bg-[#0b0b0b]'} hidden md:block`}>
+  <div class="max-w-4xl mx-auto rounded-lg shadow-xl overflow-hidden">
+    <!-- Header -->
+    <div class="bg-[#161616] text-white flex flex-col items-center justify-center py-6">
+      <h2 class="text-3xl font-poppins font-bold">PREGUNTAS FRECUENTES</h2>
+      <div class="border-t-2 border-secondary w-24 mt-4"></div>
+    </div>
+
+    <!-- Cuerpo: Dos columnas independientes -->
+    <div class="bg-[#0f0f0f] px-6 py-8 md:flex md:space-x-12">
+      <!-- Columna 1 -->
+      <div class="flex-1 space-y-4">
+        {firstColumn.map(item => (
+          <details class="border-b border-secondary">
+            <summary class="flex justify-between items-center h-16 py-4 cursor-pointer text-gray-100 font-karla">
+              <span>{item.question}</span>
+              <span class="faq-symbol text-2xl">+</span>
+            </summary>
+            <div class="faq-answer">
+              <div class="pt-2 pb-4 text-gray-300 font-inter">
+                {item.answer}
+              </div>
+            </div>
+          </details>
+        ))}
+      </div>
+
+      <!-- Columna 2 -->
+      <div class="flex-1 space-y-4 mt-4 md:mt-0">
+        {secondColumn.map(item => (
+          <details class="border-b border-secondary">
+            <summary class="flex justify-between items-center h-16 py-4 cursor-pointer text-gray-100 font-karla">
+              <span>{item.question}</span>
+              <span class="faq-symbol text-2xl">+</span>
+            </summary>
+            <div class="faq-answer">
+              <div class="pt-2 pb-4 text-gray-300 font-inter">
+                {item.answer}
+              </div>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-[#161616] text-gray-300 flex items-center justify-center py-6 font-karla">
+      <span>¿No está tu pregunta y necesitas una respuesta rápida?</span>
+      <a
+        href={inviteLink}
+        class="ml-2 font-poppins underline text-secondary hover:text-accent transition-colors duration-200"
+      >
+        Únete a nuestro Discord
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    details[open] .faq-answer {
+      max-height: 500px;
+    }
+  </style>
+
+  <script type="module" src="/scripts/faq-toggle.js"></script>
+</section>
+
+<!-- VERSIÓN MÓVIL (<768px) -->
+<section class={`faq-section py-16 ${backgroundClass ?? 'bg-[#0b0b0b]'} block md:hidden`}>
+  <div class="px-6 space-y-6">
+    <!-- Header simplificado -->
+    <div class="text-center text-white">
+      <h2 class="text-2xl font-poppins font-bold">PREGUNTAS FRECUENTES</h2>
+      <div class="border-t-2 border-secondary w-16 mx-auto mt-2"></div>
+    </div>
+
+    <!-- FAQ en una sola columna -->
+    <div class="space-y-4">
+      {items.map(item => (
+        <details class="border-b border-secondary">
+          <summary class="flex justify-between items-center py-3 cursor-pointer text-gray-100 font-karla">
+            <span>{item.question}</span>
+            <span class="faq-symbol text-xl">+</span>
+          </summary>
+          <div class="faq-answer px-2">
+            <div class="pt-2 pb-4 text-gray-300 font-inter text-sm">
+              {item.answer}
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center text-gray-300 py-4 font-karla">
+      <span>¿No está tu pregunta?</span>
+      <a
+        href={inviteLink}
+        class="ml-1 font-poppins underline text-secondary hover:text-accent transition-colors duration-200"
+      >
+        Únete a nuestro Discord
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    details[open] .faq-answer {
+      max-height: 500px;
+    }
+  </style>
+
+  <script type="module" src="/scripts/faq-toggle.js"></script>
+</section>

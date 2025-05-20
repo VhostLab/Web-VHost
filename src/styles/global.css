@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fade-in solo para el contenido entre header y footer */
+.fade-content {
+    opacity: 0;
+    animation: contentFadeIn 0.8s ease-out forwards;
+  }
+  
+  @keyframes contentFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  
+
+  
+
+  

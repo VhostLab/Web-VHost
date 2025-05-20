@@ -1,0 +1,26 @@
+---
+// src/components/PanelSection.astro
+import panel1 from '../images/panel1.png';
+import panel2 from '../images/panel2.png';
+import panel3 from '../images/panel3.png';
+---
+<section class="py-16 bg-primary text-white">
+  <div class="container mx-auto px-6 text-center space-y-4">
+    <h2 class="text-4xl font-poppins font-bold">
+      PANEL <span class="bg-secondary text-black px-4 py-1 rounded">CUSTOM</span>
+    </h2>
+  </div>
+
+  <!-- Imágenes estáticas agrupadas -->
+  <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    <img src={panel1.src} alt="Panel 1" class="rounded-lg shadow-lg w-full" />
+    <img src={panel2.src} alt="Panel 2" class="rounded-lg shadow-lg w-full" />
+    <img src={panel3.src} alt="Panel 3" class="rounded-lg shadow-lg w-full" />
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="/panel" class="text-secondary italic font-semibold hover:underline">
+      Ir al panel de administración »
+    </a>
+  </div>
+</section>

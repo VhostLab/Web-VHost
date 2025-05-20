@@ -1,0 +1,68 @@
+---
+// src/components/HeroSection.astro
+---
+<section class="relative bg-[url('/images/nether.png')] bg-cover bg-right overflow-hidden">
+  <!-- Overlay oscuro general -->
+  <div class="absolute inset-0 bg-black/70"></div>
+  <!-- Overlay de gradiente intenso hasta la mitad -->
+  <div class="absolute inset-0 pointer-events-none"
+    style="background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%);">
+  </div>
+
+  <div class="relative container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-28 flex flex-col md:flex-row md:items-center z-10">
+    <!-- Hero Content -->
+    <div class="w-full md:w-3/4 lg:w-1/2 text-white">
+      <!-- Subtítulo -->
+      <p class="text-base sm:text-lg font-poppins uppercase text-secondary mb-2">Adquiere ahora</p>
+      <!-- Título -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-poppins font-bold mb-6">Minecraft Hosting</h1>
+
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <ul class="space-y-4">
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-cube text-white"></i></span>
+            <span>Soporte para Java &amp; Bedrock</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-shield-alt text-white"></i></span>
+            <span>Protección Anti-DDoS avanzada</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-users text-white"></i></span>
+            <span>Slots ilimitados</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-layer-group text-white"></i></span>
+            <span>Todas las versiones y modpacks</span>
+          </li>
+        </ul>
+        <ul class="space-y-4">
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-handshake text-white"></i></span>
+            <span>Confiado por +100 clientes</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-book text-white"></i></span>
+            <span>Guías y tutoriales</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-globe text-white"></i></span>
+            <span>Subdominio .vhost.tech sin puerto</span>
+          </li>
+          <li class="flex items-center space-x-3">
+            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-dollar-sign text-white"></i></span>
+            <span>Precios desde €0.85/GB/mes</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="mt-10 md:mt-12">
+        <a href="/tienda" class="inline-block px-8 py-4 bg-secondary text-black font-semibold rounded-lg hover:bg-secondary/90 transition">
+          Adquirir un servidor de Minecraft »
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

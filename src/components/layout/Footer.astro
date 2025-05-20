@@ -1,0 +1,25 @@
+---
+// src/components/
+---
+<footer>
+  <!-- Banda de métodos de pago -->
+  <div class="bg-secondary py-1">
+    <div class="container mx-auto px-6 flex justify-center space-x-6">
+      <i class="fab fa-cc-visa text-2xl text-white transform transition-transform duration-200 hover:scale-110"></i>
+      <i class="fab fa-cc-mastercard text-2xl text-white transform transition-transform duration-200 hover:scale-110"></i>
+      <i class="fab fa-cc-paypal text-2xl text-white transform transition-transform duration-200 hover:scale-110"></i>
+    </div>
+  </div>
+
+  <!-- Banda de copyright -->
+  <div class="bg-primary py-4">
+    <div class="container mx-auto px-6">
+      <p class="text-neutral text-sm">
+        © <span id="current-year"></span> - Vhost Hosting Service
+      </p>
+    </div>
+  </div>
+
+  <!-- Ahora con type="module" -->
+  <script type="module" src="/scripts/footer-year.js"></script>
+</footer>

@@ -1,0 +1,47 @@
+---
+// src/components/DiscordStatus.astro
+---
+<!-- src/components/DiscordStatus.astro -->
+<div
+  id="discord-status"
+  class="fixed bottom-0 right-0 bg-[#1a1a1a] text-white px-4 py-2 rounded-tl-xl shadow-lg flex items-center justify-between gap-3 text-sm font-poppins z-40"
+>
+  <div class="flex items-center gap-2">
+    <i class="fab fa-discord text-xl"></i>
+    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+    <span id="discord-count" class="font-semibold">Cargando...</span>
+  </div>
+
+  <a
+    href="https://discord.gg/Ykr85wevrj"
+    target="_blank"
+    class="bg-secondary text-black px-2.5 py-1 rounded font-semibold text-xs hover:bg-orange-500 transition"
+  >
+    Ingresar
+  </a>
+</div>
+
+<!-- Script para obtener datos dinámicos -->
+<script is:inline>
+  async function fetchDiscordOnline() {
+    try {
+      const res = await fetch("https://discord.com/api/guilds/963425973330665473/widget.json");
+      const data = await res.json();
+      const count = data.presence_count;
+      const span = document.getElementById("discord-count");
+      if (span) {
+        span.textContent = `${count} Miembros en línea`;
+      }
+    } catch (err) {
+      console.error("Error al cargar el estado de Discord:", err);
+    }
+  }
+
+  fetchDiscordOnline();
+</script>
+
+
+
+
+
+

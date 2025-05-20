@@ -1,0 +1,114 @@
+---
+import vhostLogo from '/src/images/vhosthostingservices.png';
+import discordIcon from '/src/images/discord-icon.png';
+import twitterIcon from '/src/images/twitter-icon.png';
+import emailIcon from '/src/images/email-icon.png';
+import MobileMenu from '../movil/MobileMenu.astro'
+
+
+const currentPath = Astro.url.pathname;
+---
+
+<header>
+  <!-- Redes sociales -->
+  <div class="bg-primary py-2">
+    <div class="container mx-auto flex justify-center md:justify-start px-6">
+      <div class="flex space-x-3">
+        <a href="https://discord.gg/Ykr85wevrj" class="group">
+          <img src={discordIcon.src} alt="Discord"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200
+                   group-hover:invert-0 group-hover:brightness-75
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+        </a>
+        <a href="https://x.com/VhostTS3" class="group">
+          <img src={twitterIcon.src} alt="Twitter"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200
+                   group-hover:invert-0 group-hover:brightness-75
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+        </a>
+        <a href="mailto:vhostts3@gmail.com" class="group">
+          <img src={emailIcon.src} alt="Email"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200
+                   group-hover:invert-0 group-hover:brightness-75
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header principal -->
+  <div class="bg-secondary">
+    <div class="container mx-auto flex items-center justify-between py-4 px-6 lg:px-12">
+      <!-- Logo -->
+      <a href="/" class="block">
+        <img src={vhostLogo.src} alt="VHost Logo" class="h-14 w-auto" />
+      </a>
+
+      <!-- Menú móvil -->
+      <MobileMenu currentPath={currentPath} />
+
+      <!-- Navegación escritorio -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <ul class="flex space-x-8 items-center">
+          <li><a href="/" class="text-lg font-poppins font-bold text-white">INICIO</a></li>
+          <li><a href="/tienda" class="text-lg font-poppins font-bold text-white">TIENDA</a></li>
+          <li><a href="/partners" class="text-lg font-poppins font-bold text-white">PARTNERS</a></li>
+        </ul>
+        <ul class="flex space-x-6 items-center">
+          <li><a href="/contacto" class="text-lg font-poppins font-extrabold px-3 py-1 text-white">SOPORTE</a></li>
+          <li class="relative group" tabindex="0">
+            <button
+              class="text-lg font-poppins font-extrabold text-white
+                     bg-gradient-to-r from-[#101010] to-[#000000]
+                     rounded-md px-3 py-1 flex items-center focus:outline-none"
+            >
+              CLIENTES
+              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <ul
+              class="absolute right-0 top-full mt-0 w-56
+                     bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
+                     rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
+                     invisible opacity-0
+                     group-hover:visible group-hover:opacity-100
+                     hover:visible    hover:opacity-100
+                     focus-within:visible focus-within:opacity-100
+                     transition duration-200 whitespace-nowrap overflow-hidden"
+            >
+              <li>
+                <a href="https://billing.vhost.tech" target="_blank"
+                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                >
+                  <i class="fas fa-user-cog w-4 h-4 mr-2"></i>Área de Clientes
+                </a>
+              </li>
+              <li>
+                <a href="https://panel.vhost.tech" target="_blank"
+                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                >
+                  <i class="fas fa-gamepad w-4 h-4 mr-2"></i>Panel Juegos
+                </a>
+              </li>
+              <li>
+                <a href="https://status.vhost.tech" target="_blank"
+                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                >
+                  <i class="fas fa-server w-4 h-4 mr-2"></i>Estado de los servidores
+                </a>
+              </li>
+              <li>
+                <a href="https://discord.gg/Ykr85wevrj" target="_blank"
+                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                >
+                  <i class="fab fa-discord w-4 h-4 mr-2"></i>Discord
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

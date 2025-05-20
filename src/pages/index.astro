@@ -1,0 +1,59 @@
+---
+// src/pages/index.astro
+import MainLayout from '../layouts/MainLayout.astro';
+import CaracteristicasInicio from '../components/CaracteristicasInicio.astro';
+import "../styles/global.css";
+import StatsSection from '../components/StatsSection.astro';
+import FAQSection from '../components/FAQSection.astro';
+import HeroSection from '../components/HeroSection.astro';
+import PriceComparisonSection from '../components/PriceComparisonSection.astro';
+import PanelCarrusel from '../components/PanelCarrusel.astro';
+
+const stats = [
+  { target: 99.9, suffix: '%',  label: 'Uptime', icon: 'fas fa-clock' },
+  { target: 1000, suffix: '+', label: 'Servidores creados', icon: 'fas fa-server' },
+  { target: 2,    suffix: '+', label: 'Ubicaciones de datacenter', icon: 'fas fa-globe' },
+];
+
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
+  { question: '¿Cuánto tarda en llegar mi servidor?', answer: 'La instalación es instantánea tras el pago.' },
+  { question: '¿Por qué debería elegir Vhost?', answer: 'Ofrecemos hardware premium y soporte 24/7 a precios competitivos.' },
+  { question: '¿Se puede instalar mods o plugins en los servidores?', answer: 'Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.' },
+  { question: '¿Los servidores funcionan con Minecraft Bedrock?', answer: 'Sí, soportamos tanto Java Edition como Bedrock Edition.' },
+  { question: '¿Puedo subir mi propio mundo al servidor?', answer: 'Puedes subir tu mundo directamente desde la sección Archivos.' },
+  { question: '¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?', answer: 'Sí, ofrecemos migración gratuita de tu servidor actual.' },
+  { question: '¿Qué plan debería elegir?', answer: 'Depende de tu uso; revisa las características de cada plan para decidir.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.' },
+];
+
+
+---
+
+<MainLayout title="Inicio">
+  <!-- Hero -->
+  <HeroSection />
+
+  <!-- Price Comparison -->
+  <PriceComparisonSection />
+
+
+
+  <!-- Features Section -->
+  <CaracteristicasInicio />
+
+
+  <!-- Stats Section -->
+  <StatsSection stats={stats} />
+
+  <!-- Interactive Cards Section -->
+   <PanelCarrusel />
+
+  <!-- FAQ Section -->
+  <FAQSection
+  items={faqs}
+  inviteLink="https://discord.gg/Ykr85wevrj"
+  backgroundClass="bg-[#0b0b0b]"
+  />
+</MainLayout>

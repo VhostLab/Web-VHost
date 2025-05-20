@@ -1,0 +1,17 @@
+---
+// src/components/ClubLogo.astro
+export interface Props {
+  imageSrc: string;
+  alt?: string;
+}
+const { imageSrc, alt = "" } = Astro.props as Props;
+---
+
+<div class="flex items-center justify-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+  <img
+    src={imageSrc}
+    alt={alt}
+    class="h-16 w-auto object-contain"
+    loading="lazy"
+  />
+</div>

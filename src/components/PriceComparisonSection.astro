@@ -1,0 +1,73 @@
+---
+// src/components/PriceComparisonSection.astro
+---
+<section class="py-20 bg-[#0b0b0b]">
+  <div class="container mx-auto px-6">
+    <!-- Title -->
+    <h2 class="text-[48px] font-poppins font-bold text-center text-white mb-4">
+      Comparativa de Precios de Hosting
+    </h2>
+    <!-- Description -->
+    <p class="text-center text-gray-300 mb-10">
+      Precio/GB de RAM (€) de los principales proveedores de hosting de Minecraft.
+    </p>
+
+    <!-- Price Bars -->
+    <div class="space-y-6 max-w-4xl mx-auto">
+      {([
+        { name: 'GG Servers',    price: 5.58, logo: '/images/ggserver.png' },
+        { name: 'Shockbyte',     price: 3.51, logo: '/images/shockbyte.avif' },
+        { name: 'Apex Hosting',  price: 2.64, logo: '/images/apexhosting.avif' },
+        { name: 'BisectHosting', price: 2.63, logo: '/images/bisecthosting.avif' },
+        { name: 'Hostinger',     price: 1.25, logo: '/images/hostinger.png' },
+        { name: 'Vhost',         price: 0.85, logo: '/images/vhostlogo.png' }
+      ]).map(item => {
+        const maxPrice = 5.58;
+        const widthPercent = Math.round((item.price / maxPrice) * 100);
+        return (
+          <div class="flex items-center">
+            <!-- Logo + Name fixed-width box with extra space between -->
+            <div class="w-48 flex items-center space-x-6 mr-8">
+              {item.name !== 'Vhost' ? (
+                <img
+                  src={item.logo}
+                  alt={`${item.name} logo`}
+                  class="filter grayscale w-10 h-10 object-contain object-center"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="relative w-10 h-10">
+                  <div class="absolute inset-1 rounded-full bg-secondary/50 blur-md"></div>
+                  <img
+                    src={item.logo}
+                    alt="Vhost logo"
+                    class="relative w-10 h-10 object-contain object-center"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <span class="font-medium text-white">{item.name}</span>
+            </div>
+
+            <!-- Price Bar -->
+            <div
+              class={`flex-1 h-8 rounded-lg overflow-hidden mr-8 ${
+                item.name === 'Vhost' ? 'bg-secondary/20' : 'bg-[#2a2a2a]'
+              }`}
+            >
+              <div
+                class={`h-full ${item.name === 'Vhost' ? 'bg-secondary' : 'bg-gray-500 filter grayscale'}`}
+                style={`width: ${widthPercent}%;`}
+              />
+            </div>
+
+            <!-- Price Text -->
+            <div class="w-28 text-right text-sm text-gray-300">
+              €{item.price.toFixed(2)} /GB RAM
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

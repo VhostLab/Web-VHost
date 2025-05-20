@@ -1,0 +1,176 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import "../styles/global.css";
+import HeroTienda from '../components/HeroTienda.astro';
+import CardCategorias from '../components/tienda/CardCategorias.astro';
+import FAQSection from '../components/FAQSection.astro';
+const faqs = [
+  {
+    question: '¿Qué métodos de pago aceptan?',
+    answer: 'Aceptamos tarjetas de crédito, PayPal y Bizum.'
+  },
+  {
+    question: '¿Cuánto tarda en estar listo mi servidor después de pagar?',
+    answer: 'La instalación es instantánea tras el pago. Recibirás los datos de acceso por email en pocos minutos.'
+  },
+  {
+    question: '¿Puedo cambiar de plan más adelante?',
+    answer: 'Sí, puedes escalar o cambiar tu plan en cualquier momento desde tu área de cliente.'
+  },
+  {
+    question: '¿Qué garantía de disponibilidad ofrecen?',
+    answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.'
+  },
+  {
+    question: '¿Cómo puedo contactar con soporte si tengo problemas?',
+    answer: 'Ofrecemos soporte técnico 24/7 a través de ticket, email y Discord.'
+  },
+  {
+    question: '¿Puedo instalar mods o plugins en los servidores?',
+    answer: 'Claro, tienes acceso completo por FTP y panel para instalar mods o plugins fácilmente.'
+  },
+  {
+    question: '¿Puedo migrar mi servidor desde otro hosting?',
+    answer: 'Sí, ofrecemos migración gratuita de tu servidor actual a Vhost.'
+  },
+  {
+    question: '¿Qué ocurre si no renuevo a tiempo mi servidor?',
+    answer: 'Te avisamos antes de la fecha de vencimiento. Si no renuevas, el servidor se suspende temporalmente y tienes unos días para recuperarlo antes del borrado definitivo.'
+  },
+  {
+    question: '¿Realizan copias de seguridad automáticas?',
+    answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.'
+  },
+  {
+    question: '¿Recibiré factura tras la compra?',
+    answer: 'Sí, todas las compras generan factura automáticamente que podrás descargar desde tu panel de cliente.'
+  },
+  {
+    question: '¿Cómo puedo cancelar mi servicio?',
+    answer: 'Puedes cancelar tu servicio en cualquier momento desde tu área de cliente, sin permanencia ni penalizaciones.'
+  },
+  {
+    question: '¿Por qué debería elegir Vhost?',
+    answer: 'Ofrecemos hardware premium, protección DDoS, migración gratuita, y soporte técnico real 24/7 a precios competitivos.'
+  }
+];
+
+const juegos = [
+  { 
+    nombre: "Minecraft",
+    ruta: "/tienda/minecraft",
+    imagen: "/images/tienda/minecraft.png",
+    alt: "Ilustración de Minecraft",
+    desc: "Hosting de mundos, mods y plugins, Bedrock y Java." 
+  },
+  { 
+    nombre: "GTA V",
+    ruta: "/tienda/gtav",
+    imagen: "/images/tienda/gta.jpg",
+    alt: "Logo de GTA V",
+    desc: "Roleplay FiveM, máxima estabilidad y rendimiento."
+  },
+  { 
+    nombre: "Rust",
+    ruta: "/tienda/rust",
+    imagen: "/images/tienda/rust.jpg",
+    alt: "Logo de Rust",
+    desc: "Wipes automáticos, protección Anti-DDoS y backups."
+  },
+  { 
+    nombre: "Ark: Survival Evolved",
+    ruta: "/tienda/ark",
+    imagen: "/images/tienda/ark.jpg",
+    alt: "Logo de Ark",
+    desc: "Para tribus, mods, mapas y aventuras sin límites."
+  },
+  { 
+    nombre: "Counter-Strike",
+    ruta: "/tienda/counterstrike",
+    imagen: "/images/tienda/cs.jpg",
+    alt: "Logo de Counter-Strike",
+    desc: "GO, Source, 1.6. Latencia baja y gestión avanzada."
+  },
+  { 
+    nombre: "Valheim",
+    ruta: "/tienda/Valheim",
+    imagen: "/images/tienda/val.jpg",
+    alt: "Logo de Valheim",
+    desc: "Aventura vikinga, explora y sobrevive con amigos.",
+  },
+];
+
+const servicios = [
+  {
+    nombre: "TeamSpeak",
+    ruta: "/tienda/teamspeak",
+    imagen: "/images/tienda/ts.png",
+    alt: "Logo de TeamSpeak",
+    desc: "El clásico de la voz gaming para clanes y e-sports. Estable, seguro y personalizable."
+  },
+  {
+    nombre: "Discord Bot",
+    ruta: "/tienda/discordbots",
+    imagen: "/images/tienda/discord.webp",
+    alt: "Icono de Discord Bot",
+    desc: "Hosting 24/7 para tus bots de Discord con soporte a NodeJS, Python, y mucho más."
+  }
+];
+
+---
+
+<MainLayout title="Tienda de Servidores" description="Elige el juego y descubre nuestros planes de hosting para servidores de Minecraft, GTA V, Rust, Ark y Counter-Strike. Calidad, protección y soporte 24/7 en Vhost.">
+
+  <HeroTienda 
+    titulo="Tienda"
+    imagenFondo="/images/tienda/tiendafondo.png"
+  />
+
+  {/* Categorías de Juegos */}
+<section class="w-full mb-16 bg-[#0b0b0b] py-14 px-4">
+  <div class="text-center mb-12">
+    <h2 class="text-[48px] font-bold font-poppins mb-2">Categorías de Juegos</h2>
+    <p class="text-[16px] text-gray-400 font-poppins">
+      Todos nuestros juegos soportan plugins, mods y administración sencilla.<br /> Haz clic en el juego para descubrir más.
+    </p>
+  </div>
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {juegos.map(juego => (
+      <CardCategorias
+        titulo={juego.nombre}
+        descripcion={juego.desc}
+        imagen={juego.imagen}
+        alt={juego.alt}
+        url={juego.ruta}
+        boton="Ver tienda"
+      />
+    ))}
+  </div>
+</section>
+
+<section class="w-full mb-16 bg-[#101010] py-14 px-4">
+  <div class="text-center mb-12">
+    <h2 class="text-[48px] font-bold font-poppins mb-4">Otros Tipos de Hosting</h2>
+    <p class="text-[16px] text-gray-400 font-poppins mb-8">
+      También puedes automatizar o comunicar tu comunidad con estos servicios:
+    </p>
+  </div>
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+    {servicios.map(servicio => (
+      <CardCategorias
+        titulo={servicio.nombre}
+        descripcion={servicio.desc}
+        imagen={servicio.imagen}
+        alt={servicio.alt}
+        url={servicio.ruta}
+        boton="Ver planes"
+      />
+    ))}
+  </div>
+</section>
+
+
+
+  <FAQSection items={faqs} inviteLink="https://discord.gg/Ykr85wevrj" />
+
+</MainLayout>

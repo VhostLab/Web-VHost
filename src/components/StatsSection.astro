@@ -1,0 +1,146 @@
+---
+export interface Stat {
+  target: number;
+  suffix?: string;
+  label: string;
+  icon: string;
+}
+export interface Props {
+  stats: Stat[];
+}
+const { stats } = Astro.props as Props;
+---
+
+<!-- DESKTOP (≥1024px) -->
+<section class="py-20 bg-[#0b0b0b] hidden lg:block">
+  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-start lg:items-center space-y-6 lg:space-y-0 lg:space-x-2">
+    <!-- Stats -->
+    <div class="flex flex-col items-end space-y-4 lg:w-1/2 -ml-32">
+      {stats.map(({ target, suffix = '', label, icon }) => (
+        <div class="flex items-center bg-[#0f0f0f] border border-secondary rounded-lg p-4 w-full max-w-sm">
+          <div class="flex-shrink-0 bg-secondary rounded-full p-3 text-white">
+            <i class={icon}></i>
+          </div>
+          <div class="ml-4 text-left">
+            <span
+              class="stat-value text-2xl font-bold block"
+              data-target={target}
+              data-suffix={suffix}
+            >
+              0{suffix}
+            </span>
+            <span class="mt-1 text-sm font-poppins text-white block">
+              {label}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+    <!-- Texto explicativo -->
+    <div class="lg:w-1/2 text-white font-poppins flex flex-col space-y-4">
+      <h4 class="text-[48px] font-bold text-right">
+        ALGUNOS NÚMEROS DESDE QUE COMENZAMOS.
+      </h4>
+      <p class="mt-4 text-[16px] text-gray-300 text-right">
+        Estamos comprometidos en brindar el mejor servicio, al mejor precio posible.
+      </p>
+      <a
+        href="/tienda"
+        class="mt-4 italic text-secondary text-right hover:text-accent transition-colors duration-200"
+      >
+        Adquirir un servidor de Minecraft »
+      </a>
+    </div>
+  </div>
+  <script type="module" src="/scripts/stats-countup.js"></script>
+</section>
+
+<!-- TABLET (md, entre 768px y 1023px) -->
+<section class="py-16 bg-[#0b0b0b] hidden md:block lg:hidden">
+  <div class="container mx-auto px-6 flex flex-col items-center">
+    <!-- Texto explicativo -->
+    <div class="text-center text-white font-poppins space-y-2 px-4 mb-10">
+      <h4 class="text-3xl font-bold">
+        ALGUNOS NÚMEROS DESDE QUE COMENZAMOS.
+      </h4>
+      <p class="text-[15px] text-gray-300">
+        Estamos comprometidos en brindar el mejor servicio, al mejor precio posible.
+      </p>
+      <a
+        href="/tienda"
+        class="italic text-secondary hover:text-accent transition-colors duration-200"
+      >
+        Adquirir un servidor de Minecraft »
+      </a>
+    </div>
+    <!-- Stats (cards apiladas) -->
+    <div class="w-full grid grid-cols-1 gap-4">
+      {stats.map(({ target, suffix = '', label, icon }) => (
+        <div class="flex items-center bg-[#0f0f0f] border border-secondary rounded-lg p-4">
+          <div class="flex-shrink-0 bg-secondary rounded-full p-3 text-white">
+            <i class={icon}></i>
+          </div>
+          <div class="ml-4 text-left">
+            <span
+              class="stat-value text-2xl font-bold block"
+              data-target={target}
+              data-suffix={suffix}
+            >
+              0{suffix}
+            </span>
+            <span class="mt-1 text-sm font-poppins text-white block">
+              {label}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <script type="module" src="/scripts/stats-countup.js"></script>
+</section>
+
+<!-- MOVIL (<768px) -->
+<section class="py-10 bg-[#0b0b0b] block md:hidden">
+  <div class="px-4 flex flex-col items-center">
+    <!-- Texto explicativo -->
+    <div class="text-center text-white font-poppins space-y-2 mb-8">
+      <h4 class="text-xl font-bold">
+        ALGUNOS NÚMEROS DESDE QUE COMENZAMOS.
+      </h4>
+      <p class="text-[13px] text-gray-300">
+        Estamos comprometidos en brindar el mejor servicio, al mejor precio posible.
+      </p>
+      <a
+        href="/tienda"
+        class="italic text-secondary hover:text-accent transition-colors duration-200"
+      >
+        Adquirir un servidor de Minecraft »
+      </a>
+    </div>
+    <!-- Stats apiladas -->
+    <div class="w-full space-y-4">
+      {stats.map(({ target, suffix = '', label, icon }) => (
+        <div class="flex items-center bg-[#0f0f0f] border border-secondary rounded-lg p-3">
+          <div class="flex-shrink-0 bg-secondary rounded-full p-2 text-white">
+            <i class={icon}></i>
+          </div>
+          <div class="ml-3 text-left">
+            <span
+              class="stat-value text-xl font-bold block"
+              data-target={target}
+              data-suffix={suffix}
+            >
+              0{suffix}
+            </span>
+            <span class="mt-1 text-xs font-poppins text-white block">
+              {label}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+  <script type="module" src="/scripts/stats-countup.js"></script>
+</section>
+
+

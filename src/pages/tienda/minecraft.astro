@@ -1,0 +1,155 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import "../../styles/global.css";
+import HeroTienda from '../../components/HeroTienda.astro';
+import BudgetSection from '../../components/BudgetSection.astro';
+import PremiumSection from '../../components/PremiumSection.astro';
+import Gamas from '../../components/Gamas.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import DedicatedSection from '../../components/DedicatedSection.astro';
+
+
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
+  { question: '¿Cuánto tarda en llegar mi servidor?', answer: 'La instalación es instantánea tras el pago.' },
+  { question: '¿Por qué debería elegir Vhost?', answer: 'Ofrecemos hardware premium y soporte 24/7 a precios competitivos.' },
+  { question: '¿Se puede instalar mods o plugins en los servidores?', answer: 'Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.' },
+  { question: '¿Los servidores funcionan con Minecraft Bedrock?', answer: 'Sí, soportamos tanto Java Edition como Bedrock Edition.' },
+  { question: '¿Puedo subir mi propio mundo al servidor?', answer: 'Puedes subir tu mundo directamente desde la sección Archivos.' },
+  { question: '¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?', answer: 'Sí, ofrecemos migración gratuita de tu servidor actual.' },
+  { question: '¿Qué plan debería elegir?', answer: 'Depende de tu uso; revisa las características de cada plan para decidir.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.' },
+];
+---
+
+<MainLayout title="Tienda">
+  <HeroTienda 
+  titulo="Minecraft Hosting"
+  imagenFondo="/images/aquatic.png"
+/>
+
+
+
+  <!--  Fondo solo para esta sección -->
+  <section
+    class="relative bg-[#0b0b0b] text-white py-12 px-4"
+    
+  >
+      <!-- Título, subtítulo y enlace -->
+  <div class="text-center mt-12 mb-6">
+    <h2 class="text-3xl font-poppins font-semibold text-white">Comparar tipos de planes</h2>
+    <p class="text-gray-300 font-poppins mt-1">
+      Selecciona una gama para ver sus características y precios.
+    </p>
+    <a
+      href="#gamas"
+      id="scroll-to-gamas"
+      class="mt-2 inline-block text-secondary underline font-poppins transition-colors duration-300 hover:text-[#e07600]"
+    >
+      Ver características
+    </a>
+  </div>
+
+
+    <div class="relative z-10">
+      <!-- Interruptor tipo toggle -->
+      <div class="flex justify-center my-6">
+        <div class="relative inline-flex bg-[#1a1a1a] rounded-full text-lg font-poppins font-semibold text-white w-[14rem] h-12 items-center">
+          <!-- Indicador deslizante -->
+          <div
+            id="toggle-indicator"
+            class="absolute top-0 left-0 h-full w-1/2 rounded-full bg-[#fc7c04] transition-all duration-300 z-0"
+          ></div>
+
+          <!-- Botón Budget -->
+          <button
+            id="btn-budget"
+            class="relative z-10 w-1/2 h-full rounded-full transition-colors duration-300"
+          >
+            Budget
+          </button>
+
+          <!-- Botón Premium -->
+          <button
+            id="btn-premium"
+            class="relative z-10 w-1/2 h-full rounded-full transition-colors duration-300"
+          >
+            Premium
+          </button>
+        </div>
+      </div>
+
+      <!-- Secciones -->
+      <div id="budget-section" class="transition-opacity duration-200 ease-in-out opacity-100">
+        <BudgetSection />
+        <DedicatedSection />
+      </div>
+
+      <div id="premium-section" class="transition-opacity duration-200 ease-in-out opacity-0 hidden">
+        <PremiumSection />
+        <DedicatedSection />
+      </div>
+    </div>
+  </section>
+
+  <!-- Estas secciones no tienen el fondo -->
+  <Gamas />
+  <FAQSection items={faqs} inviteLink="https://discord.gg/Ykr85wevrj" />
+
+  <!-- Script -->
+  <script is:inline>
+    const btnBudget = document.getElementById('btn-budget');
+    const btnPremium = document.getElementById('btn-premium');
+    const toggleIndicator = document.getElementById('toggle-indicator');
+    const budgetSection = document.getElementById('budget-section');
+    const premiumSection = document.getElementById('premium-section');
+    const DURATION = 200;
+
+    function fadeTo(show, hide) {
+      hide.classList.remove('opacity-100');
+      hide.classList.add('opacity-0');
+      setTimeout(() => {
+        hide.classList.add('hidden');
+        show.classList.remove('hidden');
+        show.classList.remove('opacity-100');
+        show.classList.add('opacity-0');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            show.classList.remove('opacity-0');
+            show.classList.add('opacity-100');
+          });
+        });
+      }, DURATION);
+    }
+
+    btnBudget.addEventListener('click', () => {
+      fadeTo(budgetSection, premiumSection);
+      toggleIndicator.style.left = '0';
+      btnBudget.classList.add('text-black');
+      btnBudget.classList.remove('text-white');
+      btnPremium.classList.remove('text-black');
+      btnPremium.classList.add('text-white');
+    });
+
+    btnPremium.addEventListener('click', () => {
+      fadeTo(premiumSection, budgetSection);
+      toggleIndicator.style.left = '50%';
+      btnPremium.classList.add('text-black');
+      btnPremium.classList.remove('text-white');
+      btnBudget.classList.remove('text-black');
+      btnBudget.classList.add('text-white');
+    });
+
+    toggleIndicator.style.left = '0';
+
+    const scrollLink = document.getElementById('scroll-to-gamas');
+    scrollLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const gamasSection = document.getElementById('gamas');
+      if (gamasSection) {
+        gamasSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+</MainLayout>
