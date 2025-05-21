@@ -5,6 +5,7 @@ import Footer from '../components/layout/Footer.astro';
 import ScrollToTop from '../components/layout/ScrollToTop.astro';
 const { title, description = 'Vhost Hosting Services' } = Astro.props;
 import DiscordStatus from '../components/layout/DiscordStatus.astro';
+import MobileHeader from '../components/movil/MobileHeader.astro';
 ---
 
 <!DOCTYPE html>
@@ -37,8 +38,6 @@ import DiscordStatus from '../components/layout/DiscordStatus.astro';
   <meta name="description" content={description} />
   <meta name="theme-color" content="#101010" />
 
- 
-
   <!-- Open Graph / Redes Sociales -->
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
@@ -47,17 +46,27 @@ import DiscordStatus from '../components/layout/DiscordStatus.astro';
   <meta property="og:url" content={Astro.url.href} />
 </head>
 <body class="min-h-screen flex flex-col bg-[#101010] text-gray-100">
-  <Header />
+  
+  <!-- Header solo en escritorio -->
+  <div class="hidden md:block">
+    <Header />
+  </div>
+  <!-- Header solo en móvil (fijo arriba) -->
+  <MobileHeader />
+  <div class="md:hidden" style="height: 80px;"></div>
+
 
   <main class="fade-content flex-grow">
     <slot />
   </main>
 
   <Footer class="mt-auto" />
-<div class="hidden md:block">
-  <layout/ScrollToTop />
-  <DiscordStatus />
-</div>
+  
+  <!-- ScrollToTop y DiscordStatus solo en escritorio -->
+  <div class="hidden md:block">
+    <layout/ScrollToTop />
+    <DiscordStatus />
+  </div>
 
   <!-- Evitar FOUC -->
   <script is:inline>
@@ -67,5 +76,6 @@ import DiscordStatus from '../components/layout/DiscordStatus.astro';
 
   <!-- Slide-up observer -->
   <script type="module" src="/scripts/slide-up.js"></script>
+  <ScrollToTop />
 </body>
 </html>

@@ -2,17 +2,23 @@
 const { currentPath } = Astro.props;
 ---
 
-<div class="md:hidden relative">
+<header class="md:hidden fixed top-0 left-0 w-full bg-secondary h-16 flex items-center justify-between px-6 shadow z-50">
+  <!-- Logo a la izquierda -->
+  <a href="/" class="flex items-center h-full">
+    <img src="/images/vhosthostingservices-blanca.png" alt="Vhost Logo" class="h-36 w-auto" loading="lazy" />
+  </a>
+
   <!-- Botón hamburguesa -->
   <button
     id="menu-toggle"
     aria-label="Toggle menu"
     class="text-white focus:outline-none"
+    type="button"
   >
     <svg
       id="icon-open"
       xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6"
+      class="h-8 w-8"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -21,7 +27,7 @@ const { currentPath } = Astro.props;
     </svg>
   </button>
 
-  <!-- Overlay menú full-screen con fondo opaco del color principal -->
+  <!-- Overlay menú full-screen -->
   <div
     id="mobile-menu"
     class="hidden fixed inset-0 z-50 flex bg-primary p-0 overflow-auto"
@@ -36,10 +42,11 @@ const { currentPath } = Astro.props;
         id="menu-close"
         aria-label="Close menu"
         class="absolute top-4 right-6 text-white focus:outline-none"
+        type="button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6"
+          class="h-8 w-8"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -53,7 +60,6 @@ const { currentPath } = Astro.props;
         <li><a href="/tienda" class="block text-lg font-poppins font-bold text-white">TIENDA</a></li>
         <li><a href="/partners" class="block text-lg font-poppins font-bold text-white">PARTNERS</a></li>
         <li><a href="/contacto" class="block text-lg font-poppins font-extrabold text-white">SOPORTE</a></li>
-
         <!-- CLIENTES como dropdown -->
         <li>
           <details>
@@ -124,4 +130,4 @@ const { currentPath } = Astro.props;
       });
     });
   </script>
-</div>
+</header>
