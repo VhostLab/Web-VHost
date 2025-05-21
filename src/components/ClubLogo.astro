@@ -3,15 +3,16 @@
 export interface Props {
   imageSrc: string;
   alt?: string;
+  url?: string;
 }
-const { imageSrc, alt = "" } = Astro.props as Props;
+const { imageSrc, alt = "", url = "https://vhost.tech" } = Astro.props as Props;
 ---
 
-<div class="flex items-center justify-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+<a href={url} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center p-4 bg-[#161616] rounded-lg shadow-md hover:shadow-lg transition-shadow">
   <img
     src={imageSrc}
     alt={alt}
     class="h-16 w-auto object-contain"
     loading="lazy"
   />
-</div>
+</a>

@@ -7,7 +7,7 @@ import "../styles/global.css";
 import el_jjota from '../images/el_jjota.jpg';
 import joselyto from '../images/joselyto.jpg';
 import community3k from '../images/3k.jpg';
-import vhostlogo from '../images/vhostlogo.png';
+
 
 const creators = [
   {
@@ -36,7 +36,30 @@ const communities = [
   }
 ];
 
-const clubs = Array(5).fill({ imageSrc: vhostlogo.src, alt: 'Vhost Logo' });
+export const clubs = [
+  {
+    name: "Club Esports Sur",
+    imageSrc: "/images/clubs/vhostlogo.png",
+    alt: "Logo Club Esports Sur",
+    url: "https://vhost.tech"
+  },
+  {
+    name: "Gamers Unidos",
+    imageSrc: "/images/clubs/vhostlogo.png",
+    alt: "Logo Gamers Unidos",
+    url: "https://vhost.tech"
+  },
+  {
+    name: "Vhost",
+    imageSrc: "/images/clubs/vhostlogo.png",
+    alt: "Vhost Logo",
+    url: "https://vhost.tech"
+  },
+  
+];
+
+
+
 ---
 
 <MainLayout title="Partners">
@@ -88,24 +111,28 @@ const clubs = Array(5).fill({ imageSrc: vhostlogo.src, alt: 'Vhost Logo' });
   </section>
 
   <!-- Sección: Clubs -->
-  <section class="slide-up py-20" style="background-color: #0b0b0b;">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-2">Clubs</h2>
-      <div class="border-t-2 border-secondary w-16 mx-auto mb-6"></div>
-      <p class="text-gray-400 mb-12 max-w-xl mx-auto">
-        Descubre los clubes asociados que forman parte de la familia Vhost.
-      </p>
-      <div class="flex flex-wrap justify-center items-center gap-4">
-        {clubs.map(c => (
-          <div class="w-32 h-32 flex items-center justify-center">
-            <ClubLogo
-              imageSrc={c.imageSrc}
-              alt={c.alt}
-            />
-          </div>
-        ))}
-      </div>
+<!-- Donde muestras los logos -->
+<section class="slide-up py-20" style="background-color: #0b0b0b;">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold mb-2 text-white">Clubs</h2>
+    <div class="border-t-2 border-secondary w-16 mx-auto mb-6"></div>
+    <p class="text-gray-400 mb-12 max-w-xl mx-auto">
+      Descubre los clubes asociados que forman parte de la familia Vhost.
+    </p>
+    <div class="flex flex-wrap justify-center items-center gap-4">
+      {clubs.map(c => (
+        <div class="w-32 h-40 flex items-center justify-center">
+          <ClubLogo
+            imageSrc={c.imageSrc}
+            alt={c.alt}
+            url={c.url}
+          />
+        </div>
+      ))}
     </div>
-  </section>
+  </div>
+</section>
+
+
 
 </MainLayout>

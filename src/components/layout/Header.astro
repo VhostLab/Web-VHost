@@ -48,9 +48,71 @@ const currentPath = Astro.url.pathname;
 
       <!-- Navegación escritorio -->
       <nav class="hidden md:flex items-center space-x-6">
-        <ul class="flex space-x-8 items-center">
+        <ul class="flex space-x-2 items-center">
           <li><a href="/" class="text-lg font-poppins font-bold text-white">INICIO</a></li>
-          <li><a href="/tienda" class="text-lg font-poppins font-bold text-white">TIENDA</a></li>
+          <li class="relative group" tabindex="0">
+<li class="relative group" tabindex="0">
+  <button
+    class="text-lg font-poppins font-bold text-white px-3 py-1 flex items-center focus:outline-none"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    TIENDA
+    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  <ul
+    class="absolute left-0 top-full mt-0 w-auto min-w-[500px]
+           bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
+           rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
+           invisible opacity-0
+           group-hover:visible group-hover:opacity-100
+           hover:visible hover:opacity-100
+           focus-within:visible focus-within:opacity-100
+           transition duration-200 whitespace-nowrap overflow-hidden
+           flex flex-row gap-8 p-6"
+  >
+    <!-- Columna Game Hosting (dos columnas usando flex) -->
+    <div>
+      <span class="px-2 pb-2 text-xs uppercase tracking-wider text-gray-400 font-bold block mb-2">Game Hosting</span>
+      <div class="flex flex-row gap-8">
+        <div class="flex flex-col min-w-[140px]">
+          <a href="/tienda/minecraft"
+            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+          >Minecraft</a>
+          <a href="/tienda/ark"
+            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+          >Ark Survival Evolved</a>
+        </div>
+        <div class="flex flex-col min-w-[100px]">
+          <a href="/tienda/rust"
+            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+          >Rust</a>
+          <a href="/tienda/gta5"
+            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+          >GTA 5</a>
+        </div>
+      </div>
+    </div>
+    <!-- Divider -->
+    <div class="w-px bg-white/10 mx-2"></div>
+    <!-- Columna Other Services -->
+    <div class="flex flex-col min-w-[160px]">
+      <span class="px-2 pb-2 text-xs uppercase tracking-wider text-gray-400 font-bold mb-2">Other Services</span>
+      <a href="/tienda/teamspeak3"
+        class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+      >Teamspeak 3</a>
+      <a href="/tienda/discordbot"
+        class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
+      >Discord Bot</a>
+    </div>
+  </ul>
+</li>
+
+
+
+
           <li><a href="/partners" class="text-lg font-poppins font-bold text-white">PARTNERS</a></li>
         </ul>
         <ul class="flex space-x-6 items-center">

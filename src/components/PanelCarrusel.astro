@@ -1,37 +1,48 @@
 ---
 const slides = [
   {
-    imagen: "/images/panel/panel1.png",
-    titulo: "Panel intuitivo",
-    descripcion: "Todo lo que necesitas, en un solo lugar."
+    imagen: "/images/panel/Panel-1.png",
+    titulo: "Inicio del Panel",
+    descripcion: "Página principal del panel de control, con acceso rápido a todas las funciones importantes."
   },
   {
-    imagen: "/images/panel/panel2.png",
-    titulo: "Instalación de mods",
-    descripcion: "Añade mods o plugins en segundos."
+    imagen: "/images/panel/Panel-2.png",
+    titulo: "Consola del Servidor",
+    descripcion: "Visualiza y administra la consola en tiempo real para controlar tu servidor fácilmente."
   },
   {
-    imagen: "/images/panel/panel3.png",
-    titulo: "Backups rápidos",
-    descripcion: "Tus datos, siempre seguros y recuperables."
+    imagen: "/images/panel/Panel-3.png",
+    titulo: "Gestión de Archivos",
+    descripcion: "Explora, sube, edita y administra todos los archivos de tu servidor desde una sola pestaña."
   },
   {
-    imagen: "/images/panel/panel4.png",
-    titulo: "Gestión de usuarios",
-    descripcion: "Controla permisos y acceso fácilmente."
+    imagen: "/images/panel/Panel-4.png",
+    titulo: "Bases de Datos",
+    descripcion: "Administra y gestiona las bases de datos asociadas a tu servidor de manera sencilla."
   },
   {
-    imagen: "/images/panel/panel5.png",
-    titulo: "Monitorización en tiempo real",
-    descripcion: "Visualiza el estado y el rendimiento del servidor."
+    imagen: "/images/panel/Panel-5.png",
+    titulo: "Gestión de Accesos",
+    descripcion: "Invita y administra a las personas que pueden acceder y gestionar tu servidor."
+  },
+  {
+    imagen: "/images/panel/Panel-6.png",
+    titulo: "Backups del Servidor",
+    descripcion: "Gestiona las copias de seguridad de tu servidor para mantener tus datos siempre protegidos."
+  },
+  {
+    imagen: "/images/panel/Panel-7.png",
+    titulo: "Gestión de IPs",
+    descripcion: "Administra las direcciones IP asociadas a tu servidor de manera eficiente."
   }
 ];
+
 ---
 <section id="panel-carousel" class="w-full flex flex-col items-center py-20 px-2 bg-[#101010]">
   <div class="text-center mb-12">
     <h2 class="text-3xl md:text-4xl font-extrabold font-poppins text-white tracking-tight inline-block">
       Vista previa del panel de gestión
-      <span class="block w-12 h-1 mt-2 mx-auto bg-secondary rounded"></span>
+      <div class="border-t-2 border-secondary w-24 mx-auto mb-6 mt-6"></div>
     </h2>
   </div>
   <div class="w-full max-w-4xl mx-auto flex flex-col items-center">
@@ -50,7 +61,7 @@ const slides = [
       ))}
     </div>
     <!-- Caja de título/descripción/dots -->
-    <div class="relative w-full bg-[#0b0b0b] border-x border-b border-[#232323] rounded-b-3xl shadow-xl flex flex-col items-center justify-center min-h-[142px] p-8 pt-9 -mt-1">
+    <div class="relative w-full bg-[#0f0f0f] border-x border-b border-[#0f0f0f] rounded-b-3xl shadow-xl flex flex-col items-center justify-center min-h-[142px] p-8 pt-9 -mt-1">
       {/* Barra de progreso: borde superior cuadrado */}
       <div class="absolute top-0 left-0 w-full h-2 overflow-hidden">
         {slides.map((_, idx) => (

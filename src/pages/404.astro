@@ -1,32 +1,25 @@
 ---
+import MainLayout from '../layouts/MainLayout.astro';
+import "../styles/global.css";
 const title = "Página no encontrada";
 const description = "La página que buscas no existe o ha sido movida.";
 ---
-
-<html lang="es" class="bg-[#101010] text-white">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>404 | Vhost</title>
-    <meta name="description" content={description} />
-    <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="min-h-screen bg-[#101010] flex items-center justify-center">
-    <main class="flex flex-col items-center px-4">
-      <img src="/images/vhostblanco.png" alt="Vhost Logo" class="w-20 h-20 mb-8" />
-      <h1 class="text-5xl font-bold text-secondary mb-4 font-poppins">404</h1>
-      <h2 class="text-2xl md:text-3xl font-semibold mb-2 font-poppins">{title}</h2>
-      <p class="text-gray-300 mb-8 text-center max-w-md">{description}</p>
+<MainLayout title="Error">
+  <section class="min-h-screen flex items-center justify-center bg-primary">
+    <div class="flex flex-col items-center justify-center w-full max-w-md px-6 py-12 bg-white/5 rounded-2xl shadow-lg">
+      
+      <h1 class="text-7xl font-bold text-secondary mb-2 font-poppins">404</h1>
+      <h2 class="text-2xl font-semibold text-secondary mb-4 font-poppins text-center">Página no encontrada</h2>
+      <p class="text-gray-300 mb-8 text-center">{description}</p>
       <a
         href="/"
-        class="inline-block bg-secondary hover:bg-accent text-black font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow"
+        class="inline-block bg-secondary hover:opacity-80 text-black font-semibold py-3 px-8 rounded-lg transition-all duration-150"
       >
         Volver al inicio
       </a>
-    </main>
-  </body>
-</html>
+
+    </div>
+  </section>
+</MainLayout>
+
+
