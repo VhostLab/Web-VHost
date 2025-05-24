@@ -5,7 +5,7 @@ const { currentPath } = Astro.props;
 <header class="md:hidden fixed top-0 left-0 w-full bg-secondary h-16 flex items-center justify-between px-6 shadow z-50">
   <!-- Logo a la izquierda -->
   <a href="/" class="flex items-center h-full">
-    <img src="/images/vhosthostingservices-blanca.png" alt="Vhost Logo" class="h-36 w-auto" loading="lazy" />
+    <img src="/images/vhosthostingservices-blanca.png" alt="Vhost Logo" class="h-32 w-auto" loading="lazy" />
   </a>
 
   <!-- Botón hamburguesa -->
@@ -56,14 +56,63 @@ const { currentPath } = Astro.props;
       </button>
 
       <ul class="mt-12 space-y-4">
-        <li><a href="/" class="block text-lg font-poppins font-bold text-white">INICIO</a></li>
-        <li><a href="/tienda" class="block text-lg font-poppins font-bold text-white">TIENDA</a></li>
-        <li><a href="/partners" class="block text-lg font-poppins font-bold text-white">PARTNERS</a></li>
-        <li><a href="/contacto" class="block text-lg font-poppins font-extrabold text-white">SOPORTE</a></li>
-        <!-- CLIENTES como dropdown -->
+        <!-- INICIO -->
+        <li>
+          <a href="/" class="block text-lg font-poppins font-bold text-white">INICIO</a>
+        </li>
+
+        <!-- Dropdown TIENDA (estilo igual a CLIENTES) -->
         <li>
           <details>
-            <summary class="flex justify-between items-center cursor-pointer text-white font-poppins font-extrabold text-lg">
+            <summary class="flex justify-between items-center cursor-pointer text-white font-poppins font-extrabold text-lg select-none">
+              TIENDA
+              <svg class="w-5 h-5 ml-1 transform transition-transform duration-200"
+                   fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 9l-7 7-7-7"/>
+              </svg>
+            </summary>
+            <ul class="mt-2 pl-4 space-y-2">
+              <li>
+                <a href="/tienda/minecraft"
+                   class="block text-white text-sm font-semibold">
+                  MINECRAFT
+                </a>
+              </li>
+              <li>
+                <a href="/tienda/ark"
+                   class="block text-white text-sm font-semibold">
+                  ARK SURVIVAL EVOLVED
+                </a>
+              </li>
+              <li>
+                <a href="/tienda/rust"
+                   class="block text-white text-sm font-semibold">
+                  RUST
+                </a>
+              </li>
+              <li>
+                <a href="/tienda/gta5"
+                   class="block text-white text-sm font-semibold">
+                  GTA 5
+                </a>
+              </li>
+            </ul>
+          </details>
+        </li>
+
+        <!-- PARTNERS -->
+        <li>
+          <a href="/partners" class="block text-lg font-poppins font-bold text-white">PARTNERS</a>
+        </li>
+        <!-- SOPORTE -->
+        <li>
+          <a href="/contacto" class="block text-lg font-poppins font-extrabold text-white">SOPORTE</a>
+        </li>
+        <!-- Dropdown CLIENTES -->
+        <li>
+          <details>
+            <summary class="flex justify-between items-center cursor-pointer text-white font-poppins font-extrabold text-lg select-none">
               CLIENTES
               <svg class="w-5 h-5 ml-1 transform transition-transform duration-200"
                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,10 +165,12 @@ const { currentPath } = Astro.props;
     toggleBtn.addEventListener('click', () => {
       menu.classList.toggle('hidden');
       iconOpen.classList.toggle('hidden');
+      document.body.style.overflow = menu.classList.contains('hidden') ? '' : 'hidden';
     });
     closeBtn.addEventListener('click', () => {
       menu.classList.add('hidden');
       iconOpen.classList.remove('hidden');
+      document.body.style.overflow = '';
     });
 
     // Rotación del icono al abrir/cerrar detalle
@@ -128,6 +179,15 @@ const { currentPath } = Astro.props;
         const svg = summary.querySelector('svg');
         svg.classList.toggle('rotate-180');
       });
+    });
+
+    // Cierra menú con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        document.body.style.overflow = '';
+      }
     });
   </script>
 </header>
