@@ -1,0 +1,85 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import "../../styles/global.css";
+import HeroTienda from '../../components/HeroTienda.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import DedicatedSection from '../../components/DedicatedSection.astro';
+import Card from '../../components/tienda/card.astro';
+import CaracteristicasInicio from '../../components/CaracteristicasInicio.astro';
+
+const arkPlans = [
+  {
+    type: "Raptor",
+    ram: "8GB RAM",
+    img: "/images/tienda/ark/plan/raptor.webp",
+    price: "19,99€ /mes",
+    url: "#",
+  },
+  {
+    type: "Triceratops",
+    ram: "16GB RAM",
+    img: "/images/tienda/ark/plan/triceratops.webp",
+    price: "39,99€ /mes",
+    url: "#",
+  },
+  {
+    type: "Giganotosaurus",
+    ram: "32GB RAM",
+    img: "/images/tienda/ark/plan/giganotosaurus.webp",
+    price: "79,99€ /mes",
+    url: "#",
+  },
+];
+
+const arkFeatures = [
+  { icon: 'fas fa-user-friends mr-2.5', text: '<strong>Slots</strong> Ilimitados' },
+  { icon: 'fas fa-hdd mr-3.5', text: '<strong>60 GB</strong> de disco' },
+  { icon: 'fas fa-shield-alt mr-3.5', text: 'Protección <strong>Anti-DDoS</strong>' },
+  { icon: 'fas fa-microchip mr-3.5', text: '<strong>Intel i7-9700K</strong>' },
+];
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y Bizum.' },
+  { question: '¿Cuánto tarda en estar disponible mi servidor de Ark?', answer: 'La instalación es instantánea tras el pago. Recibirás los datos de acceso al momento.' },
+  { question: '¿Por qué debería elegir Vhost para mi servidor de Ark?', answer: 'Ofrecemos hardware premium, soporte técnico 24/7 y una infraestructura optimizada para Ark a precios competitivos.' },
+  { question: '¿Puedo instalar mods o mapas personalizados en mi servidor de Ark?', answer: 'Sí, tienes acceso completo vía FTP para instalar todos los mods, mapas y configuraciones que desees.' },
+  { question: '¿Cuántos jugadores soportan los servidores?', answer: 'Depende del plan que elijas, pero puedes escalar el número de slots de jugadores en cualquier momento.' },
+  { question: '¿Puedo subir mi partida guardada o mundo propio?', answer: 'Claro, puedes subir tu mundo o partidas guardadas directamente desde el panel de control.' },
+  { question: 'Estoy en otro hosting, ¿puedo migrar mi servidor a Vhost?', answer: 'Sí, ofrecemos migración gratuita desde otros proveedores para que no pierdas nada de tu progreso.' },
+  { question: '¿Qué plan de servidor Ark es el más adecuado para mí?', answer: 'Depende del número de jugadores y mods que planees usar. Consulta las características de cada plan o contáctanos para asesoría personalizada.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime, con monitoreo 24/7 y protección avanzada contra ataques DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para proteger tus partidas y archivos.' },
+];
+
+---
+
+
+<MainLayout 
+  title="ARK"
+  description="Contrata tu servidor de ARK en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre nuestros planes."
+  image="https://vhost.tech/SEO/vhost-preview.webp"
+  url="https://vhost.tech/tienda/ark"
+>
+  <HeroTienda 
+    titulo="ARK Hosting"
+    imagenFondo="/images/tienda/ark/ark-bg.webp"
+  />
+
+  <section class="relative bg-[#0b0b0b] text-white py-12 px-4">
+    <div class="text-center mt-12 mb-6">
+      <h2 class="text-3xl font-poppins font-semibold text-white">Comparar tipos de planes</h2>
+      <p class="text-gray-300 font-poppins mt-1">
+        Selecciona una gama para ver sus características y precios.
+    </div>
+    <div id="budget-section" class="transition-opacity duration-200 ease-in-out opacity-100">
+      <Card products={arkPlans} featuresList={arkFeatures} />
+      <DedicatedSection />
+    </div>
+  </section>
+  <CaracteristicasInicio />
+
+    <FAQSection
+  items={faqs}
+  inviteLink="https://discord.gg/Ykr85wevrj"
+  backgroundClass="bg-[#0b0b0b]"
+  />
+</MainLayout>

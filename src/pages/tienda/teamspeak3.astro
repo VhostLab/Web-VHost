@@ -1,0 +1,69 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import "../../styles/global.css";
+import HeroTienda from '../../components/HeroTienda.astro';
+import FAQSection from '../../components/FAQSection.astro';
+import Card from '../../components/tienda/card.astro';
+import CaracteristicasInicio from '../../components/CaracteristicasInicio.astro';
+
+const tsPlans = [
+  {
+    type: "TeamSpeak Pro",
+    ram: "32 SLOTS",
+    img: "/images/tienda/teamspeak3/plan/ts3.webp", // Cambia por la imagen real
+    price: "0,99€ /mes",
+    url: "#",
+  },
+];
+
+const tsFeatures = [
+  { icon: 'fas fa-users mr-2.5', text: '<strong>32</strong> Slots' }, // Mejor que user-friends para canales/usuarios
+  { icon: 'fas fa-shield-alt mr-3.5', text: 'Protección <strong>Anti-DDoS</strong>' },
+  { icon: 'fas fa-server mr-3.5', text: '<strong>99,9%</strong> Uptime' }, // Más relacionado con servidores que microchip
+  { icon: 'fas fa-volume-up mr-3.5', text: 'Calidad de <strong>Audio HD</strong>' }, // Nueva característica relevante para TS
+];
+
+
+const faqs = [
+  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y Bizum.' },
+  { question: '¿Cuánto tarda en estar disponible mi servidor de TeamSpeak?', answer: 'La instalación es instantánea tras el pago. Recibirás los datos de acceso al momento.' },
+  { question: '¿Por qué debería elegir Vhost para mi servidor de TeamSpeak?', answer: 'Ofrecemos máxima calidad de audio, soporte técnico 24/7 y una infraestructura segura y estable.' },
+  { question: '¿Puedo gestionar los permisos y canales de mi TeamSpeak?', answer: 'Sí, tienes acceso completo al panel de administración para personalizar tu servidor a tu gusto.' },
+  { question: '¿Cuántos usuarios soporta el servidor?', answer: 'El número de slots es de 32.' },
+  { question: '¿Puedo migrar mi servidor de otro proveedor?', answer: 'Sí, ofrecemos migración gratuita para que no pierdas tu configuración ni historial.' },
+  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime, con monitoreo 24/7 y protección avanzada contra ataques DDoS.' },
+  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para proteger tu configuración y canales.' },
+];
+---
+
+<MainLayout 
+  title="TeamSpeak"
+  description="Contrata tu servidor de TeamSpeak en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. ¡Habla sin límites y con máxima calidad de audio!"
+  image="https://vhost.tech/SEO/vhost-preview.webp"
+  url="https://vhost.tech/tienda/teamspeak3"
+>
+  <HeroTienda 
+    titulo="TeamSpeak Hosting"
+    imagenFondo="/images/tienda/teamspeak3/ts-bg.webp"
+  />
+
+  <section class="relative bg-[#0b0b0b] text-white py-12 px-4">
+    <div class="text-center mt-12 mb-6">
+      <h2 class="text-3xl font-poppins font-semibold text-white">Nuestro plan TeamSpeak</h2>
+      <p class="text-gray-300 font-poppins mt-1">
+        Un solo plan, todo incluido, sin complicaciones.
+      </p>
+    </div>
+    <div id="budget-section" class="transition-opacity duration-200 ease-in-out opacity-100">
+      <Card products={tsPlans} featuresList={tsFeatures} />
+      
+    </div>
+  </section>
+
+  <CaracteristicasInicio />
+  <FAQSection
+    items={faqs}
+    inviteLink="https://discord.gg/Ykr85wevrj"
+    backgroundClass="bg-[#0b0b0b]"
+  />
+</MainLayout>
