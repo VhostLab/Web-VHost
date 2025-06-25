@@ -1,0 +1,34 @@
+---
+// src/components/partners/HistorialEventos.astro
+import EventoColaboracion from './EventoColaboracion.astro';
+---
+
+<section class="bg-[#101010] py-20">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center text-white mb-12 font-poppins">
+      Historial de Colaboraciones
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <EventoColaboracion
+        imgSrc="/images/partners/eventos/equizers.webp"
+        nombre="PostZomb"
+        year="2024"
+        descripcion="Colaboramos con @eQuizersEC y 50 creadores en este evento hardcore, donde los jugadores enfrentan hordas de zombis y bosses en un mapa post-apocalíptico. ¡Supervivencia al límite y trabajo en equipo para desafiar el máximo reto en Minecraft!"
+      />
+
+      <EventoColaboracion
+        imgSrc="/images/partners/eventos/totty.webp"
+        nombre="Minecraft Extreme"
+        year="2023"
+        descripcion="Evento organizado por Totty (@tottymixeasy) donde los jugadores compiten con vidas limitadas y eliminaciones directas en distintas etapas. El mapa inicia en una isla costera y cada fase ofrece modos de juego variados como duelos y supervivencia. Ideal para quienes buscan partidas dinámicas llenas de estrategia y acción PvP."
+      />
+      <EventoColaboracion
+        imgSrc="/images/partners/eventos/vhostblanco.webp"
+        nombre="Servidores SMP"
+        year="2022"
+        descripcion="Creamos servidores Survival Multiplayer (SMP) con lobbys temáticos, arenas PvP, economía, trabajos y protección de zonas. Ofrecemos una experiencia de supervivencia colaborativa, con micropagos, crates y mundo abierto para que cada jugador viva su propia aventura junto a la comunidad."
+      />
+      <!-- Puedes añadir más Eventos aquí -->
+    </div>
+  </div>
+</section>

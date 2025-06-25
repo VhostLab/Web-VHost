@@ -1,143 +1,109 @@
 ---
-// src/pages/partners.astro
 import MainLayout from '../layouts/MainLayout.astro';
-import PartnersCard from '../components/PartnersCard.astro';
-import ClubLogo from '../components/ClubLogo.astro';
 import "../styles/global.css";
-import el_jjota from '../images/el_jjota.webp';
-import joselyto from '../images/joselyto.webp';
-import community3k from '../images/3k.webp';
-
-
-const creators = [
-  {
-    name: 'el_jjota', role: 'Streamer', imageSrc: el_jjota.src,
-    twitchUrl: 'https://www.twitch.tv/el_jjota',
-    twitterUrl: 'https://x.com/el_jjota',
-    youtubeUrl: 'https://www.youtube.com/@el_jjota',
-    tiktokUrl: 'https://www.tiktok.com/@el_jjota',
-    instagramUrl: 'https://www.instagram.com/el_jjota/'
-  },
-  {
-    name: 'Joselyto', role: 'Streamer', imageSrc: joselyto.src,
-    twitchUrl: 'https://www.twitch.tv/Joselyto',
-    twitterUrl: 'https://x.com/JoselytoOG',
-    youtubeUrl: 'https://www.youtube.com/@joselyto',
-    tiktokUrl: 'https://www.tiktok.com/@joselytoog',
-    instagramUrl: 'https://www.instagram.com/joselyto.tv/'
-  }
-];
-
-const communities = [
-  {
-    name: '3K COMMUNITY', type: 'Comunidad', imageSrc: community3k.src,
-    twitterUrl: 'https://x.com/community3000',
-    youtubeUrl: 'https://www.youtube.com/@community-3000'
-  }
-];
-
-export const clubs = [
-  {
-    name: "Club Esports Sur",
-    imageSrc: "/images/clubs/vhostlogo.webp",
-    alt: "Logo Club Esports Sur",
-    url: "https://vhost.tech"
-  },
-  {
-    name: "Gamers Unidos",
-    imageSrc: "/images/clubs/vhostlogo.webp",
-    alt: "Logo Gamers Unidos",
-    url: "https://vhost.tech"
-  },
-  {
-    name: "Vhost",
-    imageSrc: "/images/clubs/vhostlogo.webp",
-    alt: "Vhost Logo",
-    url: "https://vhost.tech"
-  },
-  
-];
-
+import HeroPartners from '../components/partners/HeroPartners.astro';
+import UneteVhost from '../components/partners/UneteVhost.astro';
+import VentajasPartners from '../components/partners/VentajasPartners.astro'
+import HistorialEventos from '../components/partners/HistorialEventos.astro'
 
 
 ---
 
 <MainLayout 
   title="Partners"
-  description="Descubre nuestros creadores de contenido, comunidades colaboradoras y clubes asociados. Conoce a los partners que forman parte de la familia Vhost."
+  description="¿Eres creador de contenido, club o comunidad? Únete a nuestro programa de partners, colabora con Vhost y gana comisiones trayendo nuevos clientes. ¡Crecemos juntos!"
   image="https://vhost.tech/SEO/vhost-preview.webp"
   url="https://vhost.tech/partners"
 >
-  <!-- Sección: Creadores de Contenido -->
-  <section class="slide-up py-20" style="background-color: #0b0b0b;">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold text-white mb-2">Creadores de Contenido</h2>
-      <div class="border-t-2 border-secondary w-16 mx-auto mb-6"></div>
-      <p class="text-gray-400 mb-12 max-w-xl mx-auto">
-        Descubre a nuestros streamers oficiales y síguelos en sus redes para no perderte ninguna transmisión.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        {creators.map(c => (
-          <PartnersCard
-            name={c.name}
-            role={c.role}
-            imageSrc={c.imageSrc}
-            twitchUrl={c.twitchUrl}
-            twitterUrl={c.twitterUrl}
-            youtubeUrl={c.youtubeUrl}
-            tiktokUrl={c.tiktokUrl}
-            instagramUrl={c.instagramUrl}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
 
-  <!-- Sección: Comunidades -->
-  <section class="slide-up py-20" style="background-color: #101010;">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-2" style="color: #ffffff;">Comunidades</h2>
-      <div class="border-t-2 w-16 mx-auto mb-6" style="border-color: #fc7c04;"></div>
-      <p class="mb-12 max-w-xl mx-auto text-gray-400">
-        Conoce las comunidades que colaboran estrechamente con nosotros.
-      </p> 
-      <div class="flex flex-wrap justify-center gap-4">
-        {communities.map(c => (
-          <PartnersCard
-            name={c.name}
-            role={c.type}
-            imageSrc={c.imageSrc}
-            twitterUrl={c.twitterUrl}
-            youtubeUrl={c.youtubeUrl}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Sección: Clubs -->
-<!-- Donde muestras los logos -->
-<section class="slide-up py-20" style="background-color: #0b0b0b;">
-  <div class="container mx-auto px-6 text-center">
-    <h2 class="text-4xl font-bold mb-2 text-white">Clubs</h2>
-    <div class="border-t-2 border-secondary w-16 mx-auto mb-6"></div>
-    <p class="text-gray-400 mb-12 max-w-xl mx-auto">
-      Descubre los clubes asociados que forman parte de la familia Vhost.
+<HeroPartners />
+<UneteVhost />
+<VentajasPartners />
+<HistorialEventos />
+<section id="support-options" class="bg-[#0b0b0b] text-white py-28 px-6">
+  <div class="max-w-5xl mx-auto text-center mb-16" data-aos="fade-up" data-aos-duration="700">
+    <h2 class="text-4xl md:text-5xl font-bold font-poppins mb-4">Nuestras opciones de contacto</h2>
+    <p class="text-gray-400 text-lg font-poppins max-w-2xl mx-auto">
+      Elige el canal que prefieras para ponerte en contacto con nosotros.<br />
+      ¡Estamos aquí para ayudarte!
     </p>
-    <div class="flex flex-wrap justify-center items-center gap-4">
-      {clubs.map(c => (
-        <div class="w-32 h-40 flex items-center justify-center">
-          <ClubLogo
-            imageSrc={c.imageSrc}
-            alt={c.alt}
-            url={c.url}
-          />
+  </div>
+
+  <div class="space-y-6 max-w-3xl mx-auto">
+    <!-- Discord -->
+    <a
+      href="https://discord.gg/Ykr85wevrj"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="100"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fab fa-discord text-3xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Discord</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Consulta a la comunidad o staff en nuestro Discord oficial.</p>
         </div>
-      ))}
-    </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <i class="far fa-clock text-green-500 text-base"></i>
+        <span class="text-white text-sm font-bold">24/7</span>
+        <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+      </div>
+    </a>
+
+    <!-- Tickets -->
+    <a
+      href="https://billing.vhost.tech"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="200"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fas fa-paper-plane text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Crear un ticket de asistencia</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Crea un ticket y obtén ayuda de un representante.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
+
+    <!-- Email -->
+    <a
+      href="mailto:vhostts3@gmail.com"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="300"
+    >
+      <div class="flex items-center gap-5">
+        <i class="far fa-envelope text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Email</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">Para consultas más formales, puedes escribirnos por correo electrónico.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
+
+    <!-- Redes sociales -->
+    <a
+      href="https://x.com/VhostTS3"
+      target="_blank"
+      class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
+      data-aos="fade-up"
+      data-aos-delay="400"
+    >
+      <div class="flex items-center gap-5">
+        <i class="fas fa-hashtag text-2xl text-white"></i>
+        <div>
+          <p class="uppercase text-white font-bold text-base font-poppins tracking-wide">Redes Sociales</p>
+          <p class="text-sm text-gray-400 font-poppins mt-1">También estamos disponibles en nuestras redes sociales.</p>
+        </div>
+      </div>
+      <i class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"></i>
+    </a>
   </div>
 </section>
-
-
-
 </MainLayout>
