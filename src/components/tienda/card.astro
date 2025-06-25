@@ -5,6 +5,7 @@ type Product = {
   img: string;
   price: string;
   url: string;
+  info?: string; // Nuevo campo opcional
 };
 
 type Feature = {
@@ -20,14 +21,26 @@ interface CardProps {
 const { products = [], featuresList = [] }: CardProps = Astro.props;
 ---
 
-
 <section id="budget-section" class="py-8 flex justify-center px-4">
   <div class="flex flex-wrap justify-center gap-x-4 gap-y-6 w-full max-w-screen-xl">
     {products.map((product: Product) => (
       <div class="bg-[#111111] text-white w-[320px] h-[370px] p-5 rounded-[10px] flex flex-col justify-between relative transform transition-transform duration-300 hover:scale-105">
         <div class="absolute top-0 left-0 w-full h-[90px] bg-[#1f1f1f] px-4 flex items-center justify-between rounded-t-[10px]">
           <div class="flex flex-col">
-            <span class="text-[#ff8c00] text-sm font-bold uppercase font-poppins tracking-wide">{product.type}</span>
+            <div class="flex items-center gap-2 group relative">
+              <span class="text-[#ff8c00] text-sm font-bold uppercase font-poppins tracking-wide">{product.type}</span>
+              {product.info &&
+                <span class="relative ml-1 group">
+                  <i class="fas fa-info-circle text-[#3AB0FF] text-base cursor-pointer group-hover:text-[#63ccff] transition"></i>
+                  <span class="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto absolute left-1/2 -translate-x-1/2 top-7 z-50
+                    bg-[#232F3E] text-white text-xs font-poppins rounded-lg px-3 py-2 shadow-2xl font-semibold min-w-[180px] whitespace-nowrap
+                    transition-opacity duration-200 border border-[#3AB0FF]">
+                    <span class="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#232F3E] border-l border-t border-[#3AB0FF] rotate-45"></span>
+                    {product.info}
+                  </span>
+                </span>
+              }
+            </div>
             <span class="text-2xl font-extrabold font-poppins">{product.ram}</span>
           </div>
           <div class="w-[60px] h-[60px] bg-[#1a1a1a] shadow-lg flex items-center justify-center rounded">

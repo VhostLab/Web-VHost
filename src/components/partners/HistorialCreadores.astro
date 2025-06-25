@@ -1,0 +1,27 @@
+---
+import CreadorColaboracion from './CreadorColaboracion.astro';
+---
+
+<section class="bg-[#101010] py-20">
+  <div class="max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center text-white mb-4 font-poppins">
+      Creadores con los que hemos colaborado
+    </h2>
+    <p class="text-lg text-center text-[#e0e0e0] font-poppins mb-12 max-w-2xl mx-auto">
+      Descubre algunos de los streamers y creadores de contenido que han confiado en Vhost para sus eventos, series o comunidades.
+    </p>
+    <div class="flex justify-center">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 justify-center max-w-2xl mx-auto">
+        <CreadorColaboracion
+          imgSrc="/images/partners/creadores/jotta.webp"
+          nombre="el_jjota"
+        />
+        <CreadorColaboracion
+          imgSrc="/images/partners/creadores/totty.webp"
+          nombre="Tottymixeasy"
+        />
+        {/* Puedes añadir más creadores aquí */}
+      </div>
+    </div>
+  </div>
+</section>
