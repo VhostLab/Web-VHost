@@ -6,12 +6,13 @@ const products = [
     img: '/images/tienda/minecraft/plan/Coal.webp',
     price: '0,99€ /mes',
     url: 'https://billing.vhost.tech/products/Plan-Budget/Coal-Budget',
-    vanilla: '1-4 jugadores',
-    plugins: 'No recomendado',
+    infoProxy: 'Lo recomendamos solo como servidor proxy.', // Solo Coal
+    vanilla: '',
+    plugins: '',
     pluginsRange: '',
-    mods: 'No recomendado',
+    mods: '',
     modsRange: '',
-    both: 'No recomendado',
+    both: '',
     bothRange: ''
   },
   {
@@ -34,9 +35,9 @@ const products = [
     img: '/images/tienda/minecraft/plan/Gold.webp',
     price: '3,99€ /mes',
     url: 'https://billing.vhost.tech/products/Plan-Budget/Gold-Budget',
-    vanilla: '8-18 jugadores',
+    vanilla: '8-16 jugadores',
     plugins: 'Si lo recomendamos',
-    pluginsRange: '5-12 jugadores',
+    pluginsRange: '5-10 jugadores',
     mods: 'No recomendado',
     modsRange: '',
     both: 'No recomendado',
@@ -48,13 +49,13 @@ const products = [
     img: '/images/tienda/minecraft/plan/Lapis.webp',
     price: '7,99€ /mes',
     url: 'https://billing.vhost.tech/products/Plan-Budget/Lapis-Budget',
-    vanilla: '18-35 jugadores',
+    vanilla: '14-24 jugadores',
     plugins: 'Si lo recomendamos',
-    pluginsRange: '12-20 jugadores',
+    pluginsRange: '10-18 jugadores',
     mods: 'Si lo recomendamos',
-    modsRange: '2-6 jugadores (modpacks ligeros)',
+    modsRange: '5-8 jugadores (modpack ligero)',
     both: 'Si lo recomendamos',
-    bothRange: '1-3 jugadores (pack ligero y pocos plugins)'
+    bothRange: '2-5 jugadores (modpack ligero + plugins básicos)'
   },
   {
     type: 'Emerald',
@@ -62,13 +63,13 @@ const products = [
     img: '/images/tienda/minecraft/plan/Emerald.webp',
     price: '11,99€ /mes',
     url: 'https://billing.vhost.tech/products/Plan-Budget/Emerald-Budget',
-    vanilla: '30-50 jugadores',
+    vanilla: '18-32 jugadores',
     plugins: 'Si lo recomendamos',
-    pluginsRange: '20-35 jugadores',
+    pluginsRange: '14-24 jugadores',
     mods: 'Si lo recomendamos',
-    modsRange: '5-12 jugadores (modpacks medianos)',
+    modsRange: '8-12 jugadores (modpack ligero)',
     both: 'Si lo recomendamos',
-    bothRange: '2-6 jugadores (modpack medio + plugins básicos)'
+    bothRange: '3-6 jugadores (modpack ligero + plugins básicos)'
   },
   {
     type: 'Diamond',
@@ -76,13 +77,13 @@ const products = [
     img: '/images/tienda/minecraft/plan/Diamond.webp',
     price: '15,99€ /mes',
     url: 'https://billing.vhost.tech/products/Plan-Budget/Diamond-Budget',
-    vanilla: '45-70 jugadores',
+    vanilla: '22-38 jugadores',
     plugins: 'Si lo recomendamos',
-    pluginsRange: '35-55 jugadores',
+    pluginsRange: '18-28 jugadores',
     mods: 'Si lo recomendamos',
-    modsRange: '10-18 jugadores (modpacks grandes)',
+    modsRange: '10-14 jugadores (modpack ligero)',
     both: 'Si lo recomendamos',
-    bothRange: '5-10 jugadores (modpack grande + plugins básicos)'
+    bothRange: '5-8 jugadores (modpack ligero + plugins básicos)'
   }
 ];
 
@@ -90,7 +91,7 @@ const featuresList = [
   { icon: 'fas fa-user-friends mr-2.5', text: '<strong>Slots</strong> Ilimitados' },
   { icon: 'fas fa-hdd mr-3.5',         text: '<strong>20 GB</strong> de disco' },
   { icon: 'fas fa-shield-alt mr-3.5',  text: 'Protección <strong>Anti-DDoS</strong>' },
-  { icon: 'fas fa-microchip mr-3.5', text: '<strong>Intel i5-8500</strong>' }
+  { icon: 'fas fa-microchip mr-3.5',   text: '<strong>Intel i5-8500</strong>' }
 ];
 ---
 
@@ -107,54 +108,55 @@ const featuresList = [
                 <span class="relative ml-1 group">
                   <i class="fas fa-info-circle text-[#3AB0FF] text-base cursor-pointer group-hover:text-[#63ccff] transition"></i>
                   <span class="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto absolute left-1/2 -translate-x-1/2 top-7 z-50
-                    bg-[#232F3E] text-white text-xs font-poppins rounded-lg px-3 py-2 shadow-2xl font-semibold min-w-[210px] whitespace-nowrap
-                    transition-opacity duration-200
-                    border border-[#3AB0FF]">
+                    bg-[#232F3E] text-white text-[11px] font-poppins rounded-lg px-3 py-2 shadow-2xl font-semibold w-[320px] max-w-[98vw]
+                    flex flex-col gap-0.5 break-words transition-opacity duration-200 border border-[#3AB0FF]">
                     <span class="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#232F3E] border-l border-t border-[#3AB0FF] rotate-45"></span>
-                    <div class="mb-2 p-2 rounded bg-[#19212b] border border-[#3AB0FF] text-[#8fc6ff] text-[11px]">
-                      <i class="fas fa-info-circle text-[#3AB0FF] text-xs mr-1"></i>
-                      Estas cifras son orientativas.
-                    </div>
-                    <div class="mb-1">
-                      <span class="text-[#3AB0FF] font-bold">Vanilla:</span>
-                      <span class="ml-1 text-white">{product.vanilla}</span>
-                    </div>
-                    <div class="mb-1">
-                      <span class="text-[#3AB0FF] font-bold">Plugins:</span>
-                      <span class={`ml-1 font-bold ${product.plugins === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
-                        {product.plugins === "Si lo recomendamos"
-                          ? <>
-                              Si lo recomendamos
-                              <span class="ml-2 text-xs text-[#bbbbbb]">{product.pluginsRange}</span>
-                            </>
-                          : "No recomendado"
-                        }
-                      </span>
-                    </div>
-                    <div class="mb-1">
-                      <span class="text-[#3AB0FF] font-bold">Mods:</span>
-                      <span class={`ml-1 font-bold ${product.mods === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
-                        {product.mods === "Si lo recomendamos"
-                          ? <>
-                              Si lo recomendamos
-                              <span class="ml-2 text-xs text-[#bbbbbb]">{product.modsRange}</span>
-                            </>
-                          : "No recomendado"
-                        }
-                      </span>
-                    </div>
-                    <div>
-                      <span class="text-[#3AB0FF] font-bold">Mods + Plugins:</span>
-                      <span class={`ml-1 font-bold ${product.both === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
-                        {product.both === "Si lo recomendamos"
-                          ? <>
-                              Si lo recomendamos
-                              <span class="ml-2 text-xs text-[#bbbbbb]">{product.bothRange}</span>
-                            </>
-                          : "No recomendado"
-                        }
-                      </span>
-                    </div>
+                    {product.type === 'Coal' && product.infoProxy
+                      ? (
+                        <div class="mb-1 p-2 rounded bg-[#19212b] border border-[#3AB0FF] text-[#8fc6ff] text-[11px] text-center font-bold">
+                          {product.infoProxy}
+                        </div>
+                      )
+                      : (
+                        <>
+                          <div class="mb-2 p-2 rounded bg-[#19212b] border border-[#3AB0FF] text-[#8fc6ff] text-[10px] break-words">
+                            <i class="fas fa-info-circle text-[#3AB0FF] text-xs mr-1"></i>
+                            Estas cifras son aproximadas.
+                          </div>
+                          <div class="mb-1 break-words">
+                            <span class="text-[#3AB0FF] font-bold">Vanilla:</span>
+                            <span class="ml-1 text-white">{product.vanilla}</span>
+                          </div>
+                          <div class="mb-1 break-words">
+                            <span class="text-[#3AB0FF] font-bold">Plugins:</span>
+                            <span class={`ml-1 font-bold ${product.plugins === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
+                              {product.plugins === "Si lo recomendamos"
+                                ? <>Si lo recomendamos <span class="ml-2 text-xs text-[#bbbbbb]">{product.pluginsRange}</span></>
+                                : "No recomendado"
+                              }
+                            </span>
+                          </div>
+                          <div class="mb-1 break-words">
+                            <span class="text-[#3AB0FF] font-bold">Mods:</span>
+                            <span class={`ml-1 font-bold ${product.mods === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
+                              {product.mods === "Si lo recomendamos"
+                                ? <>Si lo recomendamos <span class="ml-2 text-xs text-[#bbbbbb]">{product.modsRange}</span></>
+                                : "No recomendado"
+                              }
+                            </span>
+                          </div>
+                          <div class="break-words">
+                            <span class="text-[#3AB0FF] font-bold">Mods + Plugins:</span>
+                            <span class={`ml-1 font-bold ${product.both === "Si lo recomendamos" ? "text-green-400" : "text-red-400"}`}>
+                              {product.both === "Si lo recomendamos"
+                                ? <>Si lo recomendamos <span class="ml-2 text-xs text-[#bbbbbb]">{product.bothRange}</span></>
+                                : "No recomendado"
+                              }
+                            </span>
+                          </div>
+                        </>
+                      )
+                    }
                   </span>
                 </span>
               </div>

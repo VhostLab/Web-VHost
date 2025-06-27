@@ -1,0 +1,199 @@
+---
+// src/components/HeroSlider.astro
+---
+<section 
+  x-data="{
+    active: 0,
+    slides: [
+      {
+        bg: '/images/inicio/hero/nether.webp',
+        title: 'Minecraft Hosting',
+        features: [
+          { icon: 'fas fa-cube', text: 'Soporte Java & Bedrock' },
+          { icon: 'fas fa-shield-alt', text: 'Anti-DDoS avanzada' },
+          { icon: 'fas fa-users', text: 'Slots ilimitados' },
+          { icon: 'fas fa-layer-group', text: 'Versiones y modpacks' }
+        ],
+        features2: [
+          { icon: 'fas fa-handshake', text: '+100 clientes confían' },
+          { icon: 'fas fa-book', text: 'Guías y tutoriales' },
+          { icon: 'fas fa-globe', text: 'Subdominio .vhost.tech' },
+          { icon: 'fas fa-dollar-sign', text: 'Desde 0,85€/GB/mes' }
+        ],
+        btn: { text: 'Ver servidores Minecraft »', link: '/tienda/minecraft' }
+      },
+      {
+        bg: '/images/inicio/hero/ark-bg.webp',
+        title: 'ARK Survival Evolved',
+        features: [
+          { icon: 'fas fa-dragon', text: 'Modpacks y mapas personalizados' },
+          { icon: 'fas fa-hdd', text: 'Disco SSD NVMe' },
+          { icon: 'fas fa-users', text: 'Slots ilimitados' },
+          { icon: 'fas fa-microchip', text: 'Intel i7-9700K' }
+        ],
+        features2: [
+          { icon: 'fas fa-clock', text: 'Instalación instantánea' },
+          { icon: 'fas fa-shield-alt', text: 'Protección Anti-DDoS' },
+          { icon: 'fas fa-user-friends', text: 'Soporte experto 24/7' },
+          { icon: 'fas fa-globe', text: 'Migración gratuita' }
+        ],
+        btn: { text: 'Ver servidores ARK »', link: '/tienda/ark' }
+      },
+      {
+        bg: '/images/inicio/hero/rust-bg.webp',
+        title: 'Rust Hosting',
+        features: [
+          { icon: 'fas fa-fire', text: 'Bajas latencias' },
+          { icon: 'fas fa-server', text: 'Hardware optimizado' },
+          { icon: 'fas fa-users', text: 'Slots ilimitados' },
+          { icon: 'fas fa-microchip', text: 'Intel i7-9700K' }
+        ],
+        features2: [
+          { icon: 'fas fa-clock', text: 'Entrega instantánea' },
+          { icon: 'fas fa-shield-alt', text: 'Anti-DDoS avanzada' },
+          { icon: 'fas fa-cogs', text: 'Configuración personalizada' },
+          { icon: 'fas fa-globe', text: 'FTP y mods' }
+        ],
+        btn: { text: 'Ver servidores Rust »', link: '/tienda/rust' }
+      },
+      {
+        bg: '/images/inicio/hero/gta-bg.webp',
+        title: 'GTA 5 Hosting',
+        features: [
+          { icon: 'fas fa-car', text: 'Scripts ilimitados' },
+          { icon: 'fas fa-server', text: 'Rendimiento extremo' },
+          { icon: 'fas fa-user-friends', text: 'Escalabilidad fácil' },
+          { icon: 'fas fa-microchip', text: 'Intel i7-9700K' }
+        ],
+        features2: [
+          { icon: 'fas fa-clock', text: 'Activación instantánea' },
+          { icon: 'fas fa-shield-alt', text: 'Anti-DDoS profesional' },
+          { icon: 'fas fa-globe', text: 'Base y recursos propios' },
+          { icon: 'fas fa-headset', text: 'Soporte 24/7' }
+        ],
+        btn: { text: 'Ver servidores GTA »', link: '/tienda/gta5' }
+      },
+      {
+        bg: '/images/inicio/hero/ts-bg.webp',
+        title: 'TeamSpeak 3 Hosting',
+        features: [
+          { icon: 'fas fa-volume-up', text: 'Voces nítidas' },
+          { icon: 'fas fa-shield-alt', text: 'Anti-DDoS dedicado' },
+          { icon: 'fas fa-user-friends', text: 'Slots flexibles' },
+          { icon: 'fas fa-globe', text: 'Ubicación España' }
+        ],
+        features2: [
+          { icon: 'fas fa-clock', text: 'Alta inmediata' },
+          { icon: 'fas fa-server', text: 'Hardware propio' },
+          { icon: 'fas fa-cogs', text: 'Panel web completo' },
+          { icon: 'fas fa-star', text: 'Uptime 99.99%' }
+        ],
+        btn: { text: 'Ver servidores TS3 »', link: '/tienda/teamspeak3' }
+      }
+    ],
+    timer: null,
+    startAutoplay() {
+      this.timer = setInterval(() => this.next(), 5000);
+    },
+    stopAutoplay() {
+      clearInterval(this.timer);
+      this.timer = null;
+    },
+    next() { this.active = (this.active + 1) % this.slides.length; },
+    prev() { this.active = (this.active - 1 + this.slides.length) % this.slides.length; }
+  }"
+  x-init="startAutoplay()"
+  @mouseenter="stopAutoplay()"
+  @mouseleave="startAutoplay()"
+  class="relative w-full h-[600px] bg-black/80 overflow-hidden"
+  style="min-height: 420px;"
+>
+  <!-- Slides fondos -->
+  <template x-for="(slide, i) in slides" :key="i">
+    <div 
+      x-show="active === i"
+      x-transition:enter="transition-opacity duration-500"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition-opacity duration-300"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      class="absolute inset-0 w-full h-full bg-cover bg-center z-0"
+      :style="`background-image: url('${slide.bg}')`"
+    ></div>
+  </template>
+  <!-- Overlay oscuro -->
+  <div class="absolute inset-0 bg-black/70 z-0"></div>
+  <div class="absolute inset-0 pointer-events-none z-0"
+    style="background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%);">
+  </div>
+
+  <!-- Contenido alineado izquierda -->
+  <div class="relative container mx-auto px-4 sm:px-6 h-full flex items-center z-10">
+    <template x-for="(slide, i) in slides" :key="i">
+      <div 
+        x-show="active === i"
+        x-transition:enter="transition-opacity duration-500"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition-opacity duration-300"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="absolute inset-0 flex items-center"
+        style="z-index: 10;"
+      >
+        <div class="w-full md:w-3/4 lg:w-1/2 ml-0">
+          <p class="text-base sm:text-lg font-poppins uppercase text-secondary mb-2">Adquiere ahora</p>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-poppins font-bold mb-6" x-text="slide.title"></h1>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <ul class="space-y-4">
+              <template x-for="feat in slide.features" :key="feat.text">
+                <li class="flex items-center space-x-3">
+                  <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded">
+                    <i :class="feat.icon + ' text-white'"></i>
+                  </span>
+                  <span x-text="feat.text"></span>
+                </li>
+              </template>
+            </ul>
+            <ul class="space-y-4">
+              <template x-for="feat in slide.features2" :key="feat.text">
+                <li class="flex items-center space-x-3">
+                  <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded">
+                    <i :class="feat.icon + ' text-white'"></i>
+                  </span>
+                  <span x-text="feat.text"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <div class="mt-10 md:mt-12">
+            <a :href="slide.btn.link" class="inline-block px-8 py-4 bg-secondary text-black font-semibold rounded-lg hover:bg-secondary/90 transition" x-text="slide.btn.text"></a>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <!-- Flechas sin fondo, flecha blanca -->
+  <button
+    @click="prev"
+    aria-label="Anterior"
+    class="absolute top-1/2 left-8 -translate-y-1/2 z-20 p-0 bg-transparent border-none outline-none hover:scale-110 transition"
+    style="box-shadow: none;"
+  >
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+    </svg>
+  </button>
+  <button
+    @click="next"
+    aria-label="Siguiente"
+    class="absolute top-1/2 right-8 -translate-y-1/2 z-20 p-0 bg-transparent border-none outline-none hover:scale-110 transition"
+    style="box-shadow: none;"
+  >
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+    </svg>
+  </button>
+</section>

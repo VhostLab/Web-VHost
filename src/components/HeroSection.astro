@@ -1,68 +1,154 @@
 ---
-// src/components/HeroSection.astro
+const slides = [
+  {
+    bg: "/images/nether.webp",
+    subtitle: "Adquiere ahora",
+    title: "Minecraft Hosting",
+    features: [
+      { icon: "fas fa-cube", text: "Soporte Java & Bedrock" },
+      { icon: "fas fa-shield-alt", text: "Anti-DDoS avanzada" },
+      { icon: "fas fa-users", text: "Slots ilimitados" },
+      { icon: "fas fa-layer-group", text: "Todas las versiones y modpacks" }
+    ],
+    features2: [
+      { icon: "fas fa-handshake", text: "Confiado por +100 clientes" },
+      { icon: "fas fa-book", text: "Guías y tutoriales" },
+      { icon: "fas fa-globe", text: "Subdominio .vhost.tech" },
+      { icon: "fas fa-dollar-sign", text: "Desde €0.85/GB/mes" }
+    ],
+    btn: { text: "Adquirir un servidor de Minecraft »", link: "/tienda/minecraft" }
+  },
+  {
+    bg: "/images/nether.webp",
+    subtitle: "¡Explora el mundo prehistórico!",
+    title: "ARK Hosting",
+    features: [
+      { icon: "fas fa-dinosaur", text: "Mods y mapas personalizados" },
+      { icon: "fas fa-shield-alt", text: "Anti-DDoS avanzada" },
+      { icon: "fas fa-users", text: "Slots ilimitados" },
+      { icon: "fas fa-server", text: "Hardware premium" }
+    ],
+    features2: [
+      { icon: "fas fa-headset", text: "Soporte 24/7" },
+      { icon: "fas fa-book", text: "Guías de configuración" },
+      { icon: "fas fa-globe", text: "Backup diarios" },
+      { icon: "fas fa-dollar-sign", text: "Desde €19,99/mes" }
+    ],
+    btn: { text: "Ver servidores de Ark", link: "/tienda/ark" }
+  },
+  {
+    bg: "/images/nether.webp",
+    subtitle: "Resiste. Sobrevive. Domina.",
+    title: "Rust Hosting",
+    features: [
+      { icon: "fas fa-fire", text: "100% Mods compatibles" },
+      { icon: "fas fa-shield-alt", text: "Anti-DDoS avanzada" },
+      { icon: "fas fa-users", text: "Slots ilimitados" },
+      { icon: "fas fa-server", text: "CPU Intel i7-9700K" }
+    ],
+    features2: [
+      { icon: "fas fa-headset", text: "Soporte experto Rust" },
+      { icon: "fas fa-hdd", text: "60GB SSD NVMe" },
+      { icon: "fas fa-cogs", text: "Wipe programado" },
+      { icon: "fas fa-dollar-sign", text: "Desde €19,99/mes" }
+    ],
+    btn: { text: "Ver servidores de Rust", link: "/tienda/rust" }
+  },
+  {
+    bg: "/images/nether.webp",
+    subtitle: "Rolea a lo grande",
+    title: "GTA 5 / FiveM Hosting",
+    features: [
+      { icon: "fas fa-car", text: "Recursos y scripts avanzados" },
+      { icon: "fas fa-shield-alt", text: "Anti-DDoS avanzada" },
+      { icon: "fas fa-users", text: "Slots ilimitados" },
+      { icon: "fas fa-server", text: "Intel i7-9700K" }
+    ],
+    features2: [
+      { icon: "fas fa-headset", text: "Soporte 24/7" },
+      { icon: "fas fa-hdd", text: "Disco SSD ultra rápido" },
+      { icon: "fas fa-code", text: "Instalación instantánea" },
+      { icon: "fas fa-dollar-sign", text: "Desde €19,99/mes" }
+    ],
+    btn: { text: "Ver servidores de GTA 5", link: "/tienda/gta5" }
+  }
+];
 ---
-<section class="relative bg-[url('/images/nether.webp')] bg-cover bg-right overflow-hidden">
-  <!-- Overlay oscuro general -->
-  <div class="absolute inset-0 bg-black/70"></div>
-  <!-- Overlay de gradiente intenso hasta la mitad -->
-  <div class="absolute inset-0 pointer-events-none"
-    style="background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%);">
-  </div>
 
-  <div class="relative container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-28 flex flex-col md:flex-row md:items-center z-10">
-    <!-- Hero Content -->
-    <div class="w-full md:w-3/4 lg:w-1/2 text-white">
-      <!-- Subtítulo -->
-      <p class="text-base sm:text-lg font-poppins uppercase text-secondary mb-2">Adquiere ahora</p>
-      <!-- Título -->
-      <h1 class="text-4xl sm:text-5xl md:text-6xl font-poppins font-bold mb-6">Minecraft Hosting</h1>
+<!-- Haz disponible el array de slides en el cliente -->
+<script is:inline>
+  window.slides = JSON.parse(`${JSON.stringify(slides)}`);
+</script>
 
-      <!-- Features Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <ul class="space-y-4">
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-cube text-white"></i></span>
-            <span>Soporte para Java &amp; Bedrock</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-shield-alt text-white"></i></span>
-            <span>Protección Anti-DDoS avanzada</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-users text-white"></i></span>
-            <span>Slots ilimitados</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-layer-group text-white"></i></span>
-            <span>Todas las versiones y modpacks</span>
-          </li>
-        </ul>
-        <ul class="space-y-4">
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-handshake text-white"></i></span>
-            <span>Confiado por +100 clientes</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-book text-white"></i></span>
-            <span>Guías y tutoriales</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-globe text-white"></i></span>
-            <span>Subdominio .vhost.tech</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded"><i class="fas fa-dollar-sign text-white"></i></span>
-            <span>Precios desde €0.85/GB/mes</span>
-          </li>
-        </ul>
+
+
+
+<section 
+  x-data="{ active: 0, slides: window.slides }"
+  class="relative w-full"
+  x-init="setInterval(()=>{ active = (active+1)%slides.length }, 8000)"
+>
+  <template x-for="(slide, i) in slides" :key="i">
+    <section 
+      x-show="active === i"
+      x-transition:enter="transition-opacity duration-700"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      class="relative min-h-[540px] bg-cover bg-right overflow-hidden"
+      :style="`background-image:url('${slide.bg}')`"
+    >
+      <!-- Overlays -->
+      <div class="absolute inset-0 bg-black/70"></div>
+      <div class="absolute inset-0 pointer-events-none"
+        style="background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.9) 50%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%);">
       </div>
 
-      <!-- Call to Action -->
-      <div class="mt-10 md:mt-12">
-        <a href="/tienda/minecraft" class="inline-block px-8 py-4 bg-secondary text-black font-semibold rounded-lg hover:bg-secondary/90 transition">
-          Adquirir un servidor de Minecraft »
-        </a>
+      <div class="relative container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-28 flex flex-col md:flex-row md:items-center z-10">
+        <div class="w-full md:w-3/4 lg:w-1/2 text-white">
+          <p class="text-base sm:text-lg font-poppins uppercase text-secondary mb-2" x-text="slide.subtitle"></p>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-poppins font-bold mb-6" x-text="slide.title"></h1>
+          <!-- Features Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <ul class="space-y-4">
+              <template x-for="feat in slide.features" :key="feat.text">
+                <li class="flex items-center space-x-3">
+                  <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded">
+                    <i :class="feat.icon + ' text-white'"></i>
+                  </span>
+                  <span x-text="feat.text"></span>
+                </li>
+              </template>
+            </ul>
+            <ul class="space-y-4">
+              <template x-for="feat in slide.features2" :key="feat.text">
+                <li class="flex items-center space-x-3">
+                  <span class="w-8 h-8 flex items-center justify-center bg-secondary rounded">
+                    <i :class="feat.icon + ' text-white'"></i>
+                  </span>
+                  <span x-text="feat.text"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <!-- Call to Action -->
+          <div class="mt-10 md:mt-12">
+            <a :href="slide.btn.link" class="inline-block px-8 py-4 bg-secondary text-black font-semibold rounded-lg hover:bg-secondary/90 transition" x-text="slide.btn.text"></a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+      <!-- Dots -->
+      <div class="absolute bottom-7 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        <template x-for="(_, j) in slides">
+          <button
+            :class="active === j ? 'bg-secondary' : 'bg-white/40'"
+            class="w-3 h-3 rounded-full transition duration-300"
+            @click="active = j"
+          ></button>
+        </template>
+      </div>
+      <!-- Flechas -->
+      <button @click="active = (active-1+slides.length)%slides.length" class="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-20 bg-secondary/80 hover:bg-secondary text-black w-10 h-10 rounded-full items-center justify-center text-2xl transition shadow-lg"><i class="fas fa-chevron-left"></i></button>
+      <button @click="active = (active+1)%slides.length" class="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-20 bg-secondary/80 hover:bg-secondary text-black w-10 h-10 rounded-full items-center justify-center text-2xl transition shadow-lg"><i class="fas fa-chevron-right"></i></button>
+    </section>
+  </template>
 </section>
