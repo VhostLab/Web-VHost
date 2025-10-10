@@ -3,11 +3,11 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import "../../styles/global.css";
 import HeroTienda from '../../components/HeroTienda.astro';
 import BudgetSection from '../../components/BudgetSection.astro';
+import NormalSection from '../../components/NormalSection.astro'; // ⬅️ NUEVO
 import PremiumSection from '../../components/PremiumSection.astro';
 import Gamas from '../../components/Gamas.astro';
 import FAQSection from '../../components/FAQSection.astro';
 import DedicatedSection from '../../components/DedicatedSection.astro';
-
 
 const faqs = [
   { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
@@ -25,60 +25,72 @@ const faqs = [
 
 <MainLayout 
   title="Minecraft"
-  description="Contrata tu servidor de Minecraft en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre planes Budget y Premium para todas las necesidades."
+  description="Contrata tu servidor de Minecraft en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre planes Budget, Normal y Premium para todas las necesidades."
   image="https://vhost.tech/SEO/vhost-preview.webp"
   url="https://vhost.tech/tienda/minecraft"
 >
   <HeroTienda 
-  titulo="Minecraft Hosting"
-  imagenFondo="/images/tienda/minecraft/mc-bg.webp"
-/>
-
-
+    titulo="Minecraft Hosting"
+    imagenFondo="/images/tienda/minecraft/mc-bg.webp"
+  />
 
   <!--  Fondo solo para esta sección -->
-  <section
-    class="relative bg-[#0b0b0b] text-white py-12 px-4"
-    
-  >
-      <!-- Título, subtítulo y enlace -->
-  <div class="text-center mt-12 mb-6">
-    <h2 class="text-3xl font-poppins font-semibold text-white">Comparar tipos de planes</h2>
-    <p class="text-gray-300 font-poppins mt-1">
-      Selecciona una gama para ver sus características y precios.
-    </p>
-    <a
-      href="#gamas"
-      id="scroll-to-gamas"
-      class="mt-2 inline-block text-secondary underline font-poppins transition-colors duration-300 hover:text-[#e07600]"
-    >
-      Ver características
-    </a>
-  </div>
-
+  <section class="relative bg-[#0b0b0b] text-white py-12 px-4">
+    <!-- Título, subtítulo y enlace -->
+    <div class="text-center mt-12 mb-6">
+      <h2 class="text-3xl font-poppins font-semibold text-white">Comparar tipos de planes</h2>
+      <p class="text-gray-300 font-poppins mt-1">
+        Selecciona una gama para ver sus características y precios.
+      </p>
+      <a
+        href="#gamas"
+        id="scroll-to-gamas"
+        class="mt-2 inline-block text-secondary underline font-poppins transition-colors duration-300 hover:text-[#e07600]"
+      >
+        Ver características
+      </a>
+    </div>
 
     <div class="relative z-10">
-      <!-- Interruptor tipo toggle -->
+      <!-- Interruptor tipo toggle 3 posiciones -->
       <div class="flex justify-center my-6">
-        <div class="relative inline-flex bg-[#1a1a1a] rounded-full text-lg font-poppins font-semibold text-white w-[14rem] h-12 items-center">
-          <!-- Indicador deslizante -->
+        <div
+          class="relative inline-flex bg-[#1a1a1a] rounded-full text-lg font-poppins font-semibold text-white w-[21rem] h-12 items-center"
+          role="tablist"
+          aria-label="Selector de planes"
+        >
+          <!-- Indicador deslizante (1/3 del ancho) -->
           <div
             id="toggle-indicator"
-            class="absolute top-0 left-0 h-full w-1/2 rounded-full bg-[#fc7c04] transition-all duration-300 z-0"
+            class="absolute top-0 left-0 h-full w-1/3 rounded-full bg-[#fc7c04] transition-all duration-300 z-0"
           ></div>
 
           <!-- Botón Budget -->
           <button
             id="btn-budget"
-            class="relative z-10 w-1/2 h-full rounded-full transition-colors duration-300"
+            role="tab"
+            aria-selected="true"
+            class="relative z-10 w-1/3 h-full rounded-full transition-colors duration-300 focus:outline-none"
           >
             Budget
+          </button>
+
+          <!-- Botón Normal -->
+          <button
+            id="btn-normal"
+            role="tab"
+            aria-selected="false"
+            class="relative z-10 w-1/3 h-full rounded-full transition-colors duration-300 focus:outline-none text-white"
+          >
+            Normal
           </button>
 
           <!-- Botón Premium -->
           <button
             id="btn-premium"
-            class="relative z-10 w-1/2 h-full rounded-full transition-colors duration-300"
+            role="tab"
+            aria-selected="false"
+            class="relative z-10 w-1/3 h-full rounded-full transition-colors duration-300 focus:outline-none text-white"
           >
             Premium
           </button>
@@ -88,6 +100,11 @@ const faqs = [
       <!-- Secciones -->
       <div id="budget-section" class="transition-opacity duration-200 ease-in-out opacity-100">
         <BudgetSection />
+        <DedicatedSection />
+      </div>
+
+      <div id="normal-section" class="transition-opacity duration-200 ease-in-out opacity-0 hidden">
+        <NormalSection />
         <DedicatedSection />
       </div>
 
@@ -105,50 +122,99 @@ const faqs = [
   <!-- Script -->
   <script is:inline>
     const btnBudget = document.getElementById('btn-budget');
+    const btnNormal = document.getElementById('btn-normal');
     const btnPremium = document.getElementById('btn-premium');
     const toggleIndicator = document.getElementById('toggle-indicator');
+
     const budgetSection = document.getElementById('budget-section');
+    const normalSection = document.getElementById('normal-section');
     const premiumSection = document.getElementById('premium-section');
-    const DURATION = 200;
-
-    function fadeTo(show, hide) {
-      hide.classList.remove('opacity-100');
-      hide.classList.add('opacity-0');
-      setTimeout(() => {
-        hide.classList.add('hidden');
-        show.classList.remove('hidden');
-        show.classList.remove('opacity-100');
-        show.classList.add('opacity-0');
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            show.classList.remove('opacity-0');
-            show.classList.add('opacity-100');
-          });
-        });
-      }, DURATION);
-    }
-
-    btnBudget.addEventListener('click', () => {
-      fadeTo(budgetSection, premiumSection);
-      toggleIndicator.style.left = '0';
-      btnBudget.classList.add('text-black');
-      btnBudget.classList.remove('text-white');
-      btnPremium.classList.remove('text-black');
-      btnPremium.classList.add('text-white');
-    });
-
-    btnPremium.addEventListener('click', () => {
-      fadeTo(premiumSection, budgetSection);
-      toggleIndicator.style.left = '50%';
-      btnPremium.classList.add('text-black');
-      btnPremium.classList.remove('text-white');
-      btnBudget.classList.remove('text-black');
-      btnBudget.classList.add('text-white');
-    });
-
-    toggleIndicator.style.left = '0';
 
     const scrollLink = document.getElementById('scroll-to-gamas');
+    const DURATION = 200;
+
+    const plans = ['budget', 'normal', 'premium'];
+    const sections = {
+      budget: budgetSection,
+      normal: normalSection,
+      premium: premiumSection,
+    };
+    const buttons = {
+      budget: btnBudget,
+      normal: btnNormal,
+      premium: btnPremium,
+    };
+
+    function fadeTo(showEl, ...hideEls) {
+      hideEls.forEach((el) => {
+        el.classList.remove('opacity-100');
+        el.classList.add('opacity-0');
+        setTimeout(() => {
+          el.classList.add('hidden');
+        }, DURATION);
+      });
+
+      showEl.classList.remove('hidden');
+      // Forzar dos frames para transición suave
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          showEl.classList.remove('opacity-0');
+          showEl.classList.add('opacity-100');
+        });
+      });
+    }
+
+    function setActive(plan) {
+      // Mover indicador: 0%, 33.333%, 66.666%
+      const index = plans.indexOf(plan);
+      const leftPercent = index * (100 / 3);
+      toggleIndicator.style.left = leftPercent + '%';
+
+      // Actualizar secciones
+      const toShow = sections[plan];
+      const toHide = plans.filter(p => p !== plan).map(p => sections[p]);
+      fadeTo(toShow, ...toHide);
+
+      // Actualizar colores y aria-selected
+      plans.forEach(p => {
+        const btn = buttons[p];
+        const selected = p === plan;
+        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        if (selected) {
+          btn.classList.add('text-black');
+          btn.classList.remove('text-white');
+        } else {
+          btn.classList.remove('text-black');
+          btn.classList.add('text-white');
+        }
+      });
+    }
+
+    // Eventos de click
+    btnBudget.addEventListener('click', () => setActive('budget'));
+    btnNormal.addEventListener('click', () => setActive('normal'));
+    btnPremium.addEventListener('click', () => setActive('premium'));
+
+    // Navegación con teclado (izq/der) para accesibilidad
+    const order = [btnBudget, btnNormal, btnPremium];
+    order.forEach((btn, i) => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          order[(i + 1) % order.length].focus();
+          order[(i + 1) % order.length].click();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          order[(i - 1 + order.length) % order.length].focus();
+          order[(i - 1 + order.length) % order.length].click();
+        }
+      });
+    });
+
+    // Estado inicial
+    setActive('budget');
+
+    // Scroll suave a "gamas"
     scrollLink.addEventListener('click', (e) => {
       e.preventDefault();
       const gamasSection = document.getElementById('gamas');

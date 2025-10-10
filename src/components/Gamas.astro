@@ -2,54 +2,87 @@
 // src/components/Gamas.astro
 ---
 
-<section id="gamas" class="py-20 bg-[primary] text-white px-6">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold font-poppins mb-3">Elige tu tipo de servidor</h2>
-      <p class="text-gray-400 font-poppins text-lg max-w-2xl mx-auto">
-        Compara nuestras gamas disponibles y selecciona la opción que mejor se adapta a tus necesidades.
-      </p>
-    </div>
-  
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Budget -->
-      <div class="bg-[#141414] border-l-4 border-[#fc7c04] rounded-lg p-6">
+<section id="gamas" class="py-24 bg-gradient-to-b from-[#0b0b0b] to-[#111111] text-white px-6">
+  <div class="text-center mb-16">
+    <h2 class="text-4xl md:text-5xl font-bold font-poppins mb-4 text-white">
+      Elige tu tipo de servidor
+    </h2>
+    <p class="text-gray-400 font-poppins text-lg max-w-2xl mx-auto">
+      Compara nuestras gamas disponibles y selecciona la opción que mejor se adapta a tus necesidades.
+    </p>
+  </div>
+
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Budget -->
+    <div
+      class="bg-[#141414] border-l-4 border-[#fc7c04] rounded-2xl p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_#fc7c04aa] flex flex-col"
+    >
+      <div class="flex-grow">
         <h3 class="text-2xl font-semibold text-[#fc7c04] font-poppins mb-1">Budget</h3>
-        <p class="text-sm text-gray-400 font-poppins mb-4">Intel i5-8500</p>
-        <ul class="space-y-3 text-gray-300 text-base font-poppins">
-          <li class="flex items-start gap-3 leading-snug">
+        <p class="text-sm text-gray-400 font-poppins mb-6">Intel i5-8500</p>
+        <ul class="grid grid-rows-3 gap-4 text-gray-300 text-base font-poppins">
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
             <i class="fas fa-users text-sm text-[#fc7c04] mt-[2px]"></i>
             <span>Ideal para grupos pequeños</span>
           </li>
-          <li class="flex items-start gap-3 leading-snug">
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
             <i class="fas fa-bolt text-sm text-[#fc7c04] mt-[2px]"></i>
             <span>Consumo optimizado</span>
           </li>
-          <li class="flex items-start gap-3 leading-snug">
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
             <i class="fas fa-wallet text-sm text-[#fc7c04] mt-[2px]"></i>
             <span>Económico y estable</span>
           </li>
         </ul>
       </div>
-  
-      <!-- Premium -->
-      <div class="bg-[#141414] border-l-4 border-[#00d4ff] rounded-lg p-6">
-        <h3 class="text-2xl font-semibold text-[#00d4ff] font-poppins mb-1">Premium</h3>
-        <p class="text-sm text-gray-400 font-poppins mb-4">Intel i7-9700K</p>
-        <ul class="space-y-3 text-gray-300 text-base font-poppins">
-          <li class="flex items-start gap-3 leading-snug">
-            <i class="fas fa-rocket text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
-            <span>Potencia extrema para cargas altas</span>
+    </div>
+
+    <!-- Normal -->
+    <div
+      class="bg-[#141414] border-l-4 border-white rounded-2xl p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_#ffffff88] flex flex-col"
+    >
+      <div class="flex-grow">
+        <h3 class="text-2xl font-semibold text-white font-poppins mb-1">Normal</h3>
+        <p class="text-sm text-gray-400 font-poppins mb-6">Intel i7-9700K</p>
+        <ul class="grid grid-rows-3 gap-4 text-gray-300 text-base font-poppins">
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-cogs text-sm text-white mt-[2px]" aria-hidden="true"></i>
+            <span>Equilibrio entre rendimiento y precio</span>
           </li>
-          <li class="flex items-start gap-3 leading-snug">
-            <i class="fas fa-plug text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
-            <span>Perfecto para servidores con mods pesados</span>
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-server text-sm text-white mt-[2px]" aria-hidden="true"></i>
+            <span>Perfecto para servidores con plugins y modpacks ligeros</span>
           </li>
-          <li class="flex items-start gap-3 leading-snug">
-            <i class="fas fa-tachometer-alt text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
-            <span>Rendimiento optimizado</span>
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-tachometer-alt text-sm text-white mt-[2px]" aria-hidden="true"></i>
+            <span>Rendimiento sólido para comunidades medianas</span>
           </li>
         </ul>
       </div>
     </div>
-  </section>
 
+    <!-- Premium -->
+    <div
+      class="bg-[#141414] border-l-4 border-[#00d4ff] rounded-2xl p-8 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_#00d4ffaa] flex flex-col"
+    >
+      <div class="flex-grow">
+        <h3 class="text-2xl font-semibold text-[#00d4ff] font-poppins mb-1">Premium</h3>
+        <p class="text-sm text-gray-400 font-poppins mb-6">Ryzen 5 9600X</p>
+        <ul class="grid grid-rows-3 gap-4 text-gray-300 text-base font-poppins">
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-rocket text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
+            <span>Potencia extrema para cargas altas</span>
+          </li>
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-plug text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
+            <span>Perfecto para servidores con mods pesados</span>
+          </li>
+          <li class="flex items-start gap-3 leading-snug min-h-[48px]">
+            <i class="fas fa-tachometer-alt text-sm text-[#00d4ff] mt-[2px]" aria-hidden="true"></i>
+            <span>Rendimiento optimizado de última generación</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
