@@ -1,0 +1,112 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Términos y Condiciones"
+  description="Términos y Condiciones de Vhost Hosting Services - Condiciones de uso de nuestros servicios"
+  url="https://vhost.tech/terminos-condiciones"
+>
+  <section class="py-16 md:py-24 bg-primary min-h-screen">
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
+      <h1 class="text-4xl sm:text-5xl font-poppins font-bold text-white text-center mb-8">
+        Términos y Condiciones
+      </h1>
+      <div class="border-t-2 border-secondary w-24 mx-auto mb-12"></div>
+
+      <div class="bg-[#111] border border-secondary/20 rounded-lg p-6 md:p-8 space-y-6 text-gray-300 leading-relaxed">
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">1. Información general</h2>
+          <p>El presente documento regula las condiciones generales de contratación de los servicios ofrecidos en el sitio web <a href="https://vhost.tech" class="text-secondary hover:underline">https://vhost.tech</a> (en adelante, "el sitio web"), propiedad de <strong class="text-white">Vhost Hosting Services</strong> (en adelante, "el titular").</p>
+          <p class="mt-4">Correo electrónico de contacto: <a href="mailto:vhostts3@gmail.com" class="text-secondary hover:underline">vhostts3@gmail.com</a></p>
+          <p class="mt-2">País y legislación aplicable: <strong class="text-white">España</strong>.</p>
+          <p class="mt-4 font-semibold text-white">El acceso y contratación de los servicios implica la aceptación plena y sin reservas de estas condiciones. El usuario reconoce haber leído y comprendido todos los apartados antes de realizar cualquier contratación.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">2. Servicios ofrecidos</h2>
+          <p>Vhost Hosting Services ofrece servicios de alojamiento de servidores de videojuegos, aplicables a los siguientes títulos:</p>
+          <p class="mt-2"><strong class="text-white">Minecraft, Counter-Strike 2, ARK: Survival Evolved, Rust, GTA V (FiveM) y TeamSpeak 3.</strong></p>
+
+          <div class="mt-4">
+            <p class="font-semibold text-white mb-2">Cada plan incluye:</p>
+            <ul class="list-disc list-inside space-y-2">
+              <li>Acceso a panel de control Pterodactyl.</li>
+              <li>Protección DDoS activa.</li>
+              <li>1 subdominio del tipo nombre.vhost.tech.</li>
+              <li>1 base de datos gratuita.</li>
+              <li>1 copia de seguridad (backup) gratuita por servidor.</li>
+            </ul>
+          </div>
+
+          <p class="mt-4">Los servicios se prestan en modalidad de alquiler, durante el periodo contratado (mensual, trimestral o anual).</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">3. Contratación y pagos</h2>
+          <p>El cliente podrá contratar los servicios directamente desde el sitio web. Los pagos se realizan de forma automática mediante los métodos habilitados (por ejemplo, PayPal o pasarelas compatibles).</p>
+          <ul class="list-disc list-inside space-y-2 mt-4">
+            <li>Los servicios se activarán una vez confirmado el pago.</li>
+            <li>La renovación se efectuará automáticamente según el ciclo de facturación seleccionado (mensual, trimestral, etc.).</li>
+            <li><strong class="text-white">No se aceptan reembolsos</strong> una vez que el servidor ha sido creado, salvo error imputable al titular.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">4. Uso permitido y prohibido</h2>
+          <p>El usuario se compromete a utilizar los servicios de forma lícita y conforme a las presentes condiciones.</p>
+          <p class="font-semibold text-white mt-4">Queda expresamente prohibido el uso de los servidores para:</p>
+          <ul class="list-disc list-inside space-y-2 mt-2">
+            <li>Realizar o participar en ataques DDoS, exploits o hacking.</li>
+            <li>Alojar contenido ilegal, incluyendo material protegido por derechos de autor, pornografía infantil, o archivos ilícitos.</li>
+            <li>Ejecutar software pirata o no autorizado.</li>
+            <li>Utilizar los recursos para minería de criptomonedas u otras actividades ajenas al alojamiento de videojuegos.</li>
+            <li>Distribuir malware, virus o contenido malicioso.</li>
+            <li>Usar el servidor para afectar redes o sistemas de terceros.</li>
+          </ul>
+          <p class="mt-4 font-semibold text-yellow-400">El incumplimiento de cualquiera de estas normas supondrá la suspensión inmediata del servidor, previo aviso por correo electrónico al cliente.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">5. Suspensión y cancelación del servicio</h2>
+          <p>Vhost Hosting Services se reserva el derecho a suspender o cancelar cualquier servidor que:</p>
+          <ul class="list-disc list-inside space-y-2 mt-2">
+            <li>Infrinja estas condiciones o la legislación vigente.</li>
+            <li>Afecte la estabilidad o seguridad de la red.</li>
+            <li>Suponga un riesgo para otros usuarios o sistemas.</li>
+          </ul>
+          <p class="mt-4">En caso de suspensión, el cliente será notificado por correo electrónico. Si el incumplimiento es grave o reiterado, el servicio podrá ser cancelado definitivamente sin derecho a reembolso.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">6. Responsabilidad del usuario</h2>
+          <p>El cliente es el único responsable del uso que haga de los servicios contratados y de los contenidos alojados en su servidor. Asimismo, el usuario es responsable de mantener sus propias copias de seguridad, incluso cuando el servicio incluya un backup gratuito.</p>
+          <p class="mt-4 font-semibold text-white">Vhost Hosting Services no se hace responsable de pérdidas de datos, configuraciones erróneas, interrupciones del servicio, ni de cualquier daño derivado del uso indebido o negligente por parte del cliente.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">7. Limitación de responsabilidad del proveedor</h2>
+          <p>El titular garantiza el funcionamiento normal de los servicios contratados, dentro de los límites técnicos y de mantenimiento necesarios. No obstante, no puede garantizar una disponibilidad absoluta ni se hace responsable de interrupciones causadas por:</p>
+          <ul class="list-disc list-inside space-y-2 mt-2">
+            <li>Fallos en proveedores externos de red o energía.</li>
+            <li>Ataques o incidentes de seguridad de origen externo.</li>
+            <li>Mantenimiento técnico programado.</li>
+          </ul>
+          <p class="mt-4 font-semibold text-white">El cliente renuncia expresamente a reclamar daños indirectos o lucro cesante derivados del uso del servicio.</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">8. Protección de datos</h2>
+          <p>Los datos personales del cliente serán tratados conforme a la <a href="/politica-privacidad" class="text-secondary hover:underline">Política de Privacidad</a> publicada en el sitio web, cumpliendo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 (LOPDGDD).</p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-bold text-white mb-4">9. Legislación y jurisdicción</h2>
+          <p>Las presentes condiciones se rigen por la legislación española. Para cualquier conflicto o controversia derivada de la interpretación o ejecución de este contrato, las partes se someten expresamente a los juzgados y tribunales de España.</p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+</MainLayout>

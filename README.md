@@ -20,7 +20,7 @@ Sitio web oficial de [VHOST Hosting Services](https://vhost.tech), especializado
 1. **Clona el repositorio:**
 
    ```bash
-   git clone https://github.com/VhostLab/Web.git
+   git clone https://github.com/VhostLab/Web-VHost.git
    cd Web
    ```
 

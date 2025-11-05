@@ -1,0 +1,12 @@
+---
+// MEJORA #10: Loading States - Skeleton loader para placeholders
+export interface Props {
+  width?: string;
+  height?: string;
+  className?: string;
+}
+
+const { width = 'w-full', height = 'h-4', className = '' } = Astro.props;
+---
+
+<div class={`skeleton ${width} ${height} ${className}`}></div>

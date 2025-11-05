@@ -8,24 +8,24 @@ import emailIcon from '/src/images/email-icon.webp';
 const currentPath = Astro.url.pathname;
 ---
 
-<header>
+<header class="sticky top-0 z-50 transition-all duration-300" id="main-header">
   <!-- Redes sociales -->
-  <div class="bg-primary py-2">
+  <div class="bg-primary py-2 transition-all duration-300" id="social-bar">
     <div class="container mx-auto flex justify-center md:justify-start px-6">
       <div class="flex space-x-3">
-        <a href="https://discord.gg/Ykr85wevrj" class="group">
+        <a href="https://discord.gg/Ykr85wevrj" class="group" aria-label="Discord">
           <img src={discordIcon.src} alt="Discord"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
                    group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
         </a>
-        <a href="https://x.com/VhostTS3" class="group">
+        <a href="https://x.com/VhostTS3" class="group" aria-label="Twitter">
           <img src={twitterIcon.src} alt="Twitter"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
                    group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
         </a>
-        <a href="mailto:vhostts3@gmail.com" class="group">
+        <a href="mailto:vhostts3@gmail.com" class="group" aria-label="Email">
           <img src={emailIcon.src} alt="Email"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
@@ -36,7 +36,7 @@ const currentPath = Astro.url.pathname;
   </div>
 
   <!-- Header principal -->
-  <div class="bg-secondary">
+  <div class="bg-secondary transition-all duration-300" id="main-nav">
     <div class="container mx-auto flex items-center justify-between py-4 px-6 lg:px-12">
       <!-- Logo -->
       <a href="/" class="block">
@@ -44,7 +44,15 @@ const currentPath = Astro.url.pathname;
       </a>
 
       <!-- Menú móvil -->
-      
+      <button
+        id="mobile-menu-button"
+        class="md:hidden text-white focus:outline-none"
+        aria-label="Abrir menú"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
 
       <!-- Navegación escritorio -->
       <nav class="hidden md:flex items-center space-x-6">
@@ -169,4 +177,180 @@ const currentPath = Astro.url.pathname;
       </nav>
     </div>
   </div>
+
+  <!-- Menú móvil desplegable -->
+  <div
+    id="mobile-menu"
+    class="md:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary/20 overflow-hidden transition-all duration-300 max-h-0"
+  >
+    <nav class="container mx-auto px-6 py-0">
+      <ul class="space-y-1">
+        <li>
+          <a href="/" class="block py-3 text-white font-bold border-b border-secondary/10">INICIO</a>
+        </li>
+        <li>
+          <button
+            id="mobile-tienda-toggle"
+            class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
+          >
+            TIENDA
+            <svg class="w-4 h-4 transition-transform" id="mobile-tienda-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <ul id="mobile-tienda-submenu" class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20">
+            <li><a href="/tienda/minecraft" class="block py-2 pl-4 text-sm text-white">Minecraft</a></li>
+            <li><a href="/tienda/ark" class="block py-2 pl-4 text-sm text-white">Ark Survival Evolved</a></li>
+            <li><a href="/tienda/rust" class="block py-2 pl-4 text-sm text-white">Rust</a></li>
+            <li><a href="/tienda/gta5" class="block py-2 pl-4 text-sm text-white">GTA 5</a></li>
+            <li><a href="/tienda/teamspeak3" class="block py-2 pl-4 text-sm text-white border-b border-secondary/10">Teamspeak 3</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/partners" class="block py-3 text-white font-bold border-b border-secondary/10">PARTNERS</a>
+        </li>
+        <li>
+          <a href="/soporte" class="block py-3 text-white font-bold border-b border-secondary/10">SOPORTE</a>
+        </li>
+        <li>
+          <button
+            id="mobile-clientes-toggle"
+            class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
+          >
+            CLIENTES
+            <svg class="w-4 h-4 transition-transform" id="mobile-clientes-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <ul id="mobile-clientes-submenu" class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20">
+            <li><a href="https://billing.vhost.tech" target="_blank" class="block py-2 pl-4 text-sm text-white">Área de Clientes</a></li>
+            <li><a href="https://panel.vhost.tech" target="_blank" class="block py-2 pl-4 text-sm text-white">Panel Juegos</a></li>
+            <li><a href="https://status.vhost.tech" target="_blank" class="block py-2 pl-4 text-sm text-white">Estado de los servidores</a></li>
+            <li><a href="https://discord.gg/Ykr85wevrj" target="_blank" class="block py-2 pl-4 text-sm text-white border-b border-secondary/10">Discord</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </header>
+
+<script>
+  // Efecto sticky header con blur y transparencia al hacer scroll
+  let lastScroll = 0;
+  const header = document.getElementById('main-header');
+  const mainNav = document.getElementById('main-nav');
+  const socialBar = document.getElementById('social-bar');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+
+    if (currentScroll > 50) {
+      // Cuando scroll > 50px: ocultar social bar, añadir blur y sombra
+      if (socialBar) socialBar.style.display = 'none';
+      if (mainNav) {
+        mainNav.style.backdropFilter = 'blur(10px)';
+        mainNav.style.backgroundColor = 'rgba(252, 124, 4, 0.95)';
+        mainNav.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+      }
+    } else {
+      // Cuando scroll < 50px: mostrar social bar, remover blur
+      if (socialBar) socialBar.style.display = 'block';
+      if (mainNav) {
+        mainNav.style.backdropFilter = 'none';
+        mainNav.style.backgroundColor = '';
+        mainNav.style.boxShadow = 'none';
+      }
+    }
+
+    lastScroll = currentScroll;
+  });
+
+  // Menú móvil
+  const mobileMenuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      menuOpen = !menuOpen;
+
+      if (menuOpen) {
+        mobileMenu.style.maxHeight = '800px';
+        mobileMenu.style.paddingTop = '8px';
+        mobileMenu.style.paddingBottom = '8px';
+      } else {
+        mobileMenu.style.maxHeight = '0px';
+        mobileMenu.style.paddingTop = '0px';
+        mobileMenu.style.paddingBottom = '0px';
+      }
+    });
+
+    // Cerrar menú al hacer clic en un enlace (excepto los botones de submenú)
+    const menuLinks = mobileMenu.querySelectorAll('a');
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.style.maxHeight = '0px';
+        mobileMenu.style.paddingTop = '0px';
+        mobileMenu.style.paddingBottom = '0px';
+      });
+    });
+  }
+
+  // Submenú móvil - Tienda
+  const tiendaToggle = document.getElementById('mobile-tienda-toggle');
+  const tiendaSubmenu = document.getElementById('mobile-tienda-submenu');
+  const tiendaArrow = document.getElementById('mobile-tienda-arrow');
+
+  if (tiendaToggle && tiendaSubmenu) {
+    tiendaToggle.addEventListener('click', () => {
+      if (tiendaSubmenu.style.maxHeight === '0px' || tiendaSubmenu.style.maxHeight === '') {
+        tiendaSubmenu.style.maxHeight = '300px';
+        if (tiendaArrow) tiendaArrow.style.transform = 'rotate(180deg)';
+      } else {
+        tiendaSubmenu.style.maxHeight = '0px';
+        if (tiendaArrow) tiendaArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+  }
+
+  // Submenú móvil - Clientes
+  const clientesToggle = document.getElementById('mobile-clientes-toggle');
+  const clientesSubmenu = document.getElementById('mobile-clientes-submenu');
+  const clientesArrow = document.getElementById('mobile-clientes-arrow');
+
+  if (clientesToggle && clientesSubmenu) {
+    clientesToggle.addEventListener('click', () => {
+      if (clientesSubmenu.style.maxHeight === '0px' || clientesSubmenu.style.maxHeight === '') {
+        clientesSubmenu.style.maxHeight = '250px';
+        if (clientesArrow) clientesArrow.style.transform = 'rotate(180deg)';
+      } else {
+        clientesSubmenu.style.maxHeight = '0px';
+        if (clientesArrow) clientesArrow.style.transform = 'rotate(0deg)';
+      }
+    });
+  }
+</script>
+
+<style>
+  /* Active state para navegación */
+  nav a[href]:not([target="_blank"]) {
+    position: relative;
+  }
+
+  nav a[href]:not([target="_blank"])::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+  }
+
+  nav a[href]:not([target="_blank"]):hover::after {
+    width: 100%;
+  }
+</style>

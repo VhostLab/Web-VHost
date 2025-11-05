@@ -1,5 +1,5 @@
 ---
-// src/components/
+// src/components/layout/Footer.astro
 ---
 <footer>
   <!-- Banda de métodos de pago -->
@@ -11,11 +11,34 @@
     </div>
   </div>
 
+  <!-- Enlaces legales -->
+  <div class="bg-[#0a0a0a] py-4 border-t border-secondary/20">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 text-sm">
+        <a href="/aviso-legal" class="text-gray-400 hover:text-secondary transition-colors duration-200">
+          Aviso Legal
+        </a>
+        <span class="hidden sm:inline text-gray-600">|</span>
+        <a href="/politica-privacidad" class="text-gray-400 hover:text-secondary transition-colors duration-200">
+          Política de Privacidad
+        </a>
+        <span class="hidden sm:inline text-gray-600">|</span>
+        <a href="/politica-cookies" class="text-gray-400 hover:text-secondary transition-colors duration-200">
+          Política de Cookies
+        </a>
+        <span class="hidden sm:inline text-gray-600">|</span>
+        <a href="/terminos-condiciones" class="text-gray-400 hover:text-secondary transition-colors duration-200">
+          Términos y Condiciones
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Banda de copyright -->
   <div class="bg-primary py-4">
-    <div class="container mx-auto px-6">
-      <p class="text-neutral text-sm">
-        © <span id="current-year"></span> - Vhost Hosting Service
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-gray-400 text-sm">
+        © <span id="current-year"></span> Vhost Hosting Services. Todos los derechos reservados.
       </p>
     </div>
   </div>

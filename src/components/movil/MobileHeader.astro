@@ -2,10 +2,10 @@
 const { currentPath } = Astro.props;
 ---
 
-<header class="md:hidden fixed top-0 left-0 w-full bg-secondary h-16 flex items-center justify-between px-6 shadow z-50">
+<header class="md:hidden fixed top-0 left-0 w-full bg-secondary h-16 flex items-center justify-between px-4 shadow z-50">
   <!-- Logo a la izquierda -->
   <a href="/" class="flex items-center h-full">
-    <img src="/images/vhosthostingservices-blanca.webp" alt="Vhost Logo" class="h-32 w-auto" loading="lazy" />
+    <img src="/images/vhosthostingservices-blanca.webp" alt="Vhost Logo" class="h-12 w-auto" loading="lazy" />
   </a>
 
   <!-- Botón hamburguesa -->
@@ -30,7 +30,7 @@ const { currentPath } = Astro.props;
   <!-- Overlay menú full-screen -->
   <div
     id="mobile-menu"
-    class="hidden fixed inset-0 z-50 flex bg-primary p-0 overflow-auto"
+    class="hidden fixed inset-0 z-50 flex bg-primary p-0 overflow-y-auto overflow-x-hidden"
   >
     <!-- Franja naranja al borde izquierdo -->
     <div class="w-2 bg-gradient-to-b from-orange-600 to-orange-400"></div>

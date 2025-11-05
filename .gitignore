@@ -1,5 +1,6 @@
 # build output
 dist/
+.output/
 
 # generated types
 .astro/
@@ -12,13 +13,41 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
 # environment variables
 .env
+.env.*
+!.env.example
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# VSCode settings (opcional, algunos prefieren versionarlas)
+.vscode/*
+!.vscode/extensions.json
+
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# OS files
+Thumbs.db
+
+# Optional: archivos de lock si solo usas npm
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

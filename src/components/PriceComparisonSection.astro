@@ -1,19 +1,19 @@
 ---
 // src/components/PriceComparisonSection.astro
 ---
-<section class="py-20 bg-[#0b0b0b]">
-  <div class="container mx-auto px-6">
+<section class="py-12 md:py-20 bg-[#0b0b0b]">
+  <div class="container mx-auto px-4 md:px-6">
     <!-- Title -->
-    <h2 class="text-[48px] font-poppins font-bold text-center text-white mb-4">
+    <h2 class="text-3xl md:text-[48px] font-poppins font-bold text-center text-white mb-3 md:mb-4">
       Comparativa de Precios de Hosting
     </h2>
     <!-- Description -->
-    <p class="text-center text-gray-300 mb-10">
+    <p class="text-center text-gray-300 text-sm md:text-base mb-8 md:mb-10">
       Precio/GB de RAM (€) de los principales proveedores de hosting de Minecraft.
     </p>
 
-    <!-- Price Bars -->
-    <div class="space-y-6 max-w-4xl mx-auto">
+    <!-- Desktop: Horizontal Bars -->
+    <div class="hidden md:block space-y-6 max-w-4xl mx-auto">
       {([
         { name: 'GG Servers',    price: 5.58, logo: '/images/ggserver.webp' },
         { name: 'Shockbyte',     price: 3.51, logo: '/images/shockbyte.avif' },
@@ -65,6 +65,67 @@
             <div class="w-28 text-right text-sm text-gray-300">
               €{item.price.toFixed(2)} /GB RAM
             </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Mobile: Vertical Cards -->
+    <div class="md:hidden grid grid-cols-2 gap-4 max-w-md mx-auto">
+      {([
+        { name: 'GG Servers',    price: 5.58, logo: '/images/ggserver.webp' },
+        { name: 'Shockbyte',     price: 3.51, logo: '/images/shockbyte.avif' },
+        { name: 'Apex Hosting',  price: 2.64, logo: '/images/apexhosting.avif' },
+        { name: 'BisectHosting', price: 2.63, logo: '/images/bisecthosting.avif' },
+        { name: 'Hostinger',     price: 1.25, logo: '/images/hostinger.webp' },
+        { name: 'Vhost',         price: 0.75, logo: '/images/vhostlogo.webp' }
+      ]).map(item => {
+        const maxPrice = 5.58;
+        const heightPercent = Math.round((item.price / maxPrice) * 100);
+        return (
+          <div class={`rounded-lg p-4 flex flex-col items-center ${
+            item.name === 'Vhost' ? 'bg-secondary/10 border-2 border-secondary' : 'bg-[#1a1a1a] border border-gray-700'
+          }`}>
+            <!-- Logo -->
+            {item.name !== 'Vhost' ? (
+              <img
+                src={item.logo}
+                alt={`${item.name} logo`}
+                class="filter grayscale w-12 h-12 object-contain mb-2"
+                loading="lazy"
+              />
+            ) : (
+              <div class="relative w-12 h-12 mb-2">
+                <div class="absolute inset-1 rounded-full bg-secondary/50 blur-md"></div>
+                <img
+                  src={item.logo}
+                  alt="Vhost logo"
+                  class="relative w-12 h-12 object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
+
+            <!-- Name -->
+            <span class={`font-semibold text-xs mb-2 text-center ${
+              item.name === 'Vhost' ? 'text-secondary' : 'text-white'
+            }`}>{item.name}</span>
+
+            <!-- Vertical Bar Container -->
+            <div class="w-8 h-32 bg-[#2a2a2a] rounded-full overflow-hidden mb-2 flex flex-col-reverse">
+              <div
+                class={`w-full ${item.name === 'Vhost' ? 'bg-secondary' : 'bg-gray-500 filter grayscale'}`}
+                style={`height: ${heightPercent}%;`}
+              />
+            </div>
+
+            <!-- Price -->
+            <div class={`text-sm font-bold ${
+              item.name === 'Vhost' ? 'text-secondary' : 'text-gray-300'
+            }`}>
+              €{item.price.toFixed(2)}
+            </div>
+            <div class="text-[10px] text-gray-400">/GB RAM</div>
           </div>
         );
       })}
