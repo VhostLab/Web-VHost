@@ -104,4 +104,4 @@ Escríbenos a [vhostts3@gmail.com](mailto:vhostts3@gmail.com) o entra en nuestro
 
 ---
 
-## © 2024 VHOST Hosting Services. Todos los derechos reservados.
+## © 2025 VHOST Hosting Services. Todos los derechos reservados.
