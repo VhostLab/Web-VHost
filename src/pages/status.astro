@@ -1,0 +1,378 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout title="Estado de Servicios - VHost">
+  <div class="min-h-screen bg-[#0b0b0b] py-16 px-4">
+    <div class="container mx-auto max-w-6xl">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-poppins font-bold text-white mb-4">
+          Estado de Servicios
+        </h1>
+        <p class="text-gray-400 text-lg">
+          Monitoreo en tiempo real de nuestros servidores
+        </p>
+        <div class="flex items-center justify-center mt-4 text-sm">
+          <span class="text-gray-500">Última actualización:</span>
+          <span id="last-update" class="ml-2 text-secondary font-semibold">--</span>
+        </div>
+      </div>
+
+      <!-- Estado general -->
+      <div id="general-status" class="mb-8 p-6 rounded-lg bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/50">
+        <div class="flex items-center justify-center space-x-3">
+          <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          <span class="text-white text-xl font-bold">Todos los sistemas operativos</span>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
+        <p class="text-gray-400 mt-4">Consultando estado de servidores...</p>
+      </div>
+
+      <!-- Grid de servicios -->
+      <div id="services-grid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Las cards se generarán dinámicamente -->
+      </div>
+
+      <!-- Info adicional -->
+      <div class="mt-12 text-center text-gray-500 text-sm">
+        <p>Los datos se actualizan automáticamente cada 30 segundos</p>
+        <p class="mt-2">Para reportar incidencias, contacta nuestro <a href="https://discord.gg/Ykr85wevrj" class="text-secondary hover:underline">Discord</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    interface ServerStatus {
+      name: string;
+      address: string;
+      isOnline: boolean;
+      responseTime: number | null;
+    }
+
+    let updateInterval: number;
+    let uptimeInterval: number;
+    let startTimes = new Map<string, number>();
+    let monitorStartTimes = new Map<string, number>(); // Cuando empezó el monitoreo de cada servidor
+    let downtimeTotal = new Map<string, number>(); // Tiempo total de downtime acumulado
+    let failCounts = new Map<string, number>(); // Contador de fallos consecutivos antes de marcar como offline
+
+    // Cargar datos desde localStorage
+    function loadStartTimes() {
+      try {
+        const storedStart = localStorage.getItem('vhost-server-start-times');
+        if (storedStart) {
+          const data = JSON.parse(storedStart);
+          startTimes = new Map(Object.entries(data));
+        }
+
+        const storedMonitor = localStorage.getItem('vhost-server-monitor-start');
+        if (storedMonitor) {
+          const data = JSON.parse(storedMonitor);
+          monitorStartTimes = new Map(Object.entries(data));
+        }
+
+        const storedDowntime = localStorage.getItem('vhost-server-downtime');
+        if (storedDowntime) {
+          const data = JSON.parse(storedDowntime);
+          downtimeTotal = new Map(Object.entries(data));
+        }
+      } catch (error) {
+        console.error('Error loading start times:', error);
+      }
+    }
+
+    // Guardar datos en localStorage
+    function saveStartTimes() {
+      try {
+        localStorage.setItem('vhost-server-start-times', JSON.stringify(Object.fromEntries(startTimes)));
+        localStorage.setItem('vhost-server-monitor-start', JSON.stringify(Object.fromEntries(monitorStartTimes)));
+        localStorage.setItem('vhost-server-downtime', JSON.stringify(Object.fromEntries(downtimeTotal)));
+      } catch (error) {
+        console.error('Error saving start times:', error);
+      }
+    }
+
+    async function fetchStatus() {
+      try {
+        const response = await fetch('/api/status');
+        const servers: ServerStatus[] = await response.json();
+        updateUI(servers);
+      } catch (error) {
+        console.error('Error fetching status:', error);
+        showError();
+      }
+    }
+
+    function updateUI(servers: ServerStatus[]) {
+      const loading = document.getElementById('loading');
+      const grid = document.getElementById('services-grid');
+      const generalStatus = document.getElementById('general-status');
+      const lastUpdate = document.getElementById('last-update');
+
+      if (loading) loading.classList.add('hidden');
+      if (grid) grid.classList.remove('hidden');
+
+      // Actualizar última actualización
+      if (lastUpdate) {
+        const now = new Date();
+        lastUpdate.textContent = now.toLocaleTimeString('es-ES');
+      }
+
+      // Generar cards de servicios
+      if (grid) {
+        // Gestionar tiempos de inicio y downtime
+        let hasChanges = false;
+        const MAX_FAILS = 2; // Requiere 2 fallos consecutivos para marcar como offline
+        let allDisplayOnline = true; // Para el estado general
+
+        servers.forEach(server => {
+          // Inicializar tiempo de monitoreo si es la primera vez
+          if (!monitorStartTimes.has(server.name)) {
+            monitorStartTimes.set(server.name, Date.now());
+            hasChanges = true;
+          }
+
+          // Servidor está online
+          if (server.isOnline) {
+            // Resetear contador de fallos
+            if (failCounts.has(server.name)) {
+              failCounts.delete(server.name);
+            }
+
+            // Inicializar tiempo de inicio si es la primera vez o si se recuperó
+            if (!startTimes.has(server.name)) {
+              startTimes.set(server.name, Date.now());
+              hasChanges = true;
+            }
+          }
+          // Servidor reporta offline
+          else {
+            const currentFails = (failCounts.get(server.name) || 0) + 1;
+            failCounts.set(server.name, currentFails);
+
+            // Solo marcar como realmente offline después de MAX_FAILS consecutivos
+            if (currentFails >= MAX_FAILS) {
+              if (startTimes.has(server.name)) {
+                startTimes.delete(server.name);
+                hasChanges = true;
+                console.log(`${server.name} marcado como offline después de ${currentFails} fallos consecutivos`);
+              }
+              allDisplayOnline = false; // Marcar que hay al menos uno offline
+            }
+            // Si tiene fallos pero no ha llegado al límite, aún cuenta como online
+          }
+        });
+
+        // Guardar si hubo cambios
+        if (hasChanges) {
+          saveStartTimes();
+        }
+
+        // Actualizar estado general basado en displayOnline de todos
+        if (generalStatus) {
+          if (allDisplayOnline) {
+            generalStatus.className = 'mb-8 p-6 rounded-lg bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/50';
+            generalStatus.innerHTML = `
+              <div class="flex items-center justify-center space-x-3">
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span class="text-white text-xl font-bold">Todos los sistemas operativos</span>
+              </div>
+            `;
+          } else {
+            generalStatus.className = 'mb-8 p-6 rounded-lg bg-gradient-to-r from-red-500/20 to-red-600/20 border border-red-500/50';
+            generalStatus.innerHTML = `
+              <div class="flex items-center justify-center space-x-3">
+                <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span class="text-white text-xl font-bold">Algunos servicios experimentan problemas</span>
+              </div>
+            `;
+          }
+        }
+
+        grid.innerHTML = servers.map(server => {
+          // Considerar realmente offline solo si ya superó el límite de fallos
+          const currentFails = failCounts.get(server.name) || 0;
+          const displayAsOnline = server.isOnline || currentFails < MAX_FAILS;
+
+          const uptime = calculateUptime(server.name);
+          const uptimePercentage = calculateUptimePercentage(server.name, displayAsOnline);
+
+          return `
+            <div class="bg-[#161616] rounded-lg border ${displayAsOnline ? 'border-green-500/30' : 'border-red-500/30'} p-6 hover:shadow-xl transition-shadow">
+              <!-- Header de la card -->
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-4 h-4 rounded-full ${displayAsOnline ? 'bg-green-500' : 'bg-red-500'} ${displayAsOnline ? 'animate-pulse' : ''}"></div>
+                  <h3 class="text-xl font-bold text-white">${server.name}</h3>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-bold ${displayAsOnline ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}">
+                  ${displayAsOnline ? 'ONLINE' : 'OFFLINE'}
+                </span>
+              </div>
+
+              <!-- Stats grid -->
+              <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-700">
+                <!-- Latencia -->
+                <div class="text-center">
+                  <p class="text-gray-500 text-xs mb-1">Latencia</p>
+                  <p class="text-white font-bold ${server.responseTime && server.responseTime < 50 ? 'text-green-400' : server.responseTime && server.responseTime < 100 ? 'text-yellow-400' : 'text-red-400'}">
+                    ${server.responseTime ? `${server.responseTime}ms` : '--'}
+                  </p>
+                </div>
+
+                <!-- Uptime % -->
+                <div class="text-center">
+                  <p class="text-gray-500 text-xs mb-1">Uptime</p>
+                  <p class="text-white font-bold" data-uptime-percent="${server.name}" data-online="${displayAsOnline}">${uptimePercentage}</p>
+                </div>
+
+                <!-- Tiempo activo -->
+                <div class="text-center">
+                  <p class="text-gray-500 text-xs mb-1">Activo</p>
+                  <p class="text-white font-bold text-sm" data-uptime-server="${server.name}">${uptime}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function calculateUptime(serverName: string): string {
+      const startTime = startTimes.get(serverName);
+      if (!startTime) return '--';
+
+      const now = Date.now();
+      const diff = now - startTime;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      if (days > 0) return `${days}d ${hours}h`;
+      if (hours > 0) return `${hours}h ${minutes}m`;
+      return `${minutes}m`;
+    }
+
+    function calculateUptimePercentage(serverName: string, isOnline: boolean): string {
+      const monitorStart = monitorStartTimes.get(serverName);
+      if (!monitorStart) return '--';
+
+      const now = Date.now();
+      const totalTime = now - monitorStart;
+
+      // Si lleva menos de 1 minuto monitoreándose, no mostrar porcentaje aún
+      if (totalTime < 60000) return '--';
+
+      if (!isOnline) {
+        // Si está offline, calcular basado en tiempo total menos el tiempo que estuvo online
+        const startTime = startTimes.get(serverName);
+        if (!startTime) {
+          // Nunca ha estado online desde que se monitorea
+          return '0%';
+        }
+        // Calcular aproximado (simplificado)
+        return '--';
+      }
+
+      // Si está online, calcular tiempo online continuo vs tiempo total
+      const startTime = startTimes.get(serverName);
+      if (!startTime) return '--';
+
+      const onlineTime = now - startTime;
+      const percentage = (onlineTime / totalTime) * 100;
+
+      // Si el porcentaje es muy alto (99.9+%), mostrar como 99.9%
+      if (percentage >= 99.9) return '99.9%';
+      if (percentage >= 99) return percentage.toFixed(1) + '%';
+      if (percentage >= 90) return percentage.toFixed(1) + '%';
+      return percentage.toFixed(0) + '%';
+    }
+
+    function showError() {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        loading.innerHTML = `
+          <div class="text-red-400">
+            <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p>Error al consultar el estado de los servidores</p>
+            <button onclick="location.reload()" class="mt-4 px-4 py-2 bg-secondary rounded text-white hover:bg-secondary/80">
+              Reintentar
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Función para limpiar intervalos
+    function cleanupIntervals() {
+      if (updateInterval) {
+        clearInterval(updateInterval);
+        updateInterval = undefined as any;
+      }
+      if (uptimeInterval) {
+        clearInterval(uptimeInterval);
+        uptimeInterval = undefined as any;
+      }
+      console.log('Status page: Intervalos detenidos');
+    }
+
+    // Inicializar solo si estamos en la página correcta
+    if (window.location.pathname === '/status' || window.location.pathname === '/status/') {
+      loadStartTimes();
+      fetchStatus();
+
+      // Actualizar cada 30 segundos
+      updateInterval = window.setInterval(fetchStatus, 30000);
+
+      // Actualizar el contador de uptime cada 10 segundos
+      uptimeInterval = window.setInterval(() => {
+        const grid = document.getElementById('services-grid');
+        if (grid && !grid.classList.contains('hidden')) {
+          // Actualizar contadores de tiempo activo
+          const uptimeElements = grid.querySelectorAll('[data-uptime-server]');
+          uptimeElements.forEach(element => {
+            const serverName = element.getAttribute('data-uptime-server');
+            if (serverName) {
+              element.textContent = calculateUptime(serverName);
+            }
+          });
+
+          // Actualizar porcentajes de uptime
+          const percentElements = grid.querySelectorAll('[data-uptime-percent]');
+          percentElements.forEach(element => {
+            const serverName = element.getAttribute('data-uptime-percent');
+            const isOnline = element.getAttribute('data-online') === 'true';
+            if (serverName) {
+              element.textContent = calculateUptimePercentage(serverName, isOnline);
+            }
+          });
+        }
+      }, 10000);
+
+      console.log('Status page: Intervalos iniciados');
+    }
+
+    // Limpiar intervalos al salir de la página
+    window.addEventListener('beforeunload', cleanupIntervals);
+
+    // También limpiar cuando se usa navegación del cliente (SPA-like)
+    window.addEventListener('pagehide', cleanupIntervals);
+
+    // Detectar cambios de navegación si Astro usa View Transitions
+    document.addEventListener('astro:before-preparation', cleanupIntervals);
+    document.addEventListener('astro:page-load', () => {
+      // Si salimos de /status, asegurar limpieza
+      if (window.location.pathname !== '/status' && window.location.pathname !== '/status/') {
+        cleanupIntervals();
+      }
+    });
+  </script>
+</MainLayout>
