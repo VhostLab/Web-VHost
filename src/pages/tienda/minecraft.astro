@@ -1,35 +1,70 @@
 ---
-import MainLayout from '../../layouts/MainLayout.astro';
+import MainLayout from "../../layouts/MainLayout.astro";
 import "../../styles/global.css";
-import HeroTienda from '../../components/HeroTienda.astro';
-import BudgetSection from '../../components/BudgetSection.astro';
-import NormalSection from '../../components/NormalSection.astro'; // ⬅️ NUEVO
-import PremiumSection from '../../components/PremiumSection.astro';
-import Gamas from '../../components/Gamas.astro';
-import FAQSection from '../../components/FAQSection.astro';
-import DedicatedSection from '../../components/DedicatedSection.astro';
+import HeroTienda from "../../components/HeroTienda.astro";
+import BudgetSection from "../../components/BudgetSection.astro";
+import NormalSection from "../../components/NormalSection.astro";
+import PremiumSection from "../../components/PremiumSection.astro";
+import Gamas from "../../components/Gamas.astro";
+import FAQSection from "../../components/FAQSection.astro";
+import DedicatedSection from "../../components/DedicatedSection.astro";
+import SupportBanner from "../../components/SupportBanner.astro";
 
 const faqs = [
-  { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos tarjetas de crédito, PayPal y bizum.' },
-  { question: '¿Cuánto tarda en llegar mi servidor?', answer: 'La instalación es instantánea tras el pago.' },
-  { question: '¿Por qué debería elegir Vhost?', answer: 'Ofrecemos hardware premium y soporte 24/7 a precios competitivos.' },
-  { question: '¿Se puede instalar mods o plugins en los servidores?', answer: 'Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.' },
-  { question: '¿Los servidores funcionan con Minecraft Bedrock?', answer: 'Sí, soportamos tanto Java Edition como Bedrock Edition.' },
-  { question: '¿Puedo subir mi propio mundo al servidor?', answer: 'Puedes subir tu mundo directamente desde la sección Archivos.' },
-  { question: '¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?', answer: 'Sí, ofrecemos migración gratuita de tu servidor actual.' },
-  { question: '¿Qué plan debería elegir?', answer: 'Depende de tu uso; revisa las características de cada plan para decidir.' },
-  { question: '¿Qué garantía de disponibilidad ofrecen?', answer: 'Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.' },
-  { question: '¿Realizan copias de seguridad automáticas?', answer: 'Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.' },
+  {
+    question: "¿Qué métodos de pago aceptan?",
+    answer: "Aceptamos tarjetas de crédito, PayPal y bizum.",
+  },
+  {
+    question: "¿Cuánto tarda en llegar mi servidor?",
+    answer: "La instalación es instantánea tras el pago.",
+  },
+  {
+    question: "¿Por qué debería elegir Vhost?",
+    answer: "Ofrecemos hardware premium y soporte 24/7 a precios competitivos.",
+  },
+  {
+    question: "¿Se puede instalar mods o plugins en los servidores?",
+    answer:
+      "Claro, tienes acceso FTP para subir todos los mods/plugins que quieras.",
+  },
+  {
+    question: "¿Los servidores funcionan con Minecraft Bedrock?",
+    answer: "Sí, soportamos tanto Java Edition como Bedrock Edition.",
+  },
+  {
+    question: "¿Puedo subir mi propio mundo al servidor?",
+    answer: "Puedes subir tu mundo directamente desde la sección Archivos.",
+  },
+  {
+    question: "¿Actualmente estoy con otro hosting, puedo migrarme a Vhost?",
+    answer: "Sí, ofrecemos migración gratuita de tu servidor actual.",
+  },
+  {
+    question: "¿Qué plan debería elegir?",
+    answer:
+      "Depende de tu uso; revisa las características de cada plan para decidir.",
+  },
+  {
+    question: "¿Qué garantía de disponibilidad ofrecen?",
+    answer:
+      "Garantizamos un 99.9% de uptime con monitoreo 24/7 y protección DDoS.",
+  },
+  {
+    question: "¿Realizan copias de seguridad automáticas?",
+    answer:
+      "Ofrecemos backups diarios automáticos opcionales para asegurar tus datos.",
+  },
 ];
 ---
 
-<MainLayout 
+<MainLayout
   title="Minecraft"
   description="Contrata tu servidor de Minecraft en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre planes Budget, Normal y Premium para todas las necesidades."
   image="https://vhost.tech/SEO/vhost-preview.webp"
   url="https://vhost.tech/tienda/minecraft"
 >
-  <HeroTienda 
+  <HeroTienda
     titulo="Minecraft Hosting"
     imagenFondo="/images/tienda/minecraft/mc-bg.webp"
   />
@@ -38,7 +73,9 @@ const faqs = [
   <section class="relative bg-[#0b0b0b] text-white py-12 px-4">
     <!-- Título, subtítulo y enlace -->
     <div class="text-center mt-12 mb-6">
-      <h2 class="text-3xl font-poppins font-semibold text-white">Comparar tipos de planes</h2>
+      <h2 class="text-3xl font-poppins font-semibold text-white">
+        Comparar tipos de planes
+      </h2>
       <p class="text-gray-300 font-poppins mt-1">
         Selecciona una gama para ver sus características y precios.
       </p>
@@ -63,7 +100,8 @@ const faqs = [
           <div
             id="toggle-indicator"
             class="absolute top-0 left-0 h-full w-1/3 rounded-full bg-[#fc7c04] transition-all duration-300 z-0"
-          ></div>
+          >
+          </div>
 
           <!-- Botón Budget -->
           <button
@@ -98,17 +136,26 @@ const faqs = [
       </div>
 
       <!-- Secciones -->
-      <div id="budget-section" class="transition-opacity duration-200 ease-in-out opacity-100">
+      <div
+        id="budget-section"
+        class="transition-opacity duration-200 ease-in-out opacity-100"
+      >
         <BudgetSection />
         <DedicatedSection />
       </div>
 
-      <div id="normal-section" class="transition-opacity duration-200 ease-in-out opacity-0 hidden">
+      <div
+        id="normal-section"
+        class="transition-opacity duration-200 ease-in-out opacity-0 hidden"
+      >
         <NormalSection />
         <DedicatedSection />
       </div>
 
-      <div id="premium-section" class="transition-opacity duration-200 ease-in-out opacity-0 hidden">
+      <div
+        id="premium-section"
+        class="transition-opacity duration-200 ease-in-out opacity-0 hidden"
+      >
         <PremiumSection />
         <DedicatedSection />
       </div>
@@ -117,23 +164,24 @@ const faqs = [
 
   <!-- Estas secciones no tienen el fondo -->
   <Gamas />
+  <SupportBanner />
   <FAQSection items={faqs} inviteLink="https://discord.gg/Ykr85wevrj" />
 
   <!-- Script -->
   <script is:inline>
-    const btnBudget = document.getElementById('btn-budget');
-    const btnNormal = document.getElementById('btn-normal');
-    const btnPremium = document.getElementById('btn-premium');
-    const toggleIndicator = document.getElementById('toggle-indicator');
+    const btnBudget = document.getElementById("btn-budget");
+    const btnNormal = document.getElementById("btn-normal");
+    const btnPremium = document.getElementById("btn-premium");
+    const toggleIndicator = document.getElementById("toggle-indicator");
 
-    const budgetSection = document.getElementById('budget-section');
-    const normalSection = document.getElementById('normal-section');
-    const premiumSection = document.getElementById('premium-section');
+    const budgetSection = document.getElementById("budget-section");
+    const normalSection = document.getElementById("normal-section");
+    const premiumSection = document.getElementById("premium-section");
 
-    const scrollLink = document.getElementById('scroll-to-gamas');
+    const scrollLink = document.getElementById("scroll-to-gamas");
     const DURATION = 200;
 
-    const plans = ['budget', 'normal', 'premium'];
+    const plans = ["budget", "normal", "premium"];
     const sections = {
       budget: budgetSection,
       normal: normalSection,
@@ -147,19 +195,19 @@ const faqs = [
 
     function fadeTo(showEl, ...hideEls) {
       hideEls.forEach((el) => {
-        el.classList.remove('opacity-100');
-        el.classList.add('opacity-0');
+        el.classList.remove("opacity-100");
+        el.classList.add("opacity-0");
         setTimeout(() => {
-          el.classList.add('hidden');
+          el.classList.add("hidden");
         }, DURATION);
       });
 
-      showEl.classList.remove('hidden');
+      showEl.classList.remove("hidden");
       // Forzar dos frames para transición suave
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          showEl.classList.remove('opacity-0');
-          showEl.classList.add('opacity-100');
+          showEl.classList.remove("opacity-0");
+          showEl.classList.add("opacity-100");
         });
       });
     }
@@ -168,42 +216,42 @@ const faqs = [
       // Mover indicador: 0%, 33.333%, 66.666%
       const index = plans.indexOf(plan);
       const leftPercent = index * (100 / 3);
-      toggleIndicator.style.left = leftPercent + '%';
+      toggleIndicator.style.left = leftPercent + "%";
 
       // Actualizar secciones
       const toShow = sections[plan];
-      const toHide = plans.filter(p => p !== plan).map(p => sections[p]);
+      const toHide = plans.filter((p) => p !== plan).map((p) => sections[p]);
       fadeTo(toShow, ...toHide);
 
       // Actualizar colores y aria-selected
-      plans.forEach(p => {
+      plans.forEach((p) => {
         const btn = buttons[p];
         const selected = p === plan;
-        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+        btn.setAttribute("aria-selected", selected ? "true" : "false");
         if (selected) {
-          btn.classList.add('text-black');
-          btn.classList.remove('text-white');
+          btn.classList.add("text-black");
+          btn.classList.remove("text-white");
         } else {
-          btn.classList.remove('text-black');
-          btn.classList.add('text-white');
+          btn.classList.remove("text-black");
+          btn.classList.add("text-white");
         }
       });
     }
 
     // Eventos de click
-    btnBudget.addEventListener('click', () => setActive('budget'));
-    btnNormal.addEventListener('click', () => setActive('normal'));
-    btnPremium.addEventListener('click', () => setActive('premium'));
+    btnBudget.addEventListener("click", () => setActive("budget"));
+    btnNormal.addEventListener("click", () => setActive("normal"));
+    btnPremium.addEventListener("click", () => setActive("premium"));
 
     // Navegación con teclado (izq/der) para accesibilidad
     const order = [btnBudget, btnNormal, btnPremium];
     order.forEach((btn, i) => {
-      btn.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight') {
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
           e.preventDefault();
           order[(i + 1) % order.length].focus();
           order[(i + 1) % order.length].click();
-        } else if (e.key === 'ArrowLeft') {
+        } else if (e.key === "ArrowLeft") {
           e.preventDefault();
           order[(i - 1 + order.length) % order.length].focus();
           order[(i - 1 + order.length) % order.length].click();
@@ -212,14 +260,14 @@ const faqs = [
     });
 
     // Estado inicial
-    setActive('budget');
+    setActive("budget");
 
     // Scroll suave a "gamas"
-    scrollLink.addEventListener('click', (e) => {
+    scrollLink.addEventListener("click", (e) => {
       e.preventDefault();
-      const gamasSection = document.getElementById('gamas');
+      const gamasSection = document.getElementById("gamas");
       if (gamasSection) {
-        gamasSection.scrollIntoView({ behavior: 'smooth' });
+        gamasSection.scrollIntoView({ behavior: "smooth" });
       }
     });
   </script>

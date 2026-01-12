@@ -1,0 +1,61 @@
+<section
+    class="py-16 md:py-20 bg-[#0b0b0b] border-y border-white/5 relative overflow-hidden"
+>
+    <div
+        class="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16"
+    >
+        <div class="flex-1 text-center md:text-left order-2 md:order-1">
+            <h2
+                class="text-3xl md:text-4xl font-poppins font-bold text-white mb-6 tracking-tight"
+            >
+                ¿No estás seguro de qué plan elegir?
+            </h2>
+
+            <p
+                class="text-gray-400 text-lg md:text-xl font-karla leading-relaxed mb-10 md:max-w-xl"
+            >
+                Si no sabes qué plan se ajusta perfectamente a tus necesidades,
+                no dudes en abrir un ticket en nuestro Discord. Nuestro equipo
+                está listo para asesorarte.
+            </p>
+
+            <div>
+                <a
+                    href="https://discord.gg/Ykr85wevrj"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-3 bg-[#fc7c04] hover:bg-[#ff9d3f] text-white font-poppins font-bold text-lg py-4 px-10 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-[#fc7c04]/20"
+                >
+                    <i class="fab fa-discord text-2xl"></i>
+                    <span>Abrir Ticket de Soporte</span>
+                </a>
+            </div>
+        </div>
+
+        <div
+            class="flex-1 flex justify-center md:justify-end order-1 md:order-2"
+        >
+            <img
+                src="/images/NPCSupport.png"
+                alt="Personaje pensando qué plan elegir"
+                class="w-full max-w-[300px] md:max-w-[400px] h-auto drop-shadow-2xl pointer-events-none animate-bounce-slow"
+            />
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Animación exacta importada de tu HeroContacto */
+    @keyframes bounce-slow {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+    .animate-bounce-slow {
+        animation: bounce-slow 3s infinite;
+    }
+</style>

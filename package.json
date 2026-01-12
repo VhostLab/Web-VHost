@@ -9,7 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.4",
+    "astro": "^5.16.6",
     "ping": "^0.4.4"
   },
   "devDependencies": {

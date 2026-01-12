@@ -3,126 +3,163 @@ const slides = [
   {
     imagen: "/images/panel/Panel-1.webp",
     titulo: "Inicio del Panel",
-    descripcion: "Página principal del panel de control, con acceso rápido a todas las funciones importantes."
+    descripcion:
+      "Página principal del panel de control, con acceso rápido a todas las funciones importantes.",
   },
   {
     imagen: "/images/panel/Panel-2.webp",
     titulo: "Consola del Servidor",
-    descripcion: "Visualiza y administra la consola en tiempo real para controlar tu servidor fácilmente."
+    descripcion:
+      "Visualiza y administra la consola en tiempo real para controlar tu servidor fácilmente.",
   },
   {
     imagen: "/images/panel/Panel-3.webp",
     titulo: "Gestión de Archivos",
-    descripcion: "Explora, sube, edita y administra todos los archivos de tu servidor desde una sola pestaña."
+    descripcion:
+      "Explora, sube, edita y administra todos los archivos de tu servidor desde una sola pestaña.",
   },
   {
     imagen: "/images/panel/Panel-4.webp",
     titulo: "Bases de Datos",
-    descripcion: "Administra y gestiona las bases de datos asociadas a tu servidor de manera sencilla."
+    descripcion:
+      "Administra y gestiona las bases de datos asociadas a tu servidor de manera sencilla.",
   },
   {
     imagen: "/images/panel/Panel-5.webp",
     titulo: "Gestión de Accesos",
-    descripcion: "Invita y administra a las personas que pueden acceder y gestionar tu servidor."
+    descripcion:
+      "Invita y administra a las personas que pueden acceder y gestionar tu servidor.",
   },
   {
     imagen: "/images/panel/Panel-6.webp",
     titulo: "Backups del Servidor",
-    descripcion: "Gestiona las copias de seguridad de tu servidor para mantener tus datos siempre protegidos."
+    descripcion:
+      "Gestiona las copias de seguridad de tu servidor para mantener tus datos siempre protegidos.",
   },
   {
     imagen: "/images/panel/Panel-7.webp",
     titulo: "Gestión de IPs",
-    descripcion: "Administra las direcciones IP asociadas a tu servidor de manera eficiente."
-  }
+    descripcion:
+      "Administra las direcciones IP asociadas a tu servidor de manera eficiente.",
+  },
 ];
-
 ---
-<section id="panel-carousel" class="w-full flex flex-col items-center py-20 px-2 bg-[#101010]">
+
+<section
+  id="panel-carousel"
+  class="w-full flex flex-col items-center py-20 px-2 bg-[#0b0b0b]"
+>
   <div class="text-center mb-12">
-    <h2 class="text-3xl md:text-4xl font-extrabold font-poppins text-white tracking-tight inline-block">
+    <h2
+      class="text-3xl md:text-4xl font-extrabold font-poppins text-white tracking-tight inline-block"
+    >
       Vista previa del panel de gestión
       <div class="border-t-2 border-secondary w-24 mx-auto mb-6 mt-6"></div>
     </h2>
   </div>
   <div class="w-full max-w-4xl mx-auto flex flex-col items-center">
     <!-- Imagen (sin fondo ni borde, solo sombra y bordes redondeados) -->
-    <div class="relative w-full aspect-[16/9] rounded-t-3xl shadow-[0_12px_50px_0_rgba(0,0,0,0.95)] overflow-hidden">
-      {slides.map((slide, idx) => (
-        <div
-          class={`carousel-slide transition-opacity duration-500 ease-in-out absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center
+    <div
+      class="relative w-full aspect-[16/9] rounded-t-3xl shadow-[0_12px_50px_0_rgba(0,0,0,0.95)] overflow-hidden"
+    >
+      {
+        slides.map((slide, idx) => (
+          <div
+            class={`carousel-slide transition-opacity duration-500 ease-in-out absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center
           ${idx === 0 ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"}`}
-          data-index={idx}
-        >
-          <img src={slide.imagen} alt={slide.titulo}
-            class="w-full h-full object-contain m-0"
-          />
-        </div>
-      ))}
+            data-index={idx}
+          >
+            <img
+              src={slide.imagen}
+              alt={slide.titulo}
+              class="w-full h-full object-contain m-0"
+            />
+          </div>
+        ))
+      }
     </div>
     <!-- Caja de título/descripción/dots -->
-    <div class="relative w-full bg-[#0f0f0f] border-x border-b border-[#0f0f0f] rounded-b-3xl shadow-xl flex flex-col items-center justify-center min-h-[142px] p-8 pt-9 -mt-1">
+    <div
+      class="relative w-full bg-[#0f0f0f] border-x border-b border-[#0f0f0f] rounded-b-3xl shadow-xl flex flex-col items-center justify-center min-h-[142px] p-8 pt-9 -mt-1"
+    >
       {/* Barra de progreso: borde superior cuadrado */}
       <div class="absolute top-0 left-0 w-full h-2 overflow-hidden">
-        {slides.map((_, idx) => (
-          <div class={`progress-bar absolute left-0 top-0 h-full bg-secondary transition-all duration-500`}
-            style={`width: ${idx === 0 ? '100%' : '0'}; z-index:2;`} data-index={idx}></div>
-        ))}
+        {
+          slides.map((_, idx) => (
+            <div
+              class={`progress-bar absolute left-0 top-0 h-full bg-secondary transition-all duration-500`}
+              style={`width: ${idx === 0 ? "100%" : "0"}; z-index:2;`}
+              data-index={idx}
+            />
+          ))
+        }
       </div>
       {/* Título/descripción CENTRADOS */}
-      {slides.map((slide, idx) => (
-        <div class={`${idx === 0 ? '' : 'hidden'} slide-desc`} data-index={idx}>
-          <h3 class="text-xl md:text-2xl font-bold text-white font-poppins mb-2 text-center">{slide.titulo}</h3>
-          <p class="text-gray-300 text-base mb-4 text-center">{slide.descripcion}</p>
-        </div>
-      ))}
+      {
+        slides.map((slide, idx) => (
+          <div
+            class={`${idx === 0 ? "" : "hidden"} slide-desc`}
+            data-index={idx}
+          >
+            <h3 class="text-xl md:text-2xl font-bold text-white font-poppins mb-2 text-center">
+              {slide.titulo}
+            </h3>
+            <p class="text-gray-300 text-base mb-4 text-center">
+              {slide.descripcion}
+            </p>
+          </div>
+        ))
+      }
       {/* Dots */}
       <div class="flex gap-3 justify-center">
-        {slides.map((_, idx) => (
-          <button type="button"
-            class={`w-4 h-4 rounded-full ${idx === 0 ? 'bg-secondary scale-110' : 'bg-neutral-500'} border-2 border-neutral-700 transition-all dot-btn`}
-            data-index={idx} aria-label={`Mostrar imagen ${idx + 1}`}></button>
-        ))}
+        {
+          slides.map((_, idx) => (
+            <button
+              type="button"
+              class={`w-4 h-4 rounded-full ${idx === 0 ? "bg-secondary scale-110" : "bg-neutral-500"} border-2 border-neutral-700 transition-all dot-btn`}
+              data-index={idx}
+              aria-label={`Mostrar imagen ${idx + 1}`}
+            />
+          ))
+        }
       </div>
     </div>
   </div>
 </section>
 
-
-
-
-
-
 <script is:inline>
   let current = 0;
   let intervalId = null;
-  let slidesEls = [], dots = [], bars = [], descEls = [];
+  let slidesEls = [],
+    dots = [],
+    bars = [],
+    descEls = [];
 
   function showSlide(index) {
     slidesEls.forEach((slide, i) => {
-      slide.classList.toggle('opacity-100', i === index);
-      slide.classList.toggle('z-10', i === index);
-      slide.classList.toggle('pointer-events-auto', i === index);
-      slide.classList.toggle('opacity-0', i !== index);
-      slide.classList.toggle('z-0', i !== index);
-      slide.classList.toggle('pointer-events-none', i !== index);
+      slide.classList.toggle("opacity-100", i === index);
+      slide.classList.toggle("z-10", i === index);
+      slide.classList.toggle("pointer-events-auto", i === index);
+      slide.classList.toggle("opacity-0", i !== index);
+      slide.classList.toggle("z-0", i !== index);
+      slide.classList.toggle("pointer-events-none", i !== index);
     });
     descEls.forEach((desc, i) => {
-      desc.classList.toggle('hidden', i !== index);
+      desc.classList.toggle("hidden", i !== index);
     });
     dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-secondary', i === index);
-      dot.classList.toggle('bg-neutral-500', i !== index);
-      dot.classList.toggle('scale-110', i === index);
+      dot.classList.toggle("bg-secondary", i === index);
+      dot.classList.toggle("bg-neutral-500", i !== index);
+      dot.classList.toggle("scale-110", i === index);
     });
     bars.forEach((bar, i) => {
       bar.style.transition = "none";
-      bar.style.width = '0';
+      bar.style.width = "0";
     });
     if (bars[index]) {
       setTimeout(() => {
         bars[index].style.transition = "width 4s linear";
-        bars[index].style.width = '100%';
+        bars[index].style.width = "100%";
       }, 10);
     }
     current = index;
@@ -139,11 +176,14 @@ const slides = [
   }
   function resetInterval() {
     if (intervalId) clearInterval(intervalId);
-    bars.forEach((b, i) => { b.style.transition = "none"; b.style.width = '0'; });
+    bars.forEach((b, i) => {
+      b.style.transition = "none";
+      b.style.width = "0";
+    });
     setTimeout(() => {
       if (bars[current]) {
         bars[current].style.transition = "width 4s linear";
-        bars[current].style.width = '100%';
+        bars[current].style.width = "100%";
       }
     }, 10);
     intervalId = setInterval(() => {
@@ -152,10 +192,10 @@ const slides = [
   }
 
   setTimeout(() => {
-    slidesEls = Array.from(document.querySelectorAll('.carousel-slide'));
-    descEls = Array.from(document.querySelectorAll('.slide-desc'));
-    dots = Array.from(document.querySelectorAll('.dot-btn'));
-    bars = Array.from(document.querySelectorAll('.progress-bar'));
+    slidesEls = Array.from(document.querySelectorAll(".carousel-slide"));
+    descEls = Array.from(document.querySelectorAll(".slide-desc"));
+    dots = Array.from(document.querySelectorAll(".dot-btn"));
+    bars = Array.from(document.querySelectorAll(".progress-bar"));
     dots.forEach((dot, idx) => {
       dot.onclick = () => goToSlide(idx);
     });

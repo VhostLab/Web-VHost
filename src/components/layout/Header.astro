@@ -1,9 +1,8 @@
 ---
-import vhostLogo from '/src/images/vhosthostingservices.webp';
-import discordIcon from '/src/images/discord-icon.webp';
-import twitterIcon from '/src/images/twitter-icon.webp';
-import emailIcon from '/src/images/email-icon.webp';
-
+import vhostLogo from "/src/images/vhosthostingservices.webp";
+import discordIcon from "/src/images/discord-icon.webp";
+import twitterIcon from "/src/images/twitter-icon.webp";
+import emailIcon from "/src/images/email-icon.webp";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -13,23 +12,36 @@ const currentPath = Astro.url.pathname;
   <div class="bg-primary py-2 transition-all duration-300" id="social-bar">
     <div class="container mx-auto flex justify-center md:justify-start px-6">
       <div class="flex space-x-3">
-        <a href="https://discord.gg/Ykr85wevrj" class="group" aria-label="Discord">
-          <img src={discordIcon.src} alt="Discord"
+        <a
+          href="https://discord.gg/Ykr85wevrj"
+          class="group"
+          aria-label="Discord"
+        >
+          <img
+            src={discordIcon.src}
+            alt="Discord"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+          />
         </a>
         <a href="https://x.com/VhostTS3" class="group" aria-label="Twitter">
-          <img src={twitterIcon.src} alt="Twitter"
+          <img
+            src={twitterIcon.src}
+            alt="Twitter"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+          />
         </a>
         <a href="mailto:vhostts3@gmail.com" class="group" aria-label="Email">
-          <img src={emailIcon.src} alt="Email"
+          <img
+            src={emailIcon.src}
+            alt="Email"
             class="h-4 w-4 filter brightness-0 invert transition duration-200
                    group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15" />
+                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+          />
         </a>
       </div>
     </div>
@@ -37,139 +49,383 @@ const currentPath = Astro.url.pathname;
 
   <!-- Header principal -->
   <div class="bg-secondary transition-all duration-300" id="main-nav">
-    <div class="container mx-auto flex items-center justify-between py-4 px-6 lg:px-12">
+    <div
+      class="container mx-auto flex items-center justify-between py-4 px-6 lg:px-12"
+    >
       <!-- Logo -->
       <a href="/" class="block">
         <img src={vhostLogo.src} alt="VHost Logo" class="h-14 w-auto" />
       </a>
 
-      <!-- Menú móvil -->
+      <!-- Menú móvil (Botón) -->
       <button
         id="mobile-menu-button"
-        class="md:hidden text-white focus:outline-none"
+        class="lg:hidden text-white focus:outline-none"
         aria-label="Abrir menú"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
       </button>
 
       <!-- Navegación escritorio -->
-      <nav class="hidden md:flex items-center space-x-6">
+      <nav class="hidden lg:flex items-center space-x-6">
         <ul class="flex space-x-2 items-center">
-          <li><a href="/" class="text-lg font-poppins font-bold text-white">INICIO</a></li>
-          <li class="relative group" tabindex="0">
-<li class="relative group" tabindex="0">
-  <button
-    class="text-lg font-poppins font-bold text-white px-3 py-1 flex items-center focus:outline-none"
-    aria-haspopup="true"
-    aria-expanded="false"
-  >
-    TIENDA
-    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button>
-  <ul
-    class="absolute left-0 top-full mt-0 w-auto min-w-[500px]
-           bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
-           rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
-           invisible opacity-0
-           group-hover:visible group-hover:opacity-100
-           hover:visible hover:opacity-100
-           focus-within:visible focus-within:opacity-100
-           transition duration-200 whitespace-nowrap overflow-hidden
-           flex flex-row gap-8 p-6"
-  >
-    <!-- Columna Game Hosting (dos columnas usando flex) -->
-    <div>
-      <span class="px-2 pb-2 text-xs uppercase tracking-wider text-gray-400 font-bold block mb-2">Game Hosting</span>
-      <div class="flex flex-row gap-8">
-        <div class="flex flex-col min-w-[140px]">
-          <a href="/tienda/minecraft"
-            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
-          >Minecraft</a>
-          <a href="/tienda/ark"
-            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
-          >Ark Survival Evolved</a>
-        </div>
-        <div class="flex flex-col min-w-[100px]">
-          <a href="/tienda/rust"
-            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
-          >Rust</a>
-          <a href="/tienda/gta5"
-            class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
-          >GTA 5</a>
-        </div>
-      </div>
-    </div>
-    <!-- Divider -->
-    <div class="w-px bg-white/10 mx-2"></div>
-    <!-- Columna Other Services -->
-    <div class="flex flex-col min-w-[160px]">
-      <span class="px-2 pb-2 text-xs uppercase tracking-wider text-gray-400 font-bold mb-2">Other Services</span>
-      <a href="/tienda/teamspeak3"
-        class="flex items-center px-2 py-2 text-sm font-semibold text-white hover:bg-white/10 rounded whitespace-nowrap"
-      >Teamspeak 3</a>
-    </div>
-  </ul>
-</li>
+          <li>
+            <a href="/" class="text-lg font-poppins font-bold text-white"
+              >INICIO</a
+            >
+          </li>
 
-
-
-
-          <li><a href="/partners" class="text-lg font-poppins font-bold text-white">PARTNERS</a></li>
-        </ul>
-        <ul class="flex space-x-6 items-center">
-          <li><a href="/soporte" class="text-lg font-poppins font-extrabold px-3 py-1 text-white">SOPORTE</a></li>
+          <!-- ITEM TIENDA (DESPLEGABLE MODIFICADO) -->
           <li class="relative group" tabindex="0">
             <button
-              class="text-lg font-poppins font-extrabold text-white
-                     bg-gradient-to-r from-[#101010] to-[#000000]
-                     rounded-md px-3 py-1 flex items-center focus:outline-none"
+              class="text-lg font-poppins font-bold text-white px-3 py-1 flex items-center focus:outline-none group-hover:text-primary transition-colors duration-200"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              CLIENTES
-              <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              TIENDA
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            <!-- CONTENIDO DEL DESPLEGABLE (ESTILO MOCKUP) -->
+            <div
+              class="absolute left-0 top-full mt-2 w-[450px]
+                     bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50
+                     invisible opacity-0 translate-y-2
+                     group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
+                     hover:visible hover:opacity-100 hover:translate-y-0
+                     focus-within:visible focus-within:opacity-100 focus-within:translate-y-0
+                     transition-all duration-300 ease-in-out p-6"
+            >
+              <div class="flex gap-6">
+                <!-- Columna Game Hosting -->
+                <div class="flex-1">
+                  <h4
+                    class="text-xs uppercase text-gray-500 font-bold mb-3 tracking-wider"
+                  >
+                    Game Hosting
+                  </h4>
+
+                  <!-- Minecraft Item -->
+                  <a
+                    href="/tienda/minecraft"
+                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
+                  >
+                    <div
+                      class="w-8 h-8 rounded bg-green-900/30 text-green-500 flex items-center justify-center mr-3 shrink-0"
+                    >
+                      <i class="fas fa-cube"></i>
+                    </div>
+                    <div>
+                      <div
+                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                      >
+                        Minecraft
+                      </div>
+                      <div class="text-xs text-gray-500">Java & Bedrock</div>
+                    </div>
+                  </a>
+
+                  <!-- Hytale Item -->
+                  <a
+                    href="/tienda/hytale"
+                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition mt-2 group/item"
+                  >
+                    <div
+                      class="w-8 h-8 rounded bg-orange-900/30 text-[#fc7c04] flex items-center justify-center mr-3 shrink-0"
+                    >
+                      <i class="fas fa-dungeon"></i>
+                    </div>
+                    <div>
+                      <div
+                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors flex items-center gap-2"
+                      >
+                        Hytale <span
+                          class="bg-[#fc7c04] text-[10px] text-white px-1 rounded leading-tight"
+                          >NEW</span
+                        >
+                      </div>
+                      <div class="text-xs text-gray-500">Próximamente</div>
+                    </div>
+                  </a>
+                </div>
+
+                <!-- Separador -->
+                <div class="w-px bg-white/10"></div>
+
+                <!-- Columna Voz -->
+                <div class="flex-1">
+                  <h4
+                    class="text-xs uppercase text-gray-500 font-bold mb-3 tracking-wider"
+                  >
+                    Voz
+                  </h4>
+
+                  <!-- TeamSpeak Item -->
+                  <a
+                    href="/tienda/teamspeak3"
+                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
+                  >
+                    <div
+                      class="w-8 h-8 rounded bg-blue-900/30 text-blue-500 flex items-center justify-center mr-3 shrink-0"
+                    >
+                      <i class="fab fa-teamspeak"></i>
+                    </div>
+                    <div>
+                      <div
+                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                      >
+                        TeamSpeak 3
+                      </div>
+                      <div class="text-xs text-gray-500">Baja latencia</div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <!-- FIN ITEM TIENDA -->
+
+          <li>
+            <a
+              href="/partners"
+              class="text-lg font-poppins font-bold text-white">PARTNERS</a
+            >
+          </li>
+
+          <ul class="flex space-x-6 items-center ml-4">
+            <li>
+              <a
+                href="/soporte"
+                class="text-lg font-poppins font-extrabold px-3 py-1 text-white"
+                >SOPORTE</a
+              >
+            </li>
+            <li class="relative group" tabindex="0">
+              <button
+                class="text-lg font-poppins font-extrabold text-white
+                       bg-gradient-to-r from-[#101010] to-[#000000]
+                       rounded-md px-3 py-1 flex items-center focus:outline-none"
+              >
+                CLIENTES
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <ul
+                class="absolute right-0 top-full mt-0 w-56
+                       bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
+                       rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
+                       invisible opacity-0
+                       group-hover:visible group-hover:opacity-100
+                       hover:visible hover:opacity-100
+                       focus-within:visible focus-within:opacity-100
+                       transition duration-200 whitespace-nowrap overflow-hidden"
+              >
+                <li>
+                  <a
+                    href="https://billing.vhost.tech"
+                    target="_blank"
+                    class="flex items-center px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+                  >
+                    <i class="fas fa-user-cog w-4 h-4 mr-2"></i>Área de Clientes
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://panel.vhost.tech"
+                    target="_blank"
+                    class="flex items-center px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+                  >
+                    <i class="fas fa-gamepad w-4 h-4 mr-2"></i>Panel Juegos
+                  </a>
+                </li>
+                <!-- <li>
+                  <a
+                    href="/status"
+                    class="flex items-center px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+                  >
+                    <i class="fas fa-server w-4 h-4 mr-2"></i>Estado de los
+                    servidores
+                  </a>
+                </li> -->
+                <li>
+                  <a
+                    href="https://discord.gg/Ykr85wevrj"
+                    target="_blank"
+                    class="flex items-center px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+                  >
+                    <i class="fab fa-discord w-4 h-4 mr-2"></i>Discord
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Menú móvil desplegable -->
+    <div
+      id="mobile-menu"
+      class="lg:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary/20 overflow-hidden transition-all duration-300 max-h-0"
+    >
+      <nav class="container mx-auto px-6 py-0">
+        <ul class="space-y-1">
+          <li>
+            <a
+              href="/"
+              class="block py-3 text-white font-bold border-b border-secondary/10"
+              >INICIO</a
+            >
+          </li>
+          <li>
+            <button
+              id="mobile-tienda-toggle"
+              class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
+            >
+              TIENDA
+              <svg
+                class="w-4 h-4 transition-transform"
+                id="mobile-tienda-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>
             <ul
-              class="absolute right-0 top-full mt-0 w-56
-                     bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
-                     rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
-                     invisible opacity-0
-                     group-hover:visible group-hover:opacity-100
-                     hover:visible    hover:opacity-100
-                     focus-within:visible focus-within:opacity-100
-                     transition duration-200 whitespace-nowrap overflow-hidden"
+              id="mobile-tienda-submenu"
+              class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20"
             >
               <li>
-                <a href="https://billing.vhost.tech" target="_blank"
-                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                <a
+                  href="/tienda/minecraft"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Minecraft</a
                 >
-                  <i class="fas fa-user-cog w-4 h-4 mr-2"></i>Área de Clientes
-                </a>
               </li>
               <li>
-                <a href="https://panel.vhost.tech" target="_blank"
-                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                <a
+                  href="/tienda/hytale"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Hytale <span class="text-xs bg-black/30 px-1 rounded ml-1"
+                    >Nuevo</span
+                  ></a
                 >
-                  <i class="fas fa-gamepad w-4 h-4 mr-2"></i>Panel Juegos
-                </a>
               </li>
               <li>
-                <a href="/status"
-                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                <a
+                  href="/tienda/teamspeak3"
+                  class="block py-2 pl-4 text-sm text-white border-b border-secondary/10 hover:bg-white/10"
+                  >Teamspeak 3</a
                 >
-                  <i class="fas fa-server w-4 h-4 mr-2"></i>Estado de los servidores
-                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a
+              href="/partners"
+              class="block py-3 text-white font-bold border-b border-secondary/10"
+              >PARTNERS</a
+            >
+          </li>
+          <li>
+            <a
+              href="/soporte"
+              class="block py-3 text-white font-bold border-b border-secondary/10"
+              >SOPORTE</a
+            >
+          </li>
+          <li>
+            <button
+              id="mobile-clientes-toggle"
+              class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
+            >
+              CLIENTES
+              <svg
+                class="w-4 h-4 transition-transform"
+                id="mobile-clientes-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <ul
+              id="mobile-clientes-submenu"
+              class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20"
+            >
+              <li>
+                <a
+                  href="https://billing.vhost.tech"
+                  target="_blank"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Área de Clientes</a
+                >
               </li>
               <li>
-                <a href="https://discord.gg/Ykr85wevrj" target="_blank"
-                   class="flex items-center px-4 py-2 text-sm font-semibold text-white"
+                <a
+                  href="https://panel.vhost.tech"
+                  target="_blank"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Panel Juegos</a
                 >
-                  <i class="fab fa-discord w-4 h-4 mr-2"></i>Discord
-                </a>
+              </li>
+              <li>
+                <a
+                  href="/status"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Estado de los servidores</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://discord.gg/Ykr85wevrj"
+                  target="_blank"
+                  class="block py-2 pl-4 text-sm text-white border-b border-secondary/10 hover:bg-white/10"
+                  >Discord</a
+                >
               </li>
             </ul>
           </li>
@@ -178,179 +434,130 @@ const currentPath = Astro.url.pathname;
     </div>
   </div>
 
-  <!-- Menú móvil desplegable -->
-  <div
-    id="mobile-menu"
-    class="md:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary/20 overflow-hidden transition-all duration-300 max-h-0"
-  >
-    <nav class="container mx-auto px-6 py-0">
-      <ul class="space-y-1">
-        <li>
-          <a href="/" class="block py-3 text-white font-bold border-b border-secondary/10">INICIO</a>
-        </li>
-        <li>
-          <button
-            id="mobile-tienda-toggle"
-            class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
-          >
-            TIENDA
-            <svg class="w-4 h-4 transition-transform" id="mobile-tienda-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <ul id="mobile-tienda-submenu" class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20">
-            <li><a href="/tienda/minecraft" class="block py-2 pl-4 text-sm text-white">Minecraft</a></li>
-            <li><a href="/tienda/ark" class="block py-2 pl-4 text-sm text-white">Ark Survival Evolved</a></li>
-            <li><a href="/tienda/rust" class="block py-2 pl-4 text-sm text-white">Rust</a></li>
-            <li><a href="/tienda/gta5" class="block py-2 pl-4 text-sm text-white">GTA 5</a></li>
-            <li><a href="/tienda/teamspeak3" class="block py-2 pl-4 text-sm text-white border-b border-secondary/10">Teamspeak 3</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="/partners" class="block py-3 text-white font-bold border-b border-secondary/10">PARTNERS</a>
-        </li>
-        <li>
-          <a href="/soporte" class="block py-3 text-white font-bold border-b border-secondary/10">SOPORTE</a>
-        </li>
-        <li>
-          <button
-            id="mobile-clientes-toggle"
-            class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
-          >
-            CLIENTES
-            <svg class="w-4 h-4 transition-transform" id="mobile-clientes-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <ul id="mobile-clientes-submenu" class="overflow-hidden transition-all duration-300 max-h-0 bg-black/20">
-            <li><a href="https://billing.vhost.tech" target="_blank" class="block py-2 pl-4 text-sm text-white">Área de Clientes</a></li>
-            <li><a href="https://panel.vhost.tech" target="_blank" class="block py-2 pl-4 text-sm text-white">Panel Juegos</a></li>
-            <li><a href="/status" class="block py-2 pl-4 text-sm text-white">Estado de los servidores</a></li>
-            <li><a href="https://discord.gg/Ykr85wevrj" target="_blank" class="block py-2 pl-4 text-sm text-white border-b border-secondary/10">Discord</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</header>
+  <script>
+    // Efecto sticky header con blur y transparencia al hacer scroll
+    let lastScroll = 0;
+    const header = document.getElementById("main-header");
+    const mainNav = document.getElementById("main-nav");
+    const socialBar = document.getElementById("social-bar");
 
-<script>
-  // Efecto sticky header con blur y transparencia al hacer scroll
-  let lastScroll = 0;
-  const header = document.getElementById('main-header');
-  const mainNav = document.getElementById('main-nav');
-  const socialBar = document.getElementById('social-bar');
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.pageYOffset;
 
-  window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 50) {
-      // Cuando scroll > 50px: ocultar social bar, añadir blur y sombra
-      if (socialBar) socialBar.style.display = 'none';
-      if (mainNav) {
-        mainNav.style.backdropFilter = 'blur(10px)';
-        mainNav.style.backgroundColor = 'rgba(252, 124, 4, 0.95)';
-        mainNav.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+      if (currentScroll > 50) {
+        // Cuando scroll > 50px: ocultar social bar, añadir blur y sombra
+        if (socialBar) socialBar.style.display = "none";
+        if (mainNav) {
+          mainNav.style.backdropFilter = "blur(10px)";
+          mainNav.style.backgroundColor = "rgba(252, 124, 4, 0.95)";
+          mainNav.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.3)";
+        }
+      } else {
+        // Cuando scroll < 50px: mostrar social bar, remover blur
+        if (socialBar) socialBar.style.display = "block";
+        if (mainNav) {
+          mainNav.style.backdropFilter = "none";
+          mainNav.style.backgroundColor = "";
+          mainNav.style.boxShadow = "none";
+        }
       }
-    } else {
-      // Cuando scroll < 50px: mostrar social bar, remover blur
-      if (socialBar) socialBar.style.display = 'block';
-      if (mainNav) {
-        mainNav.style.backdropFilter = 'none';
-        mainNav.style.backgroundColor = '';
-        mainNav.style.boxShadow = 'none';
-      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Menú móvil
+    const mobileMenuButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+    let menuOpen = false;
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menuOpen = !menuOpen;
+
+        if (menuOpen) {
+          mobileMenu.style.maxHeight = "800px";
+          mobileMenu.style.paddingTop = "8px";
+          mobileMenu.style.paddingBottom = "8px";
+        } else {
+          mobileMenu.style.maxHeight = "0px";
+          mobileMenu.style.paddingTop = "0px";
+          mobileMenu.style.paddingBottom = "0px";
+        }
+      });
+
+      // Cerrar menú al hacer clic en un enlace (excepto los botones de submenú)
+      const menuLinks = mobileMenu.querySelectorAll("a");
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          menuOpen = false;
+          mobileMenu.style.maxHeight = "0px";
+          mobileMenu.style.paddingTop = "0px";
+          mobileMenu.style.paddingBottom = "0px";
+        });
+      });
     }
 
-    lastScroll = currentScroll;
-  });
+    // Submenú móvil - Tienda
+    const tiendaToggle = document.getElementById("mobile-tienda-toggle");
+    const tiendaSubmenu = document.getElementById("mobile-tienda-submenu");
+    const tiendaArrow = document.getElementById("mobile-tienda-arrow");
 
-  // Menú móvil
-  const mobileMenuButton = document.getElementById('mobile-menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  let menuOpen = false;
-
-  if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener('click', (e) => {
-      e.stopPropagation();
-      menuOpen = !menuOpen;
-
-      if (menuOpen) {
-        mobileMenu.style.maxHeight = '800px';
-        mobileMenu.style.paddingTop = '8px';
-        mobileMenu.style.paddingBottom = '8px';
-      } else {
-        mobileMenu.style.maxHeight = '0px';
-        mobileMenu.style.paddingTop = '0px';
-        mobileMenu.style.paddingBottom = '0px';
-      }
-    });
-
-    // Cerrar menú al hacer clic en un enlace (excepto los botones de submenú)
-    const menuLinks = mobileMenu.querySelectorAll('a');
-    menuLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        menuOpen = false;
-        mobileMenu.style.maxHeight = '0px';
-        mobileMenu.style.paddingTop = '0px';
-        mobileMenu.style.paddingBottom = '0px';
+    if (tiendaToggle && tiendaSubmenu) {
+      tiendaToggle.addEventListener("click", () => {
+        if (
+          tiendaSubmenu.style.maxHeight === "0px" ||
+          tiendaSubmenu.style.maxHeight === ""
+        ) {
+          tiendaSubmenu.style.maxHeight = "300px";
+          if (tiendaArrow) tiendaArrow.style.transform = "rotate(180deg)";
+        } else {
+          tiendaSubmenu.style.maxHeight = "0px";
+          if (tiendaArrow) tiendaArrow.style.transform = "rotate(0deg)";
+        }
       });
-    });
-  }
+    }
 
-  // Submenú móvil - Tienda
-  const tiendaToggle = document.getElementById('mobile-tienda-toggle');
-  const tiendaSubmenu = document.getElementById('mobile-tienda-submenu');
-  const tiendaArrow = document.getElementById('mobile-tienda-arrow');
+    // Submenú móvil - Clientes
+    const clientesToggle = document.getElementById("mobile-clientes-toggle");
+    const clientesSubmenu = document.getElementById("mobile-clientes-submenu");
+    const clientesArrow = document.getElementById("mobile-clientes-arrow");
 
-  if (tiendaToggle && tiendaSubmenu) {
-    tiendaToggle.addEventListener('click', () => {
-      if (tiendaSubmenu.style.maxHeight === '0px' || tiendaSubmenu.style.maxHeight === '') {
-        tiendaSubmenu.style.maxHeight = '300px';
-        if (tiendaArrow) tiendaArrow.style.transform = 'rotate(180deg)';
-      } else {
-        tiendaSubmenu.style.maxHeight = '0px';
-        if (tiendaArrow) tiendaArrow.style.transform = 'rotate(0deg)';
-      }
-    });
-  }
+    if (clientesToggle && clientesSubmenu) {
+      clientesToggle.addEventListener("click", () => {
+        if (
+          clientesSubmenu.style.maxHeight === "0px" ||
+          clientesSubmenu.style.maxHeight === ""
+        ) {
+          clientesSubmenu.style.maxHeight = "250px";
+          if (clientesArrow) clientesArrow.style.transform = "rotate(180deg)";
+        } else {
+          clientesSubmenu.style.maxHeight = "0px";
+          if (clientesArrow) clientesArrow.style.transform = "rotate(0deg)";
+        }
+      });
+    }
+  </script>
 
-  // Submenú móvil - Clientes
-  const clientesToggle = document.getElementById('mobile-clientes-toggle');
-  const clientesSubmenu = document.getElementById('mobile-clientes-submenu');
-  const clientesArrow = document.getElementById('mobile-clientes-arrow');
+  <style>
+    /* Active state para navegación */
+    nav a[href]:not([target="_blank"]) {
+      position: relative;
+    }
 
-  if (clientesToggle && clientesSubmenu) {
-    clientesToggle.addEventListener('click', () => {
-      if (clientesSubmenu.style.maxHeight === '0px' || clientesSubmenu.style.maxHeight === '') {
-        clientesSubmenu.style.maxHeight = '250px';
-        if (clientesArrow) clientesArrow.style.transform = 'rotate(180deg)';
-      } else {
-        clientesSubmenu.style.maxHeight = '0px';
-        if (clientesArrow) clientesArrow.style.transform = 'rotate(0deg)';
-      }
-    });
-  }
-</script>
+    nav a[href]:not([target="_blank"])::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s ease;
+    }
 
-<style>
-  /* Active state para navegación */
-  nav a[href]:not([target="_blank"]) {
-    position: relative;
-  }
-
-  nav a[href]:not([target="_blank"])::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: width 0.3s ease;
-  }
-
-  nav a[href]:not([target="_blank"]):hover::after {
-    width: 100%;
-  }
-</style>
+    nav a[href]:not([target="_blank"]):hover::after {
+      width: 100%;
+    }
+  </style>
+</header>

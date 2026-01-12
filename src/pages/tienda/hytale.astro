@@ -1,0 +1,409 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import "../../styles/global.css";
+import HeroTienda from "../../components/HeroTienda.astro";
+import Gamas from "../../components/Gamas.astro";
+import FAQSection from "../../components/FAQSection.astro";
+import SupportBanner from "../../components/SupportBanner.astro";
+
+// --- DATOS DE LOS PLANES (EDITAR AQUÍ) ---
+
+const products = [
+    {
+        key: "inicio",
+        type: "Plan Inicio",
+        ram: "4GB",
+        disk: "20 GB", // <--- EDITA EL DISCO AQUÍ
+        price: "3,99€", // <--- EDITA EL PRECIO AQUÍ
+        // He puesto una imagen genérica que funciona. Cambia esta URL por la tuya cuando quieras.
+        img: "https://via.placeholder.com/150/0000FF/808080?text=Hytale+Inicio",
+        url: "https://billing.vhost.tech/products/hytale/inicio",
+        bgClass: "bg-gradient-to-br from-blue-900 to-slate-900",
+        recommended: false,
+    },
+    {
+        key: "avanzado",
+        type: "Plan Avanzado",
+        ram: "8GB",
+        disk: "40 GB", // <--- EDITA EL DISCO AQUÍ
+        price: "7,99€", // <--- EDITA EL PRECIO AQUÍ
+        img: "https://via.placeholder.com/150/FF4500/FFFFFF?text=Hytale+Avanzado",
+        url: "https://billing.vhost.tech/products/hytale/avanzado",
+        bgClass: "bg-gradient-to-br from-orange-900 to-red-900",
+        recommended: true,
+    },
+    {
+        key: "pro",
+        type: "Plan Profesional",
+        ram: "16GB",
+        disk: "80 GB", // <--- EDITA EL DISCO AQUÍ
+        price: "15,99€", // <--- EDITA EL PRECIO AQUÍ
+        img: "https://via.placeholder.com/150/008000/FFFFFF?text=Hytale+Pro",
+        url: "https://billing.vhost.tech/products/hytale/pro",
+        bgClass: "bg-gradient-to-br from-emerald-900 to-teal-900",
+        recommended: false,
+    },
+];
+
+const faqs = [
+    {
+        question: "¿Cuándo se activará mi servidor?",
+        answer: "Estamos en fase de pre-reserva. Tu servidor se activará automáticamente el día del lanzamiento.",
+    },
+    {
+        question: "¿Soportan Scripting y Mods?",
+        answer: "Sí, todos nuestros planes permiten acceso completo para scripts y la instalación de mods compatibles con Hytale.",
+    },
+    {
+        question: "¿Qué métodos de pago aceptan?",
+        answer: "Aceptamos tarjetas de crédito, PayPal y Bizum.",
+    },
+    {
+        question: "¿Puedo mejorar mi plan (Upgrade) más tarde?",
+        answer: "Sí, puedes aumentar la RAM y el disco de tu servidor en cualquier momento desde el área de clientes pagando solo la diferencia.",
+    },
+    {
+        question: "¿Incluyen protección Anti-DDoS?",
+        answer: "Por supuesto. Todos nuestros servidores cuentan con protección Anti-DDoS profesional optimizada para juegos (Game Protection).",
+    },
+    {
+        question: "¿Dónde están ubicados los servidores?",
+        answer: "Nuestros servidores están alojados en centros de datos en España para garantizar la mejor latencia y estabilidad.",
+    },
+    {
+        question: "¿Tengo acceso a los archivos del servidor?",
+        answer: "Sí, tendrás acceso completo vía SFTP y a través del gestor de archivos de nuestro panel de control.",
+    },
+    {
+        question: "¿Ofrecen soporte técnico?",
+        answer: "Contamos con un equipo de soporte 24/7 disponible a través de Discord y tickets para ayudarte con cualquier problema.",
+    },
+    {
+        question: "¿Qué panel de control utilizan?",
+        answer: "Utilizamos un panel intuitivo y moderno (Pterodactyl modificado) que facilita la gestión, copias de seguridad y configuración.",
+    },
+    {
+        question: "¿Existe política de devolución?",
+        answer: "Sí, ofrecemos una garantía de reembolso durante las primeras 48 horas si el servicio no cumple con tus expectativas.",
+    },
+];
+---
+
+<MainLayout
+    title="Hytale Hosting"
+    description="Reserva tu servidor de Hytale en Vhost."
+    image="https://vhost.tech/SEO/hytale-preview.webp"
+    url="https://vhost.tech/tienda/hytale"
+>
+    <HeroTienda
+        titulo="Hytale Hosting"
+        imagenFondo="/images/tienda/hytale/hytale-wallpaper.jpg"
+    />
+
+    <section class="relative bg-[#0b0b0b] text-white py-16 px-4">
+        <div class="text-center mt-8 mb-10">
+            <h2 class="text-3xl font-poppins font-semibold text-white">
+                Elige tu Plan
+            </h2>
+            <p class="text-gray-300 font-poppins mt-1">
+                Selecciona la potencia que necesitas para tu aventura.
+            </p>
+        </div>
+
+        <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto place-items-center"
+        >
+            {
+                products.map((product) => (
+                    <div
+                        class={`
+            relative flex flex-col w-full max-w-[350px] bg-[#151515] rounded-2xl overflow-hidden 
+            border transition-all duration-300 shadow-2xl group
+            ${
+                product.recommended
+                    ? "border-[#fc7c04]/50 shadow-[0_0_30px_rgba(252,124,4,0.15)] -translate-y-2"
+                    : "border-white/5 hover:border-white/20 hover:-translate-y-2 hover:shadow-xl"
+            }
+        `}
+                    >
+                        {/* Badge Recomendado */}
+                        {product.recommended && (
+                            <>
+                                <div class="absolute top-0 inset-x-0 h-1 bg-[#fc7c04] z-20" />
+                                <div class="absolute top-4 right-4 bg-[#fc7c04] text-white text-[10px] font-bold px-3 py-1 rounded-full z-20">
+                                    RECOMENDADO
+                                </div>
+                            </>
+                        )}
+
+                        {/* Cabecera Imagen */}
+                        <div
+                            class={`h-40 w-full relative overflow-hidden flex items-center justify-center ${product.bgClass}`}
+                        >
+                            <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+                            <img
+                                src={product.img}
+                                alt={product.type}
+                                class="h-[80%] w-auto object-contain absolute bottom-0 drop-shadow-2xl z-10 group-hover:scale-110 transition-transform duration-500"
+                            />
+                        </div>
+
+                        {/* Cuerpo */}
+                        <div class="p-6 flex-grow flex flex-col">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <h3 class="text-xl font-bold text-white font-poppins">
+                                        {product.type}
+                                    </h3>
+                                    <div class="flex items-center gap-2 mt-1 opacity-70">
+                                        <img
+                                            src="https://flagcdn.com/w40/es.png"
+                                            class="w-4 h-auto rounded-[2px]"
+                                            alt="España"
+                                        />
+                                        <span class="text-xs text-gray-400">
+                                            España
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-2xl font-bold text-[#fc7c04]">
+                                        {product.ram}
+                                    </span>
+                                    <span class="text-xs text-gray-500 font-bold">
+                                        RAM
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* --- FEATURES --- */}
+                            {/* Sin barras separadoras (divide-y eliminado) */}
+                            <ul class="mb-8 text-sm text-gray-300 space-y-4">
+                                <li class="flex items-center">
+                                    <i class="fas fa-users text-[#fc7c04] w-6 text-center mr-2" />{" "}
+                                    Slots Ilimitados
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-hdd text-[#fc7c04] w-6 text-center mr-2" />{" "}
+                                    {product.disk} de disco
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-shield-alt text-[#fc7c04] w-6 text-center mr-2" />{" "}
+                                    Protección Anti-DDoS
+                                </li>
+                            </ul>
+
+                            <div class="mt-auto flex items-center justify-between pt-4 border-t border-white/10">
+                                <span
+                                    class={`text-2xl font-bold ${product.recommended ? "text-[#fc7c04]" : "text-white"}`}
+                                >
+                                    {product.price}
+                                    <span class="text-xs font-normal text-gray-500">
+                                        /mes
+                                    </span>
+                                </span>
+                                <a
+                                    href={product.url}
+                                    class={`
+                        px-6 py-2 rounded-lg font-bold transition-colors
+                        ${
+                            product.recommended
+                                ? "bg-[#fc7c04] hover:bg-orange-600 text-white shadow-lg shadow-orange-900/20"
+                                : "bg-white/10 hover:bg-white/20 text-white"
+                        }
+                    `}
+                                >
+                                    Comprar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </section>
+
+    <section class="py-20 px-4 bg-[#101010] border-t border-white/5">
+        <div
+            class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+        >
+            <div class="space-y-8 order-2 lg:order-1">
+                <div>
+                    <h2
+                        class="text-3xl md:text-4xl font-poppins font-bold text-white mb-4"
+                    >
+                        El control en tus manos
+                    </h2>
+                    <p class="text-gray-400 text-lg">
+                        No necesitas ser un experto en sistemas. Nuestro panel
+                        intuitivo te permite gestionar cada aspecto de tu
+                        servidor de Hytale con un par de clics.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="flex flex-col gap-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-[#fc7c04]/10 flex items-center justify-center text-[#fc7c04]"
+                        >
+                            <i class="fas fa-terminal text-lg"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg">
+                            Consola en Vivo
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Ejecuta comandos y monitorea tu servidor en tiempo
+                            real desde la web.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-[#fc7c04]/10 flex items-center justify-center text-[#fc7c04]"
+                        >
+                            <i class="fas fa-folder-open text-lg"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg">
+                            Gestor de Archivos
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Sube mods, scripts y edita configuraciones
+                            directamente sin usar FTP.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-[#fc7c04]/10 flex items-center justify-center text-[#fc7c04]"
+                        >
+                            <i class="fas fa-cloud-upload-alt text-lg"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg">
+                            Backups Automáticos
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Protege tu progreso. Crea y restaura copias de
+                            seguridad en segundos.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-[#fc7c04]/10 flex items-center justify-center text-[#fc7c04]"
+                        >
+                            <i class="fas fa-users-cog text-lg"></i>
+                        </div>
+                        <h3 class="text-white font-bold text-lg">
+                            Sub-usuarios
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            Da acceso a tus moderadores o desarrolladores con
+                            permisos específicos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group order-1 lg:order-2">
+                <div
+                    class="absolute -inset-1 bg-gradient-to-r from-[#fc7c04] to-purple-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"
+                >
+                </div>
+
+                <div
+                    class="relative rounded-2xl overflow-hidden border border-white/10 bg-[#0F0F0F] shadow-2xl h-[350px] flex flex-col font-mono text-xs md:text-sm"
+                >
+                    <div
+                        class="h-9 bg-[#1a1a1a] border-b border-white/5 flex items-center px-4 justify-between select-none"
+                    >
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80">
+                            </div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80">
+                            </div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80">
+                            </div>
+                        </div>
+                        <div
+                            class="text-gray-500 text-xs font-semibold tracking-wide"
+                        >
+                            root@vhost-node:~/hytale-server
+                        </div>
+                        <div class="w-10"></div>
+                    </div>
+
+                    <div
+                        class="flex-grow p-4 overflow-hidden text-gray-300 space-y-1 opacity-90"
+                    >
+                        <div class="text-blue-400">
+                            <span class="text-gray-500">[10:00:01]</span> [SYSTEM]:
+                            Booting Hytale Dedicated Server v1.0...
+                        </div>
+                        <div>
+                            <span class="text-gray-500">[10:00:02]</span> [INFO]:
+                            Loading world generator "OrbisCore"...
+                        </div>
+                        <div>
+                            <span class="text-gray-500">[10:00:02]</span> [INFO]:
+                            Loading assets: models, textures, sounds... <span
+                                class="text-green-500">Done (1.2s)</span
+                            >
+                        </div>
+                        <div class="text-yellow-500">
+                            <span class="text-gray-500">[10:00:03]</span> [WARN]:
+                            "Kweebec_Village" structure density is high in sector
+                            7.
+                        </div>
+                        <div>
+                            <span class="text-gray-500">[10:00:04]</span> [INFO]:
+                            Loading 12 custom scripts from /scripts folder.
+                        </div>
+                        <div>
+                            <span class="text-gray-500">[10:00:04]</span> [INFO]:
+                            Allocating 8GB RAM... <span class="text-green-500"
+                                >Success</span
+                            >.
+                        </div>
+                        <div>
+                            <span class="text-gray-500">[10:00:05]</span> [INFO]:
+                            Connecting to Vhost Network... Connected.
+                        </div>
+                        <div class="text-green-400 font-bold mt-2">
+                            <span class="text-gray-500 font-normal"
+                                >[10:00:06]</span
+                            > [SUCCESS]: Server is UP and listening on port 25565!
+                        </div>
+                        <div class="animate-pulse text-[#fc7c04] mt-1">_</div>
+                    </div>
+
+                    <div
+                        class="h-10 bg-[#151515] border-t border-white/5 flex items-center px-4 text-gray-400"
+                    >
+                        <span class="text-[#fc7c04] mr-2">➜</span>
+                        <span>/op PlayerOne</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <SupportBanner />
+    <FAQSection
+        items={faqs}
+        inviteLink="https://discord.gg/Ykr85wevrj"
+        backgroundClass="101010"
+    />
+
+    <script is:inline>
+        // Script suave para enlaces ancla
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const target = document.querySelector(
+                    this.getAttribute("href"),
+                );
+                if (target) target.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+    </script>
+</MainLayout>
