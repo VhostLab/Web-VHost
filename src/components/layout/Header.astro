@@ -8,7 +8,6 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header class="sticky top-0 z-50 transition-all duration-300" id="main-header">
-  <!-- Redes sociales -->
   <div class="bg-primary py-2 transition-all duration-300" id="social-bar">
     <div class="container mx-auto flex justify-center md:justify-start px-6">
       <div class="flex space-x-3">
@@ -20,44 +19,35 @@ const currentPath = Astro.url.pathname;
           <img
             src={discordIcon.src}
             alt="Discord"
-            class="h-4 w-4 filter brightness-0 invert transition duration-200
-                   group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200 group-hover:invert-0 group-hover:brightness-75 group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
           />
         </a>
         <a href="https://x.com/VhostTS3" class="group" aria-label="Twitter">
           <img
             src={twitterIcon.src}
             alt="Twitter"
-            class="h-4 w-4 filter brightness-0 invert transition duration-200
-                   group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200 group-hover:invert-0 group-hover:brightness-75 group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
           />
         </a>
         <a href="mailto:vhostts3@gmail.com" class="group" aria-label="Email">
           <img
             src={emailIcon.src}
             alt="Email"
-            class="h-4 w-4 filter brightness-0 invert transition duration-200
-                   group-hover:invert-0 group-hover:brightness-75
-                   group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
+            class="h-4 w-4 filter brightness-0 invert transition duration-200 group-hover:invert-0 group-hover:brightness-75 group-hover:sepia group-hover:saturate-200 group-hover:hue-rotate-15"
           />
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Header principal -->
   <div class="bg-secondary transition-all duration-300" id="main-nav">
     <div
       class="container mx-auto flex items-center justify-between py-4 px-6 lg:px-12"
     >
-      <!-- Logo -->
       <a href="/" class="block">
         <img src={vhostLogo.src} alt="VHost Logo" class="h-14 w-auto" />
       </a>
 
-      <!-- Menú móvil (Botón) -->
       <button
         id="mobile-menu-button"
         class="lg:hidden text-white focus:outline-none"
@@ -77,7 +67,6 @@ const currentPath = Astro.url.pathname;
         </svg>
       </button>
 
-      <!-- Navegación escritorio -->
       <nav class="hidden lg:flex items-center space-x-6">
         <ul class="flex space-x-2 items-center">
           <li>
@@ -86,7 +75,6 @@ const currentPath = Astro.url.pathname;
             >
           </li>
 
-          <!-- ITEM TIENDA (DESPLEGABLE MODIFICADO) -->
           <li class="relative group" tabindex="0">
             <button
               class="text-lg font-poppins font-bold text-white px-3 py-1 flex items-center focus:outline-none group-hover:text-primary transition-colors duration-200"
@@ -108,18 +96,10 @@ const currentPath = Astro.url.pathname;
               </svg>
             </button>
 
-            <!-- CONTENIDO DEL DESPLEGABLE (ESTILO MOCKUP) -->
             <div
-              class="absolute left-0 top-full mt-2 w-[450px]
-                     bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50
-                     invisible opacity-0 translate-y-2
-                     group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
-                     hover:visible hover:opacity-100 hover:translate-y-0
-                     focus-within:visible focus-within:opacity-100 focus-within:translate-y-0
-                     transition-all duration-300 ease-in-out p-6"
+              class="absolute left-0 top-full mt-2 w-[450px] bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 hover:visible hover:opacity-100 hover:translate-y-0 focus-within:visible focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-300 ease-in-out p-6"
             >
               <div class="flex gap-6">
-                <!-- Columna Game Hosting -->
                 <div class="flex-1">
                   <h4
                     class="text-xs uppercase text-gray-500 font-bold mb-3 tracking-wider"
@@ -127,7 +107,6 @@ const currentPath = Astro.url.pathname;
                     Game Hosting
                   </h4>
 
-                  <!-- Minecraft Item -->
                   <a
                     href="/tienda/minecraft"
                     class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
@@ -147,7 +126,6 @@ const currentPath = Astro.url.pathname;
                     </div>
                   </a>
 
-                  <!-- Hytale Item -->
                   <a
                     href="/tienda/hytale"
                     class="flex items-center p-2 rounded-lg hover:bg-white/5 transition mt-2 group/item"
@@ -170,43 +148,9 @@ const currentPath = Astro.url.pathname;
                     </div>
                   </a>
                 </div>
-
-                <!-- Separador -->
-                <div class="w-px bg-white/10"></div>
-
-                <!-- Columna Voz -->
-                <div class="flex-1">
-                  <h4
-                    class="text-xs uppercase text-gray-500 font-bold mb-3 tracking-wider"
-                  >
-                    Voz
-                  </h4>
-
-                  <!-- TeamSpeak Item -->
-                  <a
-                    href="/tienda/teamspeak3"
-                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
-                  >
-                    <div
-                      class="w-8 h-8 rounded bg-blue-900/30 text-blue-500 flex items-center justify-center mr-3 shrink-0"
-                    >
-                      <i class="fab fa-teamspeak"></i>
-                    </div>
-                    <div>
-                      <div
-                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
-                      >
-                        TeamSpeak 3
-                      </div>
-                      <div class="text-xs text-gray-500">Baja latencia</div>
-                    </div>
-                  </a>
-                </div>
               </div>
             </div>
           </li>
-          <!-- FIN ITEM TIENDA -->
-
           <li>
             <a
               href="/partners"
@@ -224,9 +168,7 @@ const currentPath = Astro.url.pathname;
             </li>
             <li class="relative group" tabindex="0">
               <button
-                class="text-lg font-poppins font-extrabold text-white
-                       bg-gradient-to-r from-[#101010] to-[#000000]
-                       rounded-md px-3 py-1 flex items-center focus:outline-none"
+                class="text-lg font-poppins font-extrabold text-white bg-gradient-to-r from-[#101010] to-[#000000] rounded-md px-3 py-1 flex items-center focus:outline-none"
               >
                 CLIENTES
                 <svg
@@ -243,14 +185,7 @@ const currentPath = Astro.url.pathname;
                 </svg>
               </button>
               <ul
-                class="absolute right-0 top-full mt-0 w-56
-                       bg-gradient-to-r from-[#101010]/90 to-[#000000]/90
-                       rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm
-                       invisible opacity-0
-                       group-hover:visible group-hover:opacity-100
-                       hover:visible hover:opacity-100
-                       focus-within:visible focus-within:opacity-100
-                       transition duration-200 whitespace-nowrap overflow-hidden"
+                class="absolute right-0 top-full mt-0 w-56 bg-gradient-to-r from-[#101010]/90 to-[#000000]/90 rounded-lg shadow-lg z-50 border border-white/20 backdrop-blur-sm invisible opacity-0 group-hover:visible group-hover:opacity-100 hover:visible hover:opacity-100 focus-within:visible focus-within:opacity-100 transition duration-200 whitespace-nowrap overflow-hidden"
               >
                 <li>
                   <a
@@ -270,15 +205,6 @@ const currentPath = Astro.url.pathname;
                     <i class="fas fa-gamepad w-4 h-4 mr-2"></i>Panel Juegos
                   </a>
                 </li>
-                <!-- <li>
-                  <a
-                    href="/status"
-                    class="flex items-center px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
-                  >
-                    <i class="fas fa-server w-4 h-4 mr-2"></i>Estado de los
-                    servidores
-                  </a>
-                </li> -->
                 <li>
                   <a
                     href="https://discord.gg/Ykr85wevrj"
@@ -295,7 +221,6 @@ const currentPath = Astro.url.pathname;
       </nav>
     </div>
 
-    <!-- Menú móvil desplegable -->
     <div
       id="mobile-menu"
       class="lg:hidden bg-primary/95 backdrop-blur-sm border-t border-secondary/20 overflow-hidden transition-all duration-300 max-h-0"
@@ -347,13 +272,6 @@ const currentPath = Astro.url.pathname;
                   >Hytale <span class="text-xs bg-black/30 px-1 rounded ml-1"
                     >Nuevo</span
                   ></a
-                >
-              </li>
-              <li>
-                <a
-                  href="/tienda/teamspeak3"
-                  class="block py-2 pl-4 text-sm text-white border-b border-secondary/10 hover:bg-white/10"
-                  >Teamspeak 3</a
                 >
               </li>
             </ul>

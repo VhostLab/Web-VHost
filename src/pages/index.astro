@@ -8,7 +8,6 @@ import FAQSection from "../components/FAQSection.astro";
 import HeroSlider from "../components/inicio/HeroSlider.astro";
 import PriceComparisonSection from "../components/PriceComparisonSection.astro";
 import PanelCarrusel from "../components/PanelCarrusel.astro";
-import ServerMap from "../components/ServerMap.astro";
 
 const stats = [
   { target: 99.9, suffix: "%", label: "Uptime", icon: "fas fa-clock" },
@@ -91,8 +90,6 @@ const faqs = [
 
   <!-- Stats Section -->
   <StatsSection stats={stats} />
-
-  <ServerMap />
 
   <!-- Interactive Cards Section -->
   <PanelCarrusel />

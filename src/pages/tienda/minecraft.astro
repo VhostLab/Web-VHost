@@ -9,6 +9,8 @@ import Gamas from "../../components/Gamas.astro";
 import FAQSection from "../../components/FAQSection.astro";
 import DedicatedSection from "../../components/DedicatedSection.astro";
 import SupportBanner from "../../components/SupportBanner.astro";
+import ServerMap from "../../components/ServerMap.astro";
+import ConsoleSection from "../../components/ConsoleSection.astro";
 
 const faqs = [
   {
@@ -161,8 +163,8 @@ const faqs = [
       </div>
     </div>
   </section>
-
-  <!-- Estas secciones no tienen el fondo -->
+  <ConsoleSection />
+  <ServerMap />
   <Gamas />
   <SupportBanner />
   <FAQSection items={faqs} inviteLink="https://discord.gg/Ykr85wevrj" />

@@ -46,7 +46,7 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                 Infraestructura <span class="text-[#fc7c04]">Global</span>
             </h2>
             <p class="text-gray-400 max-w-2xl mx-auto">
-                Latencia verificada en tiempo real automáticamente.
+                Comprobando latencia en tiempo real desde tu conexión actual.
             </p>
         </div>
 
@@ -116,7 +116,8 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                 <h3
                     class="text-white font-bold mb-4 flex items-center gap-2 text-lg"
                 >
-                    <i class="fas fa-server text-[#fc7c04]"></i> Estado de la Red
+                    <i class="fas fa-server text-[#fc7c04]"></i> Tu latencia hacia
+                    el servidor
                     <span class="relative flex h-2 w-2 ml-auto">
                         <span
                             class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
@@ -236,7 +237,6 @@ const allServers = locations.flatMap((loc) => loc.nodes);
         const elements = document.querySelectorAll(".ping-value");
 
         // Opcional: Poner "..." antes de actualizar para dar efecto de "midiendo"
-        // Si prefieres que solo cambie el número sin parpadear, comenta este bloque.
         elements.forEach((el) => {
             el.className =
                 "ping-value text-gray-500 font-mono font-bold text-lg opacity-50";
@@ -252,9 +252,10 @@ const allServers = locations.flatMap((loc) => loc.nodes);
             let latency = await getLatency(domain);
             if (latency <= 0) latency = simulateLatency(id);
 
+            // MODIFICACIÓN: Color forzado a verde siempre
             let colorClass = "text-green-400";
-            if (latency > 40) colorClass = "text-yellow-400";
-            if (latency > 100) colorClass = "text-red-400";
+            // if (latency > 40) colorClass = "text-yellow-400"; // Eliminado
+            // if (latency > 100) colorClass = "text-red-400";    // Eliminado
 
             el.innerText = latency;
             // Quitamos la opacidad y añadimos color

@@ -1,0 +1,127 @@
+---
+const products = [
+    {
+        type: "Wanderer", // Antes: Coal
+        ram: "1GB RAM",
+        img: "/images/tienda/hytale/plan/Wanderer.png",
+        price: "0,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Wanderer-Normal",
+    },
+    {
+        type: "Settler", // Antes: Iron
+        ram: "2GB RAM",
+        img: "/images/tienda/hytale/plan/Settler.png",
+        price: "1,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Settler-Normal",
+    },
+    {
+        type: "Explorer", // Antes: Gold
+        ram: "4GB RAM",
+        img: "/images/tienda/hytale/plan/Explorer.png",
+        price: "3,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Explorer-Normal",
+    },
+    {
+        type: "Hero", // Antes: Lapis
+        ram: "8GB RAM",
+        img: "/images/tienda/hytale/plan/hero.png",
+        price: "7,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Hero-Normal",
+    },
+    {
+        type: "Legend", // Antes: Emerald
+        ram: "12GB RAM",
+        img: "/images/tienda/hytale/plan/Legend.png",
+        price: "11,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Legend-Normal",
+    },
+    {
+        type: "Guardian", // Antes: Diamond
+        ram: "16GB RAM",
+        img: "/images/tienda/hytale/plan/guardian.png",
+        price: "15,99€ /mes",
+        url: "https://billing.vhost.tech/products/Plan-Hytale/Guardian-Normal",
+    },
+];
+
+// Las características del servidor (CPU, Disco) se mantienen iguales
+const featuresList = [
+    {
+        icon: "fas fa-user-friends mr-2.5",
+        text: "<strong>Slots</strong> Ilimitados",
+    },
+    { icon: "fas fa-hdd mr-3.5", text: "<strong>20 GB</strong> de disco" },
+    {
+        icon: "fas fa-shield-alt mr-3.5",
+        text: "Protección <strong>Anti-DDoS</strong>",
+    },
+    {
+        icon: "fas fa-microchip mr-3.5",
+        text: "<strong>Intel i7-9700K</strong>",
+    },
+];
+---
+
+<section id="hytale-section" class="py-8 flex justify-center px-4">
+    <div class="w-full max-w-screen-xl">
+        <div class="flex flex-wrap justify-center gap-x-4 gap-y-6">
+            {
+                products.map((product) => (
+                    <div class="bg-[#111111] text-white w-[320px] h-[370px] p-5 rounded-[10px] flex flex-col justify-between relative transform transition-transform duration-300 hover:scale-105">
+                        {/* Cabecera */}
+                        <div class="absolute top-0 left-0 w-full h-[90px] bg-[#1f1f1f] px-4 flex items-center justify-between rounded-t-[10px]">
+                            <div class="flex flex-col">
+                                <div class="flex items-center gap-2 group relative">
+                                    <span class="text-[#ff8c00] text-sm font-bold uppercase font-poppins tracking-wide">
+                                        {product.type}
+                                    </span>
+                                </div>
+                                <span class="text-2xl font-extrabold font-poppins">
+                                    {product.ram}
+                                </span>
+                            </div>
+                            <div class="w-[60px] h-[60px] bg-[#1a1a1a] shadow-lg flex items-center justify-center rounded">
+                                <img
+                                    src={product.img}
+                                    alt={`${product.type} Image`}
+                                    class="w-full h-auto"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Características */}
+                        <div class="mt-20 font-poppins text-lg px-4">
+                            <h1 class="text-[#fc7c04] text-xl font-medium mb-2">
+                                Características:
+                            </h1>
+                            <div class="space-y-2">
+                                {featuresList.map((feature) => (
+                                    <div class="flex items-center">
+                                        <i
+                                            class={feature.icon}
+                                            aria-hidden="true"
+                                        />
+                                        <span set:html={feature.text} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Pie */}
+                        <div class="absolute bottom-0 left-0 w-full bg-[#1f1f1f] py-4 px-6 flex items-center justify-between rounded-b-[10px]">
+                            <span class="text-lg font-poppins">
+                                {product.price}
+                            </span>
+                            <a
+                                href={product.url}
+                                class="px-4 py-1 text-base font-semibold font-poppins bg-[#fc7c04] text-white rounded hover:bg-[#ffb000] transition-colors duration-300"
+                            >
+                                COMPRAR
+                            </a>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
