@@ -1,0 +1,157 @@
+---
+import type { Product, Feature } from '@types/index';
+
+interface Props {
+  product: Product;
+  features: Feature[];
+}
+
+const { product, features } = Astro.props;
+
+// Helper para determinar si es recomendado
+const isRecommended = (value?: string) =>
+  value === "Sí" || value === "Si lo recomendamos";
+
+// Helper para el color del texto
+const getRecommendationColor = (value?: string) =>
+  isRecommended(value) ? "text-green-400" : "text-red-400";
+---
+
+<div class="bg-[#111111] text-white w-[320px] h-[370px] p-5 rounded-[10px] flex flex-col justify-between relative transform transition-transform duration-300 hover:scale-105">
+  <!-- Cabecera -->
+  <div class="absolute top-0 left-0 w-full h-[90px] bg-[#1f1f1f] px-4 flex items-center justify-between rounded-t-[10px]">
+    <div class="flex flex-col">
+      <div class="flex items-center gap-2 group relative">
+        <span class="text-[#ff8c00] text-sm font-bold uppercase font-poppins tracking-wide">
+          {product.type}
+        </span>
+        <span class="relative ml-1 group">
+          <i class="fas fa-info-circle text-[#3AB0FF] text-base cursor-pointer group-hover:text-[#63ccff] transition"></i>
+          <span
+            class="opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto absolute left-1/2 -translate-x-1/2 top-7 z-50
+          bg-[#232F3E] text-white text-[11px] font-poppins rounded-lg px-3 py-2 shadow-2xl font-semibold w-[320px] max-w-[98vw]
+          flex flex-col gap-0.5 break-words transition-opacity duration-200 border border-[#3AB0FF]"
+          >
+            <span class="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#232F3E] border-l border-t border-[#3AB0FF] rotate-45"></span>
+
+            {product.infoProxy ? (
+              <div class="mb-1 p-2 rounded bg-[#19212b] border border-[#3AB0FF] text-[#8fc6ff] text-[11px] text-center font-bold">
+                {product.infoProxy}
+              </div>
+            ) : (
+              <>
+                <div class="mb-2 p-2 rounded bg-[#19212b] border border-[#3AB0FF] text-[#8fc6ff] text-[10px] break-words">
+                  <i class="fas fa-info-circle text-[#3AB0FF] text-xs mr-1"></i>
+                  Estas cifras son aproximadas.
+                </div>
+
+                {product.vanilla && (
+                  <div class="mb-1 break-words">
+                    <span class="text-[#3AB0FF] font-bold">Vanilla:</span>
+                    <span class="ml-1 text-white">{product.vanilla}</span>
+                  </div>
+                )}
+
+                {product.plugins && (
+                  <div class="mb-1 break-words">
+                    <span class="text-[#3AB0FF] font-bold">Plugins:</span>
+                    <span class={`ml-1 font-bold ${getRecommendationColor(product.plugins)}`}>
+                      {isRecommended(product.plugins) ? (
+                        <>
+                          Si lo recomendamos{" "}
+                          {product.pluginsRange && (
+                            <span class="ml-2 text-xs text-[#bbbbbb]">
+                              {product.pluginsRange}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "No recomendado"
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {product.mods && (
+                  <div class="mb-1 break-words">
+                    <span class="text-[#3AB0FF] font-bold">Mods:</span>
+                    <span class={`ml-1 font-bold ${getRecommendationColor(product.mods)}`}>
+                      {isRecommended(product.mods) ? (
+                        <>
+                          Si lo recomendamos{" "}
+                          {product.modsRange && (
+                            <span class="ml-2 text-xs text-[#bbbbbb]">
+                              {product.modsRange}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "No recomendado"
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {product.both && (
+                  <div class="break-words">
+                    <span class="text-[#3AB0FF] font-bold">Mods + Plugins:</span>
+                    <span class={`ml-1 font-bold ${getRecommendationColor(product.both)}`}>
+                      {isRecommended(product.both) ? (
+                        <>
+                          Si lo recomendamos{" "}
+                          {product.bothRange && (
+                            <span class="ml-2 text-xs text-[#bbbbbb]">
+                              {product.bothRange}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "No recomendado"
+                      )}
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+          </span>
+        </span>
+      </div>
+      <span class="text-2xl font-extrabold font-poppins">
+        {product.ram}
+      </span>
+    </div>
+    <div class="w-[60px] h-[60px] bg-[#1a1a1a] shadow-lg flex items-center justify-center rounded">
+      <img
+        src={product.img}
+        alt={`${product.type} Image`}
+        class="w-full h-auto"
+      />
+    </div>
+  </div>
+
+  <!-- Características -->
+  <div class="mt-20 font-poppins text-lg px-4">
+    <h1 class="text-[#fc7c04] text-xl font-medium mb-2">
+      Características:
+    </h1>
+    <div class="space-y-2">
+      {features.map((feature) => (
+        <div class="flex items-center">
+          <i class={feature.icon} aria-hidden="true"></i>
+          <span set:html={feature.text} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Pie -->
+  <div class="absolute bottom-0 left-0 w-full bg-[#1f1f1f] py-4 px-6 flex items-center justify-between rounded-b-[10px]">
+    <span class="text-lg font-poppins">{product.price}</span>
+    <a
+      href={product.url}
+      class="px-4 py-1 text-base font-semibold font-poppins bg-[#fc7c04] text-white rounded hover:bg-[#ffb000] transition-colors duration-300"
+    >
+      COMPRAR
+    </a>
+  </div>
+</div>

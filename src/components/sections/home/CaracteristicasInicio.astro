@@ -1,0 +1,116 @@
+---
+export interface Caracteristica {
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+}
+
+const caracteristicas: Caracteristica[] = [
+  {
+    icon: "fas fa-server",
+    title: "Hardware Empresarial",
+    description:
+      "Rendimiento fluido garantizado con hardware profesional de última generación.",
+    color: "#F59E0B",
+  },
+  {
+    icon: "fas fa-coins",
+    title: "Económico",
+    description:
+      "Precios asequibles y transparentes adaptados para cualquier tipo de presupuesto.",
+    color: "#10B981",
+  },
+  {
+    icon: "fas fa-headset",
+    title: "Soporte Gratuito",
+    description:
+      "Asistencia técnica inmediata y experta ante cualquier incidencia disponible 24/7.",
+    color: "#60A5FA",
+  },
+  {
+    icon: "fas fa-globe",
+    title: "Baja Latencia",
+    description:
+      "Red global de servidores con conexiones optimizadas para máxima velocidad.",
+    color: "#8B5CF6",
+  },
+  {
+    icon: "fas fa-bolt",
+    title: "Activación Instantánea",
+    description:
+      "Tu servidor desplegado y listo para usar segundos después de confirmar el pago.",
+    color: "#F97316",
+  },
+  {
+    icon: "fas fa-shield-alt",
+    title: "Protección DDoS",
+    description:
+      "Blindaje perimetral automático ante ataques malintencionados sin coste añadido.",
+    color: "#F43F5E",
+  },
+];
+---
+
+<section class="py-20 md:py-24 bg-primary">
+  <div class="container mx-auto px-4 sm:px-6">
+    <h2
+      class="text-3xl sm:text-4xl md:text-5xl font-poppins font-bold text-white text-center mb-8"
+    >
+      ¿Por qué elegirnos?
+    </h2>
+    <div class="border-t-2 border-secondary w-24 mx-auto mb-12"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {
+        caracteristicas.map((item) => (
+          <div
+            class="feature-card group flex flex-col sm:flex-row items-start p-8 rounded-2xl bg-white/5 border border-white/10 transition-all duration-300 hover:border-[var(--feature-color)]/40"
+            style={`--feature-color: ${item.color};`}
+          >
+            {/* Icono con efecto aura/glow */}
+            <div class="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
+              <div class="icon-wrapper w-14 h-14 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                <i class={`${item.icon} text-2xl`} />
+              </div>
+            </div>
+
+            {/* Texto */}
+            <div>
+              <h3 class="feature-title text-xl font-bold text-white mb-3 transition-colors duration-300">
+                {item.title}
+              </h3>
+              <p class="text-slate-400 leading-relaxed text-[15px]">
+                {item.description}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-card {
+    --feature-color: #f59e0b;
+  }
+
+  .icon-wrapper {
+    background-color: color-mix(in srgb, var(--feature-color) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--feature-color) 30%, transparent);
+    color: var(--feature-color);
+    box-shadow: 
+      /* Lado izquierdo */
+      -12px 0 20px -10px
+        color-mix(in srgb, var(--feature-color) 25%, transparent),
+      /* Lado derecho */ 12px 0 20px -10px
+        color-mix(in srgb, var(--feature-color) 25%, transparent),
+      /* Abajo - más intenso */ 0 15px 25px -10px
+        color-mix(in srgb, var(--feature-color) 35%, transparent);
+  }
+
+  .group:hover .feature-title {
+    color: var(--feature-color);
+  }
+</style>

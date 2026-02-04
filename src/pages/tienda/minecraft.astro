@@ -1,16 +1,14 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
-import "../../styles/global.css";
-import HeroTienda from "../../components/HeroTienda.astro";
-import BudgetSection from "../../components/BudgetSection.astro";
-import NormalSection from "../../components/NormalSection.astro";
-import PremiumSection from "../../components/PremiumSection.astro";
-import Gamas from "../../components/Gamas.astro";
-import FAQSection from "../../components/FAQSection.astro";
-import DedicatedSection from "../../components/DedicatedSection.astro";
-import SupportBanner from "../../components/SupportBanner.astro";
-import ServerMap from "../../components/ServerMap.astro";
-import ConsoleSection from "../../components/ConsoleSection.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import HeroTienda from "@components/sections/pages/HeroTienda.astro";
+import ProductSection from "@components/sections/products/ProductSection.astro";
+import Gamas from "@components/sections/products/Gamas.astro";
+import FAQSection from "@components/sections/pages/FAQSection.astro";
+import DedicatedSection from "@components/sections/servers/DedicatedSection.astro";
+import SupportBanner from "@components/ui/SupportBanner.astro";
+import ServerMap from "@components/sections/servers/ServerMap.astro";
+import ConsoleSection from "@components/sections/servers/ConsoleSection.astro";
 
 const faqs = [
   {
@@ -142,7 +140,7 @@ const faqs = [
         id="budget-section"
         class="transition-opacity duration-200 ease-in-out opacity-100"
       >
-        <BudgetSection />
+        <ProductSection tier="budget" />
         <DedicatedSection />
       </div>
 
@@ -150,7 +148,7 @@ const faqs = [
         id="normal-section"
         class="transition-opacity duration-200 ease-in-out opacity-0 hidden"
       >
-        <NormalSection />
+        <ProductSection tier="normal" />
         <DedicatedSection />
       </div>
 
@@ -158,7 +156,7 @@ const faqs = [
         id="premium-section"
         class="transition-opacity duration-200 ease-in-out opacity-0 hidden"
       >
-        <PremiumSection />
+        <ProductSection tier="premium" />
         <DedicatedSection />
       </div>
     </div>

@@ -1,0 +1,33 @@
+---
+import ProductCard from '@components/products/ProductCard.astro';
+import type { ProductTierType } from '@types/index';
+import { productTiers } from '@data/products';
+
+interface Props {
+  tier: ProductTierType;
+  sectionId?: string;
+}
+
+const { tier, sectionId } = Astro.props;
+const tierData = productTiers[tier];
+
+if (!tierData) {
+  throw new Error(`Invalid product tier: ${tier}`);
+}
+---
+
+<section
+  id={sectionId || `${tier}-section`}
+  class="py-8 flex justify-center px-4"
+>
+  <div class="w-full max-w-screen-xl">
+    <div class="flex flex-wrap justify-center gap-x-4 gap-y-6">
+      {tierData.products.map((product) => (
+        <ProductCard
+          product={product}
+          features={tierData.features}
+        />
+      ))}
+    </div>
+  </div>
+</section>
