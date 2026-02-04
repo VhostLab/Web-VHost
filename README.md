@@ -101,15 +101,6 @@ Este proyecto ha sido completamente refactorizado siguiendo las mejores práctic
 - ✅ **Path Aliases**: Imports limpios con `@components`, `@data`, `@services`
 - ✅ **Optimización**: Minificación, compresión y optimización de imágenes
 
-### Antes vs Después de la Refactorización
-
-| Aspecto | Antes | Después | Mejora |
-|---------|-------|---------|--------|
-| Duplicación de código | ~500 líneas | 0 | 100% |
-| Componentes de productos | 3 archivos | 1 genérico | 66% menos |
-| Datos centralizados | 0 archivos | 2 archivos | ∞ |
-| Organización | Caótica | Estructurada | 100% |
-| TypeScript types | 0 | 3 archivos | ∞ |
 
 ## 🗂️ Organización de Datos
 
@@ -200,8 +191,8 @@ Card reutilizable para mostrar productos:
 
 ```bash
 # Clonar el repositorio
-git clone <repository-url>
-cd Web-VHost-1
+git clone https://github.com/VhostLab/Web-VHost
+cd Web-VHost
 
 # Instalar dependencias
 npm install
@@ -292,9 +283,9 @@ Este proyecto es privado y pertenece a VHost Hosting Services.
 
 ## 📧 Contacto
 
-- Web: [https://vhost.tech](https://vhost.tech)
-- Discord: [https://discord.gg/Ykr85wevrj](https://discord.gg/Ykr85wevrj)
-- Email: info@vhost.tech
+- Web: [vhost.tech](https://vhost.tech)
+- Discord: [Click here](https://discord.gg/Ykr85wevrj)
+- Email: vhostts3@gmail.com
 
 ---
 
