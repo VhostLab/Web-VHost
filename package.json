@@ -12,6 +12,7 @@
     "clean": "rm -rf dist .astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "astro": "^5.16.6",
     "ping": "^0.4.4"
   },
