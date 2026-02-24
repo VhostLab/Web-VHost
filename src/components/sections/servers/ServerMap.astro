@@ -37,9 +37,9 @@ const locations = [
 const allServers = locations.flatMap((loc) => loc.nodes);
 ---
 
-<section class="py-20 bg-[#101010] relative overflow-hidden">
+<section class="py-10 lg:py-20 bg-[#101010] relative overflow-hidden">
     <div class="container mx-auto px-4 relative z-10">
-        <div class="text-center mb-12">
+        <div class="text-center mb-6 lg:mb-12">
             <h2
                 class="text-3xl md:text-5xl font-poppins font-bold text-white mb-4"
             >
@@ -54,7 +54,7 @@ const allServers = locations.flatMap((loc) => loc.nodes);
             class="relative w-full max-w-6xl mx-auto bg-[#121212] rounded-3xl border border-white/5 shadow-2xl overflow-hidden flex flex-col lg:flex-row"
         >
             <div
-                class="relative w-full lg:w-2/3 bg-[#0f0f0f] border-b lg:border-b-0 lg:border-r border-white/5 overflow-hidden min-h-[300px] lg:min-h-[500px]"
+                class="relative w-full lg:w-2/3 bg-[#0f0f0f] border-b lg:border-b-0 lg:border-r border-white/5 overflow-hidden h-[200px] lg:min-h-[500px] lg:h-auto"
             >
                 <img
                     src="/images/map.svg"
@@ -65,6 +65,7 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                 {
                     locations.map((loc) => (
                         <div
+                            id="map-pin-fr"
                             class="absolute group cursor-pointer hover:z-50"
                             style={`top: ${loc.top}; left: ${loc.left};`}
                         >
@@ -209,6 +210,14 @@ const allServers = locations.flatMap((loc) => loc.nodes);
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
         bg: #fc7c04;
+    }
+
+    /* Posición del pin ajustada para móvil (< 1024px) */
+    @media (max-width: 1023px) {
+        #map-pin-fr {
+            top: 49% !important;
+            left: 48% !important;
+        }
     }
 </style>
 

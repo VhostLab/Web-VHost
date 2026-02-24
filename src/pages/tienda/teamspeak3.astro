@@ -4,7 +4,7 @@ import "@/styles/global.css";
 import HeroTienda from "@components/sections/pages/HeroTienda.astro";
 import FAQSection from "@components/sections/pages/FAQSection.astro";
 import Card from "@components/products/card.astro";
-import TSConsoleSection from "@components/sections/servers/TSConsoleSection.astro";
+import ConsoleSection from "@components/sections/servers/ConsoleSection.astro";
 import ServerMap from "@components/sections/servers/ServerMap.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
 
@@ -186,7 +186,81 @@ const faqs = [
   </section>
 
   <!-- Sección terminal / panel de control -->
-  <TSConsoleSection />
+  <ConsoleSection
+    title="Panel de control en tus manos"
+    description="Gestiona tu servidor de TeamSpeak 3 desde cualquier lugar. Crea canales, asigna permisos y monitoriza conexiones en tiempo real."
+    glowTo="blue-600"
+    consolePath="root@vhost-ts3:~/teamspeak3-server"
+    consoleCommand="clientkick clid=2 reasonid=5 reasonmsg=AFK"
+    features={[
+      {
+        icon: "fa-layer-group",
+        title: "Gestión de Canales",
+        description:
+          "Crea canales ilimitados, añade contraseñas y organiza tu comunidad como quieras.",
+      },
+      {
+        icon: "fa-user-shield",
+        title: "Sistema de Permisos",
+        description:
+          "Asigna roles y permisos granulares a cada usuario o grupo de tu servidor.",
+      },
+      {
+        icon: "fa-cloud-upload-alt",
+        title: "Backups Automáticos",
+        description:
+          "Tu configuración siempre a salvo. Crea y restaura copias de seguridad con un clic.",
+      },
+      {
+        icon: "fa-chart-bar",
+        title: "Estadísticas en Vivo",
+        description:
+          "Monitoriza ancho de banda, latencia y conexiones activas en tiempo real.",
+      },
+    ]}
+    consoleLogs={[
+      {
+        time: "09:00:01",
+        level: "SYSTEM",
+        message: "Booting TeamSpeak 3 Server v3.13.7...",
+      },
+      {
+        time: "09:00:01",
+        level: "INFO",
+        message:
+          'Loading config file server.ini... <span class="text-green-500">OK</span>',
+      },
+      {
+        time: "09:00:02",
+        level: "INFO",
+        message:
+          'Anti-DDoS protection <span class="text-green-500">enabled</span>.',
+      },
+      {
+        time: "09:00:02",
+        level: "INFO",
+        message:
+          'Codec: Opus Voice / Opus Music — HD quality <span class="text-green-500">active</span>.',
+      },
+      {
+        time: "09:00:03",
+        level: "INFO",
+        message:
+          'Listening on UDP port <span class="text-yellow-400">9987</span>...',
+      },
+      {
+        time: "09:00:04",
+        level: "INFO",
+        message:
+          'Max slots: <span class="text-yellow-400">32</span> — Encryption: <span class="text-green-500">end-to-end</span>.',
+      },
+      {
+        time: "09:00:06",
+        level: "SUCCESS",
+        message: "Server is UP — 2/32 slots in use.",
+      },
+    ]}
+  />
 
   <!-- Mapa de servidores -->
   <ServerMap />

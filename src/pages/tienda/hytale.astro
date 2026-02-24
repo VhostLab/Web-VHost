@@ -196,7 +196,80 @@ const faqs = [
         </div>
     </section>
 
-    <ConsoleSection />
+    <ConsoleSection
+        title="El control en tus manos"
+        description="No necesitas ser un experto en sistemas. Nuestro panel intuitivo te permite gestionar cada aspecto de tu servidor de Hytale con un par de clics."
+        glowTo="purple-600"
+        consolePath="root@vhost-node:~/hytale-server"
+        consoleCommand="/op PlayerOne"
+        features={[
+            {
+                icon: "fa-terminal",
+                title: "Consola en Vivo",
+                description:
+                    "Ejecuta comandos y monitorea tu servidor en tiempo real desde la web.",
+            },
+            {
+                icon: "fa-folder-open",
+                title: "Gestor de Archivos",
+                description:
+                    "Sube mods, scripts y edita configuraciones directamente sin usar FTP.",
+            },
+            {
+                icon: "fa-cloud-upload-alt",
+                title: "Backups Automáticos",
+                description:
+                    "Protege tu progreso. Crea y restaura copias de seguridad en segundos.",
+            },
+            {
+                icon: "fa-users-cog",
+                title: "Sub-usuarios",
+                description:
+                    "Da acceso a tus moderadores con permisos específicos y granulares.",
+            },
+        ]}
+        consoleLogs={[
+            {
+                time: "10:00:01",
+                level: "SYSTEM",
+                message: "Booting Hytale Dedicated Server v1.0...",
+            },
+            {
+                time: "10:00:02",
+                level: "INFO",
+                message:
+                    'Loading world generator <span class="text-green-500">"OrbisCore"</span>...',
+            },
+            {
+                time: "10:00:02",
+                level: "INFO",
+                message:
+                    'Loading assets: models, textures, sounds... <span class="text-green-500">Done (1.2s)</span>',
+            },
+            {
+                time: "10:00:03",
+                level: "WARN",
+                message:
+                    '"Kweebec_Village" structure density is high in sector 7.',
+            },
+            {
+                time: "10:00:04",
+                level: "INFO",
+                message: "Loading 12 custom scripts from /scripts folder.",
+            },
+            {
+                time: "10:00:05",
+                level: "INFO",
+                message:
+                    'Allocating 8GB RAM... <span class="text-green-500">Success</span>.',
+            },
+            {
+                time: "10:00:06",
+                level: "SUCCESS",
+                message: "Server is UP and listening on port 25565!",
+            },
+        ]}
+    />
     <ServerMap />
 
     <SupportBanner />

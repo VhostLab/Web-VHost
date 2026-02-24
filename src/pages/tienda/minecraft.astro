@@ -161,7 +161,79 @@ const faqs = [
       </div>
     </div>
   </section>
-  <ConsoleSection />
+  <ConsoleSection
+    title="Gestiona tu servidor de Minecraft"
+    description="Instala plugins, sube mods, haz backups y controla la consola en tiempo real desde nuestro panel Pterodactyl. Sin ssh, sin complicaciones."
+    glowTo="green-600"
+    consolePath="root@vhost-node:~/minecraft-server"
+    consoleCommand="/gamemode creative Steve"
+    features={[
+      {
+        icon: "fa-terminal",
+        title: "Consola en Vivo",
+        description:
+          "Ejecuta comandos y ve el output del servidor en tiempo real desde la web.",
+      },
+      {
+        icon: "fa-puzzle-piece",
+        title: "Plugins & Mods",
+        description:
+          "Instala Spigot, Paper, Forge o Fabric con un clic desde el panel.",
+      },
+      {
+        icon: "fa-cloud-upload-alt",
+        title: "Backups Automáticos",
+        description:
+          "Copia de seguridad diaria de tu mundo. Restaura en segundos si algo sale mal.",
+      },
+      {
+        icon: "fa-users-cog",
+        title: "Sub-usuarios",
+        description:
+          "Da acceso a tus admins con permisos específicos sin compartir tu contraseña.",
+      },
+    ]}
+    consoleLogs={[
+      {
+        time: "08:00:01",
+        level: "SYSTEM",
+        message: "Starting Minecraft server (Paper 1.21.1)...",
+      },
+      {
+        time: "08:00:02",
+        level: "INFO",
+        message: 'Loading world <span class="text-green-500">"world"</span>...',
+      },
+      {
+        time: "08:00:03",
+        level: "INFO",
+        message:
+          'Loaded 128 chunks in <span class="text-green-500">0.8s</span>.',
+      },
+      {
+        time: "08:00:03",
+        level: "INFO",
+        message: "Loading plugins: EssentialsX, WorldEdit, LuckPerms...",
+      },
+      {
+        time: "08:00:04",
+        level: "INFO",
+        message: 'Plugins loaded: <span class="text-green-500">3/3 OK</span>.',
+      },
+      {
+        time: "08:00:05",
+        level: "INFO",
+        message:
+          'Done! For help, type <span class="text-yellow-400">"help"</span>.',
+      },
+      {
+        time: "08:00:06",
+        level: "SUCCESS",
+        message:
+          'Server is UP — listening on port <span class="text-yellow-400">25565</span>!',
+      },
+    ]}
+  />
   <ServerMap />
   <Gamas />
   <SupportBanner />
