@@ -1,6 +1,7 @@
 ---
 // src/components/layout/layout/ScrollToTop.astro
 ---
+
 <section>
   <button
     id="scroll-to-top"
@@ -9,26 +10,44 @@
     <i class="fas fa-chevron-up"></i>
   </button>
 
-
   <script type="module">
-    const btn = document.getElementById('scroll-to-top');
+    const btn = document.getElementById("scroll-to-top");
     const threshold = 200;
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function smoothScrollToTop(duration = 650) {
+      const start = window.scrollY;
+      const startTime = performance.now();
+
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeInOutCubic(progress);
+
+        window.scrollTo(0, start * (1 - eased));
+
+        if (progress < 1) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
 
     function onScroll() {
       if (window.scrollY > threshold) {
-        btn.classList.remove('opacity-0');
-        btn.classList.add('opacity-100');
+        btn.classList.remove("opacity-0");
+        btn.classList.add("opacity-100");
       } else {
-        btn.classList.add('opacity-0');
-        btn.classList.remove('opacity-100');
+        btn.classList.add("opacity-0");
+        btn.classList.remove("opacity-100");
       }
     }
 
-    btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    btn.addEventListener("click", () => smoothScrollToTop(650));
 
-    window.addEventListener('scroll', onScroll);
-    onScroll(); // initialize
+    window.addEventListener("scroll", onScroll);
+    onScroll();
   </script>
 </section>
