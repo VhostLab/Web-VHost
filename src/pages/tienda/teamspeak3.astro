@@ -4,28 +4,31 @@ import "@/styles/global.css";
 import HeroTienda from "@components/sections/pages/HeroTienda.astro";
 import FAQSection from "@components/sections/pages/FAQSection.astro";
 import Card from "@components/products/card.astro";
+import TSConsoleSection from "@components/sections/servers/TSConsoleSection.astro";
+import ServerMap from "@components/sections/servers/ServerMap.astro";
+import SupportBanner from "@components/ui/SupportBanner.astro";
 
 const tsPlans = [
   {
     type: "TeamSpeak Pro",
     ram: "32 SLOTS",
-    img: "/images/tienda/teamspeak3/plan/ts3.webp", // Cambia por la imagen real
+    img: "/images/tienda/teamspeak3/plan/ts3.webp",
     price: "0,99€ /mes",
     url: "https://billing.vhost.tech/products/teamspeak-3/teamspeak-3",
   },
 ];
 
 const tsFeatures = [
-  { icon: "fas fa-users mr-2.5", text: "<strong>32</strong> Slots" }, // Mejor que user-friends para canales/usuarios
+  { icon: "fas fa-users mr-2.5", text: "<strong>32</strong> Slots" },
   {
     icon: "fas fa-shield-alt mr-3.5",
     text: "Protección <strong>Anti-DDoS</strong>",
   },
-  { icon: "fas fa-server mr-3.5", text: "<strong>99,9%</strong> Uptime" }, // Más relacionado con servidores que microchip
+  { icon: "fas fa-server mr-3.5", text: "<strong>99,9%</strong> Uptime" },
   {
     icon: "fas fa-volume-up mr-3.5",
     text: "Calidad de <strong>Audio HD</strong>",
-  }, // Nueva característica relevante para TS
+  },
 ];
 
 const faqs = [
@@ -81,6 +84,7 @@ const faqs = [
     imagenFondo="/images/tienda/teamspeak3/ts-bg.webp"
   />
 
+  <!-- Sección plan -->
   <section class="relative bg-[#0b0b0b] text-white py-12 px-4">
     <div class="text-center mt-12 mb-6">
       <h2 class="text-3xl font-poppins font-semibold text-white">
@@ -97,6 +101,98 @@ const faqs = [
       <Card products={tsPlans} featuresList={tsFeatures} />
     </div>
   </section>
+
+  <!-- Sección características -->
+  <section class="bg-[#0b0b0b] py-16 px-4 border-t border-white/5">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-poppins font-bold text-white mb-4">
+          ¿Por qué elegir TeamSpeak con Vhost?
+        </h2>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+          Comunicación de calidad profesional para tu equipo, clan o comunidad.
+          Sin retrasos, sin cortes, sin compromisos.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1 -->
+        <div
+          class="bg-[#111111] border border-white/10 rounded-xl p-6 hover:border-[#fc7c04]/40 transition-all duration-300 group"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-blue-900/30 text-blue-400 flex items-center justify-center mb-4 group-hover:bg-blue-800/50 group-hover:text-blue-300 transition-all duration-300"
+          >
+            <i class="fas fa-microphone text-xl"></i>
+          </div>
+          <h3 class="text-white font-bold text-lg mb-2">Audio HD</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Codec Opus de última generación. Voz cristalina sin compresión y con
+            latencia mínima.
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-[#111111] border border-white/10 rounded-xl p-6 hover:border-[#fc7c04]/40 transition-all duration-300 group"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-green-900/30 text-green-400 flex items-center justify-center mb-4 group-hover:bg-green-800/50 group-hover:text-green-300 transition-all duration-300"
+          >
+            <i class="fas fa-shield-alt text-xl"></i>
+          </div>
+          <h3 class="text-white font-bold text-lg mb-2">Anti-DDoS</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Protección avanzada ante ataques DDoS incluida en todos los planes.
+            Tu servidor siempre disponible.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div
+          class="bg-[#111111] border border-white/10 rounded-xl p-6 hover:border-[#fc7c04]/40 transition-all duration-300 group"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-purple-900/30 text-purple-400 flex items-center justify-center mb-4 group-hover:bg-purple-800/50 group-hover:text-purple-300 transition-all duration-300"
+          >
+            <i class="fas fa-lock text-xl"></i>
+          </div>
+          <h3 class="text-white font-bold text-lg mb-2">Cifrado E2E</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Todas las comunicaciones cifradas de extremo a extremo. Tus
+            conversaciones son privadas.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div
+          class="bg-[#111111] border border-white/10 rounded-xl p-6 hover:border-[#fc7c04]/40 transition-all duration-300 group"
+        >
+          <div
+            class="w-12 h-12 rounded-lg bg-orange-900/30 text-[#fc7c04] flex items-center justify-center mb-4 group-hover:bg-orange-800/50 group-hover:text-orange-300 transition-all duration-300"
+          >
+            <i class="fas fa-bolt text-xl"></i>
+          </div>
+          <h3 class="text-white font-bold text-lg mb-2">
+            Activación Instantánea
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            Tu servidor listo en segundos tras el pago. Sin esperas ni trámites
+            manuales.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección terminal / panel de control -->
+  <TSConsoleSection />
+
+  <!-- Mapa de servidores -->
+  <ServerMap />
+
+  <!-- Banner soporte -->
+  <SupportBanner />
 
   <FAQSection
     items={faqs}

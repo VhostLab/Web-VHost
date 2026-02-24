@@ -4,30 +4,30 @@
 // 1. Estructura de Datos Agrupada
 const locations = [
     {
-        country: "España",
-        top: "52%",
-        left: "47%",
+        country: "Francia",
+        top: "48%",
+        left: "48%",
         color: "#fc7c04",
         nodes: [
             {
                 id: "budget",
                 name: "Budget",
-                city: "Logroño",
-                domain: "va.vhost.tech",
+                city: "París",
+                domain: "n1.vhost.tech",
                 type: "basic",
             },
             {
                 id: "normal",
                 name: "Normal",
-                city: "Barcelona",
-                domain: "vl.vhost.tech",
+                city: "París",
+                domain: "n2.vhost.tech",
                 type: "std",
             },
             {
                 id: "premium",
                 name: "Premium",
-                city: "Barcelona",
-                domain: "vlp.vhost.tech",
+                city: "París",
+                domain: "n3.vhost.tech",
                 type: "pro",
             },
         ],
@@ -92,7 +92,14 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                                             <li class="text-xs text-gray-300 flex justify-between items-center">
                                                 <span>
                                                     <span
-                                                        class={`inline-block w-2 h-2 rounded-full mr-1 ${node.type === "pro" ? "bg-[#fc7c04]" : node.type === "std" ? "bg-green-500" : "bg-blue-500"}`}
+                                                        class={`inline-block w-2 h-2 rounded-full mr-1 ${
+                                                            node.type === "pro"
+                                                                ? "bg-[#fc7c04]"
+                                                                : node.type ===
+                                                                  "std"
+                                                                ? "bg-green-500"
+                                                                : "bg-blue-500"
+                                                        }`}
                                                     />
                                                     {node.name}
                                                 </span>
@@ -136,7 +143,13 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                             <div class="bg-[#0f0f0f] border border-white/5 p-4 rounded-xl flex items-center justify-between hover:border-white/20 transition-all group relative overflow-hidden">
                                 <div class="flex items-center gap-3 relative z-10">
                                     <div
-                                        class={`w-10 h-10 rounded-lg flex items-center justify-center bg-opacity-10 ${server.type === "pro" ? "bg-[#fc7c04] text-[#fc7c04]" : server.type === "std" ? "bg-green-500 text-green-500" : "bg-blue-500 text-blue-500"}`}
+                                        class={`w-10 h-10 rounded-lg flex items-center justify-center bg-opacity-10 ${
+                                            server.type === "pro"
+                                                ? "bg-[#fc7c04] text-[#fc7c04]"
+                                                : server.type === "std"
+                                                ? "bg-green-500 text-green-500"
+                                                : "bg-blue-500 text-blue-500"
+                                        }`}
                                     >
                                         <i class="fas fa-microchip" />
                                     </div>
@@ -175,7 +188,7 @@ const allServers = locations.flatMap((loc) => loc.nodes);
                 >
                     <p class="text-xs text-green-200 leading-relaxed">
                         <i class="fas fa-check-circle mr-1"></i>
-                        Infraestructura optimizada en España.
+                        Infraestructura optimizada en Francia, París.
                     </p>
                 </div>
             </div>
@@ -221,9 +234,9 @@ const allServers = locations.flatMap((loc) => loc.nodes);
     // Simulación: Valores bajos porque es España
     function simulateLatency(id) {
         const base = {
-            budget: 18,
-            normal: 14,
-            premium: 10,
+            budget: 22,
+            normal: 18,
+            premium: 14,
         };
         return (base[id] || 20) + Math.floor(Math.random() * 8);
     }
