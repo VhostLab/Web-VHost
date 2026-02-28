@@ -1,0 +1,175 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import SupportOptions from "@components/ui/SupportOptions.astro";
+import GameCard from "@components/ui/GameCard.astro";
+
+// Definicion de los juegos soportados por Pterodactyl usando portadas de Steam / genericas
+const games = [
+    {
+        name: "Minecraft Java",
+        image: "https://images.igdb.com/igdb/image/upload/t_cover_big/co49x5.jpg",
+        price: "0.75€",
+        link: "/tienda/minecraft",
+        available: true,
+    },
+    {
+        name: "Minecraft Bedrock",
+        image: "https://image.winudf.com/v2/image1/Y29tLmJlZHJvY2tfbWNwZS5taW5lY2ZhdHBlLm1vZHMubWFzdGVyLmFkZG9uX2ljb25fMTY3ODQyMTk1OV8wNDY/icon.png?w=184&fakeurl=1",
+        price: "0.75€",
+        link: "/tienda/minecraft",
+        available: true,
+    },
+    {
+        name: "Hytale",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXzuddu5h3TtVsSqiY1oYhcFKco0fqFuOUhA&s",
+        price: "0,75€",
+        link: "/tienda/hytale",
+        available: true,
+    },
+    {
+        name: "Rust",
+        image: "https://cdn.cloudflare.steamstatic.com/steam/apps/252490/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "ARK: Survival Evolved",
+        image: "https://store-images.s-microsoft.com/image/apps.34402.14545480955348978.6df932ed-6670-40c9-9a84-fc164557d4ec.635b23a8-4ec7-44bd-b0ba-bc07c9b9ebb6?q=90&w=480&h=270",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "CS2 (Counter-Strike 2)",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/730/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "FiveM (GTA V)",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Palworld",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1623730/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Terraria",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/105600/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Valheim",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/892970/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "7 Days to Die",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/251570/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Project Zomboid",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/108600/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Garry's Mod",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4000/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "DayZ",
+        image: "https://cdn.cloudflare.steamstatic.com/steam/apps/221100/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Left 4 Dead 2",
+        image: "https://cdn.cloudflare.steamstatic.com/steam/apps/550/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "Team Fortress 2",
+        image: "https://cdn.cloudflare.steamstatic.com/steam/apps/440/library_600x900_2x.jpg",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+    {
+        name: "TeamSpeak 3",
+        image: "https://www.hd-tecnologia.com/imagenes/articulos/2026/02/TeamSpeak-registra-un-fuerte-crecimiento-luego-del-anuncio-de-verificacion-de-edad-de-Discord-2.jpg",
+        price: "0.99€",
+        link: "/tienda/teamspeak3",
+        available: true,
+    },
+    {
+        name: "Discord Bots",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn3JMWMDQMetIzp_spOy6B4zhwSueyTqpSBw&s",
+        link: "https://discord.gg/Ykr85wevrj",
+        available: false,
+    },
+];
+---
+
+<MainLayout
+    title="Todos los Juegos | Vhost"
+    description="Explora la lista completa de juegos y servicios soportados por Vhost mediante el potente panel Pterodactyl."
+    url="https://vhost.tech/juegos"
+>
+    <div
+        class="relative bg-[#0b0b0b] min-h-screen text-white pt-32 pb-24 overflow-hidden"
+    >
+        <!-- Fondo decorativo -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay">
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h1
+                    class="text-4xl md:text-5xl lg:text-6xl font-poppins font-bold mb-6"
+                >
+                    Nuestros <span class="text-[#fc7c04]">Juegos</span>
+                </h1>
+                <p class="text-xl text-gray-400 font-inter">
+                    Gracias a nuestro panel Pterodactyl, podemos alojar una
+                    inmensa variedad de juegos. Si el juego que buscas no está
+                    en la tienda automática, contáctanos.
+                </p>
+            </div>
+
+            <div
+                class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 w-full max-w-[1400px] mx-auto"
+            >
+                {
+                    games.map((game) => (
+                        <GameCard
+                            name={game.name}
+                            image={game.image}
+                            price={game.price}
+                            link={game.link}
+                            available={game.available}
+                        />
+                    ))
+                }
+            </div>
+
+            <SupportOptions
+                title="¿No encuentras tu juego?"
+                subtitle="Podemos alojar prácticamente cualquier juego que sea compatible con Pterodactyl. Abre un ticket en nuestro Discord y prepararemos un servidor a medida para ti."
+                backgroundClass="bg-transparent"
+            />
+        </div>
+    </div>
+</MainLayout>

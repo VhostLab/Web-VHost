@@ -97,55 +97,84 @@ const currentPath = Astro.url.pathname;
             </button>
 
             <div
-              class="absolute left-0 top-full mt-2 w-[600px] bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 hover:visible hover:opacity-100 hover:translate-y-0 focus-within:visible focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-300 ease-in-out p-6"
+              class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-[760px] bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50 invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 hover:visible hover:opacity-100 hover:translate-y-0 focus-within:visible focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-300 ease-in-out p-6 origin-top"
             >
               <div class="flex gap-6">
-                <div class="flex-1">
+                <div class="flex-[2]">
                   <h4
                     class="text-xs uppercase text-gray-500 font-bold mb-3 tracking-wider"
                   >
                     Game Hosting
                   </h4>
 
-                  <a
-                    href="/tienda/minecraft"
-                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
-                  >
-                    <div
-                      class="w-8 h-8 rounded bg-green-900/30 text-green-500 flex items-center justify-center mr-3 shrink-0"
-                    >
-                      <i class="fas fa-cube"></i>
-                    </div>
-                    <div>
-                      <div
-                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col space-y-2">
+                      <a
+                        href="/tienda/minecraft"
+                        class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
                       >
-                        Minecraft
-                      </div>
-                      <div class="text-xs text-gray-500">Java & Bedrock</div>
-                    </div>
-                  </a>
+                        <div
+                          class="w-8 h-8 rounded bg-green-900/30 text-green-500 flex items-center justify-center mr-3 shrink-0"
+                        >
+                          <i class="fas fa-cube"></i>
+                        </div>
+                        <div>
+                          <div
+                            class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                          >
+                            Minecraft
+                          </div>
+                          <div class="text-xs text-gray-500">
+                            Java & Bedrock
+                          </div>
+                        </div>
+                      </a>
 
-                  <a
-                    href="/tienda/hytale"
-                    class="flex items-center p-2 rounded-lg hover:bg-white/5 transition mt-2 group/item"
-                  >
-                    <div
-                      class="w-8 h-8 rounded bg-orange-900/30 text-[#fc7c04] flex items-center justify-center mr-3 shrink-0"
-                    >
-                      <i class="fas fa-dungeon"></i>
-                    </div>
-                    <div>
-                      <div
-                        class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                      <a
+                        href="/tienda/hytale"
+                        class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
                       >
-                        Hytale
-                      </div>
-                      <div class="text-xs text-gray-500">
-                        RPG &amp; Mundo Abierto
-                      </div>
+                        <div
+                          class="w-8 h-8 rounded bg-orange-900/30 text-[#fc7c04] flex items-center justify-center mr-3 shrink-0"
+                        >
+                          <i class="fas fa-dungeon"></i>
+                        </div>
+                        <div>
+                          <div
+                            class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                          >
+                            Hytale
+                          </div>
+                          <div class="text-xs text-gray-500">
+                            RPG &amp; Mundo Abierto
+                          </div>
+                        </div>
+                      </a>
                     </div>
-                  </a>
+
+                    <div class="flex flex-col space-y-2">
+                      <a
+                        href="/juegos"
+                        class="flex items-center p-2 rounded-lg hover:bg-white/5 transition group/item"
+                      >
+                        <div
+                          class="w-8 h-8 rounded bg-purple-900/30 text-purple-400 flex items-center justify-center mr-3 shrink-0"
+                        >
+                          <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div>
+                          <div
+                            class="text-sm font-bold text-white group-hover/item:text-[#fc7c04] transition-colors"
+                          >
+                            Todos los juegos
+                          </div>
+                          <div class="text-xs text-gray-500">
+                            Ver lista de todos los juegos
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="w-px bg-white/10 self-stretch"></div>
@@ -298,6 +327,13 @@ const currentPath = Astro.url.pathname;
                   href="/tienda/hytale"
                   class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
                   >Hytale</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/juegos"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10 text-[#fc7c04]"
+                  >Todos los juegos</a
                 >
               </li>
               <li>

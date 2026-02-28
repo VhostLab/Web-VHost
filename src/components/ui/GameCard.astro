@@ -1,0 +1,63 @@
+---
+interface Props {
+    name: string;
+    image: string;
+    price?: string;
+    link: string;
+    available: boolean;
+    gameId?: string; // Para futuras integraciones
+}
+
+const { name, image, link } = Astro.props;
+const target = link.startsWith("http") ? "_blank" : "_self";
+---
+
+<a
+    href={link}
+    target={target}
+    class="group flex flex-col w-full bg-[#111111] rounded-2xl overflow-hidden border border-white/10 transition-colors duration-200 hover:bg-[#1b1e25] hover:border-white/20"
+>
+    {/* --- IMAGEN ALARGADA --- */}
+    <div class="relative w-full aspect-[3/4] overflow-hidden bg-black/50">
+        <img
+            src={image}
+            alt={name}
+            class="w-full h-full object-cover"
+            loading="lazy"
+        />
+
+        {/* Sutil sombra interna para separar la imagen del fondo oscuro */}
+        <div
+            class="absolute inset-0 ring-1 ring-inset ring-white/10 pointer-events-none rounded-t-2xl"
+        >
+        </div>
+    </div>
+
+    {/* --- CONTENIDO MINIMALISTA --- */}
+    <div class="p-5 flex flex-col flex-grow gap-3">
+        {/* Titulo claro y legible */}
+        <h3
+            class="text-gray-100 font-medium text-lg leading-snug line-clamp-2 h-[3.5rem] overflow-hidden transition-colors duration-300 group-hover:text-white"
+        >
+            {name}
+        </h3>
+
+        {/* Descripcion */}
+        <p class="text-sm text-gray-400">
+            Si quieres mas informacion click aqui
+        </p>
+
+        {/* Separador invisible que empuja el pie de la tarjeta hacia abajo */}
+        <div class="mt-auto"></div>
+
+        {/* --- PIE DE TARJETA: INFORMACION --- */}
+        <div
+            class="flex items-center justify-between pt-4 border-t border-white/5"
+        >
+            <span class="text-sm text-gray-400">Informacion</span>
+            <span class="text-sm font-medium text-white group-hover:text-[#fc7c04] transition-colors">
+                Ver detalles &rarr;
+            </span>
+        </div>
+    </div>
+</a>

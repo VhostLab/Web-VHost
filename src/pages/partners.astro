@@ -5,6 +5,7 @@ import HeroPartners from "@components/partners/HeroPartners.astro";
 import HistorialCreadores from "@components/partners/HistorialCreadores.astro";
 import VentajasPartners from "@components/partners/VentajasPartners.astro";
 import HistorialEventos from "@components/partners/HistorialEventos.astro";
+import SupportOptions from "@components/ui/SupportOptions.astro";
 ---
 
 <MainLayout
@@ -18,130 +19,9 @@ import HistorialEventos from "@components/partners/HistorialEventos.astro";
   <VentajasPartners />
   <HistorialEventos />
   <HistorialCreadores />
-  <section id="support-options" class="bg-[#0b0b0b] text-white py-28 px-6">
-    <div
-      class="max-w-5xl mx-auto text-center mb-16"
-      data-aos="fade-up"
-      data-aos-duration="700"
-    >
-      <h2 class="text-4xl md:text-5xl font-bold font-poppins mb-4">
-        Nuestras opciones de contacto
-      </h2>
-      <p class="text-gray-400 text-lg font-poppins max-w-2xl mx-auto">
-        Elige el canal que prefieras para ponerte en contacto con nosotros.<br
-        />
-        ¡Estamos aquí para ayudarte!
-      </p>
-    </div>
 
-    <div class="space-y-6 max-w-3xl mx-auto">
-      <!-- Discord -->
-      <a
-        href="https://discord.gg/Ykr85wevrj"
-        target="_blank"
-        class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
-        data-aos="fade-up"
-        data-aos-delay="100"
-      >
-        <div class="flex items-center gap-5">
-          <i class="fab fa-discord text-3xl text-white"></i>
-          <div>
-            <p
-              class="uppercase text-white font-bold text-base font-poppins tracking-wide"
-            >
-              Discord
-            </p>
-            <p class="text-sm text-gray-400 font-poppins mt-1">
-              Consulta a la comunidad o staff en nuestro Discord oficial.
-            </p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <i class="far fa-clock text-green-500 text-base"></i>
-          <span class="text-white text-sm font-bold">24/7</span>
-          <i
-            class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"
-          ></i>
-        </div>
-      </a>
-
-      <!-- Tickets -->
-      <a
-        href="https://billing.vhost.tech"
-        target="_blank"
-        class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
-        data-aos="fade-up"
-        data-aos-delay="200"
-      >
-        <div class="flex items-center gap-5">
-          <i class="fas fa-paper-plane text-2xl text-white"></i>
-          <div>
-            <p
-              class="uppercase text-white font-bold text-base font-poppins tracking-wide"
-            >
-              Crear un ticket de asistencia
-            </p>
-            <p class="text-sm text-gray-400 font-poppins mt-1">
-              Crea un ticket y obtén ayuda de un representante.
-            </p>
-          </div>
-        </div>
-        <i
-          class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"
-        ></i>
-      </a>
-
-      <!-- Email -->
-      <a
-        href="mailto:vhostts3@gmail.com"
-        class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
-        data-aos="fade-up"
-        data-aos-delay="300"
-      >
-        <div class="flex items-center gap-5">
-          <i class="far fa-envelope text-2xl text-white"></i>
-          <div>
-            <p
-              class="uppercase text-white font-bold text-base font-poppins tracking-wide"
-            >
-              Email
-            </p>
-            <p class="text-sm text-gray-400 font-poppins mt-1">
-              Para consultas más formales, puedes escribirnos por correo
-              electrónico.
-            </p>
-          </div>
-        </div>
-        <i
-          class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"
-        ></i>
-      </a>
-
-      <!-- Redes sociales -->
-      <a
-        href="https://x.com/VhostTS3"
-        target="_blank"
-        class="flex items-center justify-between border-2 border-white rounded-2xl px-6 py-6 hover:bg-white/5 hover:shadow-md transition group"
-        data-aos="fade-up"
-        data-aos-delay="400"
-      >
-        <div class="flex items-center gap-5">
-          <i class="fas fa-hashtag text-2xl text-white"></i>
-          <div>
-            <p
-              class="uppercase text-white font-bold text-base font-poppins tracking-wide"
-            >
-              Redes Sociales
-            </p>
-            <p class="text-sm text-gray-400 font-poppins mt-1">
-              También estamos disponibles en nuestras redes sociales.
-            </p>
-          </div>
-        </div>
-        <i
-          class="fas fa-chevron-right text-white text-sm opacity-70 group-hover:opacity-100"
-        ></i>
-      </a>
-    </div>
-  </section>
+  <SupportOptions
+    title="Nuestras opciones de contacto"
+    backgroundClass="bg-[#0b0b0b] text-white"
+  />
 </MainLayout>
