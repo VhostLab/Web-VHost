@@ -25,6 +25,10 @@ lerna-debug.log*
 # macOS-specific files
 .DS_Store
 
+# Claude Code (config y skills locales)
+.claude/
+CLAUDE.md
+
 # jetbrains setting folder
 .idea/
 
