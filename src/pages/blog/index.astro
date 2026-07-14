@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content";
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import { breadcrumbSchema } from "@data/seo";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.updatedDate.valueOf() - a.data.updatedDate.valueOf()
+);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("es-ES", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+---
+
+<MainLayout
+  title="Blog: Guías de Servidores de Juegos"
+  description="Guías prácticas del equipo de Vhost sobre servidores de juegos: cuánta RAM necesitas, mods, plugins, optimización y administración con Pterodactyl."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Blog", path: "/blog" },
+    ]),
+  ]}
+>
+  <section class="bg-[#0b0b0b] text-white min-h-screen py-24 px-6">
+    <div class="container mx-auto max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-poppins font-bold mb-4">
+        Blog de <span class="text-secondary">Vhost</span>
+      </h1>
+      <p class="text-gray-400 font-poppins mb-12">
+        Guías prácticas sobre servidores de juegos escritas por el equipo que
+        opera la infraestructura de Vhost: RAM, mods, optimización y
+        administración de servidores.
+      </p>
+
+      <div class="space-y-8">
+        {
+          posts.map((post) => (
+            <a
+              href={`/blog/${post.id}/`}
+              class="block bg-[#111111] rounded-lg p-6 border border-transparent hover:border-secondary transition-colors duration-300"
+            >
+              <h2 class="text-2xl font-poppins font-semibold text-white mb-2">
+                {post.data.title}
+              </h2>
+              <p class="text-gray-400 font-inter mb-3">
+                {post.data.description}
+              </p>
+              <span class="text-sm text-gray-500 font-poppins">
+                Actualizado: {formatDate(post.data.updatedDate)}
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</MainLayout>

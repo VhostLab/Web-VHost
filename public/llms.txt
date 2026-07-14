@@ -1,0 +1,27 @@
+# Vhost
+
+> Vhost es un hosting español de servidores de juegos (Minecraft, Rust, ARK,
+> GTA 5/FiveM, Hytale y TeamSpeak 3) con nodos en Logroño y Barcelona,
+> protección anti-DDoS, panel intuitivo y soporte 24/7 en español.
+> Servidores de Minecraft desde 0,75 €/mes y TeamSpeak 3 desde 0,99 €/mes.
+
+## Planes de hosting
+
+- [Hosting de Minecraft](https://vhost.tech/tienda/minecraft/): planes Budget, Normal y Premium de 1 a 16 GB de RAM, desde 0,75 €/mes; Java y Bedrock, mods y plugins.
+- [Hosting de Rust](https://vhost.tech/tienda/rust/): servidores con acceso FTP completo para mods, desde 19,99 €/mes.
+- [Hosting de ARK: Survival Evolved](https://vhost.tech/tienda/ark/): planes de 8 a 32 GB con mods y mapas personalizados, desde 19,99 €/mes.
+- [Hosting de GTA 5 / FiveM](https://vhost.tech/tienda/gta5/): servidores optimizados para FiveM y RageMP, desde 19,99 €/mes.
+- [Hosting de Hytale](https://vhost.tech/tienda/hytale/): reserva de servidores sobre Ryzen 5 9600X, desde 0,75 €/mes.
+- [Hosting de TeamSpeak 3](https://vhost.tech/tienda/teamspeak3/): servidor de voz con 32 slots, audio HD y panel web por 0,99 €/mes.
+- [Tienda completa](https://vhost.tech/tienda/tienda/): todos los juegos con planes propios, por gama y precio.
+- [Juegos compatibles](https://vhost.tech/juegos/): catálogo completo de juegos alojables (todo lo compatible con el panel Pterodactyl).
+
+## Guías
+
+- [¿Cuánta RAM necesita un servidor de Minecraft?](https://vhost.tech/blog/cuanta-ram-servidor-minecraft/): tabla de RAM recomendada por número de jugadores, plugins y modpacks.
+
+## Soporte y empresa
+
+- [Soporte](https://vhost.tech/soporte/): atención 24/7 por Discord, ticket y correo, en español.
+- [Partners](https://vhost.tech/partners/): programa para creadores de contenido, clubes y comunidades.
+- [Aviso legal](https://vhost.tech/aviso-legal/): datos identificativos de Vhost Hosting Services.
