@@ -7,18 +7,25 @@ import Footer from "@components/layout/Footer.astro";
 import ScrollToTop from "@components/layout/ScrollToTop.astro";
 import DiscordStatus from "@components/layout/DiscordStatus.astro";
 import MobileHeader from "@components/layout/MobileHeader.astro";
+import SEO from "@components/seo/SEO.astro";
 
 export interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** @deprecated el canonical y og:url se calculan automáticamente */
   url?: string;
+  noindex?: boolean;
+  ogType?: "website" | "article" | "product";
+  schemas?: object[];
 }
 const {
   title = "Vhost Hosting Services",
   description = "Aloja tus servidores de juegos y comunidades con Vhost. Soporte 24/7, backups automáticos y panel intuitivo.",
-  image = "https://vhost.tech/SEO/vhost-preview.png",
-  url = "https://vhost.tech/",
+  image,
+  noindex = false,
+  ogType = "website",
+  schemas = [],
 } = Astro.props as Props;
 
 const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
@@ -27,6 +34,8 @@ const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
 <!DOCTYPE html>
 <html lang="es" class="bg-[#101010] text-white">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
       defer
@@ -73,29 +82,22 @@ const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Metadatos SEO y Social Dinámicos -->
-    <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    <!-- Metadatos SEO y Social -->
+    <SEO
+      title={fullTitle}
+      description={description}
+      ogImage={image}
+      noindex={noindex}
+      type={ogType}
+    />
     <meta name="theme-color" content="#101010" />
 
-    <!-- Open Graph / Redes Sociales -->
-    <meta property="og:site_name" content="Vhost" />
-    <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={url} />
-    <meta property="og:locale" content="es_ES" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    <meta name="twitter:url" content={url} />
+    <!-- Datos estructurados (JSON-LD) -->
+    {
+      schemas.map((schema) => (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      ))
+    }
   </head>
   <body class="min-h-screen flex flex-col bg-[#101010] text-gray-100">
     <!-- Page Load Progress Bar -->

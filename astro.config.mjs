@@ -5,7 +5,11 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://vhost.tech',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/status/') && !page.includes('/404/'),
+    }),
+  ],
 
   // Optimizaciones de build
   build: {
