@@ -123,17 +123,20 @@ const getRecommendationColor = (value?: string) =>
     <div class="w-[60px] h-[60px] bg-[#1a1a1a] shadow-lg flex items-center justify-center rounded">
       <img
         src={product.img}
-        alt={`${product.type} Image`}
+        alt={`Plan ${product.type} (${product.ram}) de hosting de Vhost`}
         class="w-full h-auto"
+        width="60"
+        height="60"
+        loading="lazy"
       />
     </div>
   </div>
 
   <!-- Características -->
   <div class="mt-20 font-poppins text-lg px-4">
-    <h1 class="text-[#fc7c04] text-xl font-medium mb-2">
+    <h3 class="text-[#fc7c04] text-xl font-medium mb-2">
       Características:
-    </h1>
+    </h3>
     <div class="space-y-2">
       {features.map((feature) => (
         <div class="flex items-center">

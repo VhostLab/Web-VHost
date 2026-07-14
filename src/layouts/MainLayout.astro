@@ -21,7 +21,7 @@ const {
   url = "https://vhost.tech/",
 } = Astro.props as Props;
 
-const fullTitle = title.includes("Vhost") ? title : `${title} | Vhost`;
+const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
 ---
 
 <!DOCTYPE html>
@@ -41,26 +41,26 @@ const fullTitle = title.includes("Vhost") ? title : `${title} | Vhost`;
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link
       rel="icon"
-      type="image/webp"
+      type="image/png"
       sizes="96x96"
-      href="/favicon/favicon-96x96.webp"
+      href="/favicon/favicon-96x96.png"
     />
     <link
       rel="icon"
-      type="image/webp"
+      type="image/png"
       sizes="192x192"
-      href="/favicon/web-app-manifest-192x192.webp"
+      href="/favicon/web-app-manifest-192x192.png"
     />
     <link
       rel="icon"
-      type="image/webp"
+      type="image/png"
       sizes="512x512"
-      href="/favicon/web-app-manifest-512x512.webp"
+      href="/favicon/web-app-manifest-512x512.png"
     />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="/favicon/apple-touch-icon.webp"
+      href="/favicon/apple-touch-icon.png"
     />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link
@@ -77,7 +77,7 @@ const fullTitle = title.includes("Vhost") ? title : `${title} | Vhost`;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Metadatos SEO y Social Dinámicos -->
-    <title>{title} | Vhost</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#101010" />
 
@@ -112,7 +112,7 @@ const fullTitle = title.includes("Vhost") ? title : `${title} | Vhost`;
 
     <!-- ScrollToTop y DiscordStatus solo en escritorio -->
     <div class="hidden md:block">
-      <layout ScrollToTop></layout>
+      <ScrollToTop />
       <DiscordStatus />
     </div>
 
@@ -130,7 +130,5 @@ const fullTitle = title.includes("Vhost") ? title : `${title} | Vhost`;
 
     <!-- Page Load Progress Bar -->
     <script type="module" src="/scripts/page-load-progress.js"></script>
-
-    <ScrollToTop />
   </body>
 </html>
