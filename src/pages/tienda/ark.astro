@@ -6,6 +6,7 @@ import FAQSection from "@components/sections/pages/FAQSection.astro";
 import DedicatedSection from "@components/sections/servers/DedicatedSection.astro";
 import Card from "@components/products/card.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
 
 const arkPlans = [
   {
@@ -103,6 +104,22 @@ const faqs = [
 <MainLayout
   title="Hosting de Servidores de ARK: Survival Evolved"
   description="Servidores de ARK: Survival Evolved con mods y mapas personalizados, protección anti-DDoS y soporte 24/7 en español. Contrata tu plan en Vhost y juega hoy."
+  schemas={[
+    productSchema({
+      name: "Hosting de servidores de ARK: Survival Evolved",
+      description:
+        "Servidores de ARK con mods y mapas personalizados, protección anti-DDoS y soporte 24/7 en español.",
+      path: "/tienda/ark",
+      image: "/images/tienda/ark/ark-bg.webp",
+      prices: arkPlans.map((plan) => plan.price),
+    }),
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+      { name: "ARK: Survival Evolved", path: "/tienda/ark" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
   <HeroTienda
     titulo="ARK Hosting"

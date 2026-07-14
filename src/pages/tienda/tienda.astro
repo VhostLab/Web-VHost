@@ -4,6 +4,7 @@ import "@/styles/global.css";
 import HeroTienda from '@components/sections/pages/HeroTienda.astro';
 import CardCategorias from '@components/products/CardCategorias.astro';
 import FAQSection from '@components/sections/pages/FAQSection.astro';
+import { faqSchema, breadcrumbSchema } from '@data/seo';
 const faqs = [
   {
     question: '¿Qué métodos de pago aceptan?',
@@ -122,6 +123,13 @@ const servicios = [
 <MainLayout
   title="Tienda: Planes de Hosting por Juego"
   description="Compara los planes de hosting de Vhost por juego: Minecraft, Rust, ARK, GTA 5 (FiveM), Hytale y TeamSpeak 3. Precios por gama y activación instantánea."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
 
   <HeroTienda 

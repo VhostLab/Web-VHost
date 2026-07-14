@@ -6,6 +6,7 @@ import FAQSection from "@components/sections/pages/FAQSection.astro";
 import DedicatedSection from "@components/sections/servers/DedicatedSection.astro";
 import Card from "@components/products/card.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
 
 const gta5Plans = [
   {
@@ -104,6 +105,22 @@ const faqs = [
 <MainLayout
   title="Hosting FiveM: Servidores de GTA 5"
   description="Servidores de GTA 5 optimizados para FiveM y RageMP con protección anti-DDoS y soporte 24/7 en español. Monta tu ciudad roleplay con los planes de Vhost."
+  schemas={[
+    productSchema({
+      name: "Hosting de servidores de GTA 5 (FiveM)",
+      description:
+        "Servidores de GTA 5 optimizados para FiveM y RageMP con protección anti-DDoS y soporte 24/7 en español.",
+      path: "/tienda/gta5",
+      image: "/images/tienda/gta/gta-bg.webp",
+      prices: gta5Plans.map((plan) => plan.price),
+    }),
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+      { name: "GTA 5 (FiveM)", path: "/tienda/gta5" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
   <HeroTienda
     titulo="GTA 5 Hosting"

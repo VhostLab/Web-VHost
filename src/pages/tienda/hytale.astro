@@ -10,6 +10,15 @@ import DedicatedSection from "@components/sections/servers/DedicatedSection.astr
 import HytaleBudgetlCards from "@components/products/hytaleBudgetCards.astro";
 import HytaleNormalCards from "@components/products/hytaleNormalCards.astro";
 import HytalePremiumCards from "@components/products/hytalePremiumCards.astro";
+import { productTiers } from "@data/products";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
+
+// Los planes de hytale*Cards.astro replican los precios de productTiers
+// (18 planes, 3 gamas). Si cambian los precios en esas tarjetas, este
+// schema debe seguir reflejando lo que se ve en la página.
+const hytalePrices = Object.values(productTiers).flatMap((tier) =>
+    tier.products.map((product) => product.price)
+);
 
 // --- DATOS DE LOS PLANES (EDITAR AQUÍ) ---
 
@@ -97,6 +106,22 @@ const faqs = [
 <MainLayout
     title="Hosting de Servidores de Hytale"
     description="Reserva tu servidor de Hytale en Vhost: hardware Ryzen 5 9600X, protección anti-DDoS, panel intuitivo y soporte 24/7 en español. Gamas Budget, Normal y Premium."
+    schemas={[
+        productSchema({
+            name: "Hosting de servidores de Hytale",
+            description:
+                "Servidores de Hytale sobre hardware Ryzen 5 9600X con protección anti-DDoS, panel intuitivo y soporte 24/7 en español.",
+            path: "/tienda/hytale",
+            image: "/images/tienda/hytale/hytale-wallpaper.jpg",
+            prices: hytalePrices,
+        }),
+        breadcrumbSchema([
+            { name: "Inicio", path: "/" },
+            { name: "Tienda", path: "/tienda/tienda" },
+            { name: "Hytale", path: "/tienda/hytale" },
+        ]),
+        faqSchema(faqs),
+    ]}
 >
     <HeroTienda
         titulo="Hytale Hosting"

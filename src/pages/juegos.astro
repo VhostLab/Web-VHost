@@ -3,6 +3,7 @@ import MainLayout from "@layouts/MainLayout.astro";
 import "@/styles/global.css";
 import SupportOptions from "@components/ui/SupportOptions.astro";
 import GameCard from "@components/ui/GameCard.astro";
+import { breadcrumbSchema } from "@data/seo";
 
 // Definicion de los juegos soportados por Pterodactyl usando portadas de Steam / genericas
 const games = [
@@ -124,6 +125,12 @@ const games = [
 <MainLayout
     title="Juegos Compatibles con Nuestro Hosting"
     description="Catálogo completo de juegos compatibles con el hosting de Vhost. Si funciona en Pterodactyl, podemos alojarlo: pídenos por Discord el que no esté en la lista."
+    schemas={[
+        breadcrumbSchema([
+            { name: "Inicio", path: "/" },
+            { name: "Juegos", path: "/juegos" },
+        ]),
+    ]}
 >
     <div
         class="relative bg-[#0b0b0b] min-h-screen text-white pt-32 pb-24 overflow-hidden"

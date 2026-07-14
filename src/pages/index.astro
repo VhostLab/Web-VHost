@@ -8,6 +8,7 @@ import FAQSection from "@components/sections/pages/FAQSection.astro";
 import HeroSlider from "@components/sections/home/HeroSlider.astro";
 import PriceComparisonSection from "@components/sections/products/PriceComparisonSection.astro";
 import PanelCarrusel from "@components/interactive/PanelCarrusel.astro";
+import { organizationSchema, webSiteSchema, faqSchema } from "@data/seo";
 
 const stats = [
   { target: 99.9, suffix: "%", label: "Uptime", icon: "fas fa-clock" },
@@ -76,6 +77,7 @@ const faqs = [
 <MainLayout
   title="Hosting de Servidores de Juegos en España"
   description="Vhost es un hosting español de servidores de juegos: Minecraft, Rust, ARK, GTA 5, Hytale y TeamSpeak 3 con anti-DDoS, activación instantánea y soporte 24/7."
+  schemas={[organizationSchema, webSiteSchema, faqSchema(faqs)]}
 >
   <!-- Hero -->
   <HeroSlider />

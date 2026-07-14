@@ -9,6 +9,29 @@ import DedicatedSection from "@components/sections/servers/DedicatedSection.astr
 import SupportBanner from "@components/ui/SupportBanner.astro";
 import ServerMap from "@components/sections/servers/ServerMap.astro";
 import ConsoleSection from "@components/sections/servers/ConsoleSection.astro";
+import { productTiers } from "@data/products";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
+
+// Precios de los 18 planes que renderiza esta página (3 gamas x 6 planes)
+const allPrices = Object.values(productTiers).flatMap((tier) =>
+  tier.products.map((product) => product.price)
+);
+
+const schemas = [
+  productSchema({
+    name: "Hosting de servidores de Minecraft",
+    description:
+      "Servidores de Minecraft en España con anti-DDoS, mods y plugins. Planes Budget, Normal y Premium de 1 a 16 GB de RAM.",
+    path: "/tienda/minecraft",
+    image: "/images/tienda/minecraft/mc-bg.webp",
+    prices: allPrices,
+  }),
+  breadcrumbSchema([
+    { name: "Inicio", path: "/" },
+    { name: "Tienda", path: "/tienda/tienda" },
+    { name: "Minecraft", path: "/tienda/minecraft" },
+  ]),
+];
 
 const faqs = [
   {
@@ -61,6 +84,7 @@ const faqs = [
 <MainLayout
   title="Hosting de Servidores de Minecraft desde 0,75 €"
   description="Servidores de Minecraft en España con anti-DDoS, mods y plugins. Planes Budget, Normal y Premium de 1 a 16 GB de RAM desde 0,75 €/mes. Actívalo en minutos."
+  schemas={[...schemas, faqSchema(faqs)]}
 >
   <HeroTienda
     titulo="Minecraft Hosting"
