@@ -32,9 +32,12 @@ export async function getServersStatus(): Promise<ServerStatusResult[]> {
     servers.map(async ({ name, address }) => {
       try {
         const res = await ping.promise.probe(address, options);
+        // La librería tipa time como number | "unknown", pero en runtime
+        // puede llegar como string; se normaliza antes de convertir
+        const raw = res.time as number | string | undefined;
         const t =
-          res.time && res.time !== "unknown" && res.time !== ""
-            ? Number(res.time)
+          raw !== undefined && raw !== "unknown" && raw !== ""
+            ? Number(raw)
             : null;
         return { name, address, isOnline: res.alive, responseTime: t };
       } catch (error) {
@@ -59,9 +62,10 @@ export async function getSingleServerStatus(name: string): Promise<ServerStatusR
 
   try {
     const res = await ping.promise.probe(server.address, options);
+    const raw = res.time as number | string | undefined;
     const t =
-      res.time && res.time !== "unknown" && res.time !== ""
-        ? Number(res.time)
+      raw !== undefined && raw !== "unknown" && raw !== ""
+        ? Number(raw)
         : null;
     return { name: server.name, address: server.address, isOnline: res.alive, responseTime: t };
   } catch (error) {
