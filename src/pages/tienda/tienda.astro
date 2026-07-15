@@ -4,6 +4,7 @@ import "@/styles/global.css";
 import HeroTienda from '@components/sections/pages/HeroTienda.astro';
 import CardCategorias from '@components/products/CardCategorias.astro';
 import FAQSection from '@components/sections/pages/FAQSection.astro';
+import { faqSchema, breadcrumbSchema } from '@data/seo';
 const faqs = [
   {
     question: '¿Qué métodos de pago aceptan?',
@@ -119,10 +120,21 @@ const servicios = [
 
 ---
 
-<MainLayout title="Tienda de Servidores" description="Elige el juego y descubre nuestros planes de hosting para servidores de Minecraft, GTA V, Rust, Ark y Counter-Strike. Calidad, protección y soporte 24/7 en Vhost.">
+<MainLayout
+  title="Tienda: Planes de Hosting por Juego"
+  description="Compara los planes de hosting de Vhost por juego: Minecraft, Rust, ARK, GTA 5 (FiveM), Hytale y TeamSpeak 3. Precios por gama y activación instantánea."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+    ]),
+    faqSchema(faqs),
+  ]}
+>
 
-  <HeroTienda 
+  <HeroTienda
     titulo="Tienda"
+    descripcion="Elige tu juego y compara los planes de hosting de Vhost por gama: precios claros, activación instantánea y soporte 24/7 en español."
     imagenFondo="/images/tienda/tiendafondo.webp"
   />
 
@@ -131,7 +143,8 @@ const servicios = [
   <div class="text-center mb-12">
     <h2 class="text-[48px] font-bold font-poppins mb-2">Categorías de Juegos</h2>
     <p class="text-[16px] text-gray-400 font-poppins">
-      Todos nuestros juegos soportan plugins, mods y administración sencilla.<br /> Haz clic en el juego para descubrir más.
+      Todos nuestros juegos soportan plugins, mods y administración sencilla.<br /> Haz clic en el juego para descubrir más. ¿No ves el tuyo? Consulta
+      <a href="/juegos" class="text-secondary hover:underline">todos los juegos compatibles</a>.
     </p>
   </div>
   <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

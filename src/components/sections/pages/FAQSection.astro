@@ -11,36 +11,28 @@ export interface Props {
 }
 
 const { items, inviteLink, backgroundClass } = Astro.props as Props;
-
-// Partimos el array en dos columnas iguales
-const half = Math.ceil(items.length / 2);
-const firstColumn = items.slice(0, half);
-const secondColumn = items.slice(half);
 ---
 
-<!-- VERSIÓN ESCRITORIO (≥768px) -->
-<section class={`faq-section py-24 ${backgroundClass ?? 'bg-[#0b0b0b]'} hidden md:block`}>
-  <div class="max-w-4xl mx-auto rounded-lg shadow-xl overflow-hidden">
+<!-- Sección única responsive: 1 columna en móvil, 2 en escritorio -->
+<section class={`faq-section py-20 md:py-24 ${backgroundClass ?? 'bg-[#0b0b0b]'}`}>
+  <div class="max-w-4xl mx-auto px-4 md:px-0 md:rounded-lg md:shadow-xl md:overflow-hidden">
     <!-- Header -->
-    <div class="bg-[#161616] text-white flex flex-col items-center justify-center py-8">
-      <h2 class="text-4xl font-poppins font-bold">PREGUNTAS FRECUENTES</h2>
-      <div class="border-t-2 border-secondary w-24 mt-4"></div>
+    <div class="md:bg-[#161616] text-white text-center py-0 md:py-8">
+      <h2 class="text-2xl md:text-4xl font-poppins font-bold">PREGUNTAS FRECUENTES</h2>
+      <div class="border-t-2 border-secondary w-16 md:w-24 mx-auto mt-3 md:mt-4"></div>
     </div>
 
-    <!-- Cuerpo: Grid con dos columnas alineadas -->
-    <div class="bg-[#0f0f0f] px-6 py-8">
-      <div class="grid md:grid-cols-2 gap-x-12 gap-y-0" style="grid-auto-rows: auto;">
-        {items.map((item, index) => (
-          <details
-            class="border-b border-secondary/50 transition-all duration-300 hover:border-secondary group"
-            style={`grid-column: ${(index % 2) + 1}; grid-row: ${Math.floor(index / 2) + 1};`}
-          >
-            <summary class="flex justify-between items-center min-h-[64px] py-4 cursor-pointer text-white font-karla font-semibold hover:text-secondary transition-colors">
-              <span>{item.question}</span>
-              <span class="faq-symbol text-2xl text-secondary group-open:rotate-45 transition-transform duration-300">+</span>
+    <!-- Cuerpo -->
+    <div class="md:bg-[#0f0f0f] px-0 md:px-6 pt-6 md:py-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 md:gap-y-0">
+        {items.map(item => (
+          <details class="border-b border-secondary/50 transition-all duration-300 hover:border-secondary group">
+            <summary class="flex justify-between items-center min-h-[64px] py-3 md:py-4 cursor-pointer text-white font-karla font-semibold hover:text-secondary active:text-secondary transition-colors">
+              <span class="pr-2">{item.question}</span>
+              <span class="faq-symbol text-xl md:text-2xl text-secondary flex-shrink-0 group-open:rotate-45 transition-transform duration-300">+</span>
             </summary>
-            <div class="faq-answer">
-              <div class="pt-2 pb-4 text-muted font-inter leading-relaxed">
+            <div class="faq-answer px-2 md:px-0">
+              <div class="pt-2 pb-4 text-muted font-inter text-sm md:text-base leading-relaxed">
                 {item.answer}
               </div>
             </div>
@@ -50,61 +42,12 @@ const secondColumn = items.slice(half);
     </div>
 
     <!-- Footer -->
-    <div class="bg-[#161616] text-gray-300 flex flex-col sm:flex-row items-center justify-center gap-4 py-6 font-karla">
+    <div class="md:bg-[#161616] text-gray-300 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 py-6 font-karla text-center">
       <span>¿No está tu pregunta y necesitas una respuesta rápida?</span>
       <a
         href={inviteLink}
         class="btn-secondary text-sm py-2 px-4"
       >
-        Únete a nuestro Discord
-      </a>
-    </div>
-  </div>
-
-  <style>
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-    details[open] .faq-answer {
-      max-height: 500px;
-    }
-  </style>
-
-  <script type="module" src="/scripts/faq-toggle.js"></script>
-</section>
-
-<!-- VERSIÓN MÓVIL (<768px) - MEJORA #12: Responsive & Touch-friendly -->
-<section class={`faq-section py-20 ${backgroundClass ?? 'bg-[#0b0b0b]'} block md:hidden`}>
-  <div class="px-4 space-y-6">
-    <!-- Header simplificado -->
-    <div class="text-center text-white">
-      <h2 class="text-2xl font-poppins font-bold">PREGUNTAS FRECUENTES</h2>
-      <div class="border-t-2 border-secondary w-16 mx-auto mt-3"></div>
-    </div>
-
-    <!-- FAQ en una sola columna - Touch-friendly -->
-    <div class="space-y-4">
-      {items.map(item => (
-        <details class="border-b border-secondary/50 transition-all duration-300 hover:border-secondary group">
-          <summary class="flex justify-between items-center min-h-[64px] py-3 cursor-pointer text-white font-karla font-semibold active:text-secondary">
-            <span class="pr-2">{item.question}</span>
-            <span class="faq-symbol text-xl text-secondary flex-shrink-0 group-open:rotate-45 transition-transform duration-300">+</span>
-          </summary>
-          <div class="faq-answer px-2">
-            <div class="pt-2 pb-4 text-muted font-inter text-sm leading-relaxed">
-              {item.answer}
-            </div>
-          </div>
-        </details>
-      ))}
-    </div>
-
-    <!-- Footer -->
-    <div class="text-center text-gray-300 py-4 font-karla flex flex-col gap-3 items-center">
-      <span>¿No está tu pregunta?</span>
-      <a href={inviteLink} class="btn-primary text-sm py-2 px-4">
         Únete a nuestro Discord
       </a>
     </div>

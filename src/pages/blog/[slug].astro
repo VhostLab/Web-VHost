@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from "astro:content";
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import FAQSection from "@components/sections/pages/FAQSection.astro";
+import { articleSchema, breadcrumbSchema, faqSchema } from "@data/seo";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const path = `/blog/${post.id}`;
+const schemas: object[] = [
+  articleSchema({
+    title: post.data.title,
+    description: post.data.description,
+    path,
+    datePublished: post.data.pubDate,
+    dateModified: post.data.updatedDate,
+    author: post.data.author,
+  }),
+  breadcrumbSchema([
+    { name: "Inicio", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.data.title, path },
+  ]),
+];
+if (post.data.faqs.length > 0) {
+  schemas.push(faqSchema(post.data.faqs));
+}
+
+const updated = post.data.updatedDate.toLocaleDateString("es-ES", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<MainLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  schemas={schemas}
+>
+  <article class="bg-[#0b0b0b] text-white py-24 px-6">
+    <div class="container mx-auto max-w-3xl">
+      <nav
+        class="text-sm text-gray-400 font-poppins mb-8"
+        aria-label="Migas de pan"
+      >
+        <a href="/" class="hover:text-secondary">Inicio</a>
+        <span class="mx-1">›</span>
+        <a href="/blog/" class="hover:text-secondary">Blog</a>
+      </nav>
+
+      <h1 class="text-3xl md:text-4xl font-poppins font-bold leading-tight mb-4">
+        {post.data.title}
+      </h1>
+      <p class="text-gray-500 font-poppins text-sm mb-10">
+        Por {post.data.author} · Actualizado:{" "}
+        <time datetime={post.data.updatedDate.toISOString()}>{updated}</time>
+      </p>
+
+      <div
+        class="prose prose-invert prose-headings:font-poppins prose-a:text-secondary hover:prose-a:text-[#ffb000] max-w-none font-inter"
+      >
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {
+    post.data.faqs.length > 0 && (
+      <FAQSection
+        items={post.data.faqs}
+        inviteLink="https://discord.gg/Ykr85wevrj"
+      />
+    )
+  }
+</MainLayout>

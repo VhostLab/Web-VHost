@@ -6,6 +6,7 @@ import FAQSection from "@components/sections/pages/FAQSection.astro";
 import DedicatedSection from "@components/sections/servers/DedicatedSection.astro";
 import Card from "@components/products/card.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
 
 const arkPlans = [
   {
@@ -101,13 +102,28 @@ const faqs = [
 ---
 
 <MainLayout
-  title="ARK"
-  description="Contrata tu servidor de ARK en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre nuestros planes."
-  image="https://vhost.tech/SEO/vhost-preview.png"
-  url="https://vhost.tech/tienda/ark"
+  title="Hosting de Servidores de ARK: Survival Evolved"
+  description="Servidores de ARK: Survival Evolved con mods y mapas personalizados, protección anti-DDoS y soporte 24/7 en español. Contrata tu plan en Vhost y juega hoy."
+  schemas={[
+    productSchema({
+      name: "Hosting de servidores de ARK: Survival Evolved",
+      description:
+        "Servidores de ARK con mods y mapas personalizados, protección anti-DDoS y soporte 24/7 en español.",
+      path: "/tienda/ark",
+      image: "/images/tienda/ark/ark-bg.webp",
+      prices: arkPlans.map((plan) => plan.price),
+    }),
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+      { name: "ARK: Survival Evolved", path: "/tienda/ark" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
   <HeroTienda
     titulo="ARK Hosting"
+    descripcion="Los servidores de ARK: Survival Evolved de Vhost soportan mods y mapas personalizados, con protección anti-DDoS y soporte 24/7, desde 19,99 €/mes."
     imagenFondo="/images/tienda/ark/ark-bg.webp"
   />
 

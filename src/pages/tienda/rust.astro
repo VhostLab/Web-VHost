@@ -6,6 +6,7 @@ import FAQSection from "@components/sections/pages/FAQSection.astro";
 import DedicatedSection from "@components/sections/servers/DedicatedSection.astro";
 import Card from "@components/products/card.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
 
 const rustPlans = [
   {
@@ -105,13 +106,28 @@ const faqs = [
 ---
 
 <MainLayout
-  title="Rust Hosting"
-  description="Contrata tu servidor de Rust en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y panel intuitivo. Elige entre nuestros planes."
-  image="https://vhost.tech/SEO/vhost-preview.png"
-  url="https://vhost.tech/tienda/rust"
+  title="Hosting de Servidores de Rust"
+  description="Alquila tu servidor de Rust en Vhost: activación instantánea, protección anti-DDoS, acceso FTP para mods y soporte 24/7 en español. Elige tu plan y juega hoy."
+  schemas={[
+    productSchema({
+      name: "Hosting de servidores de Rust",
+      description:
+        "Servidores de Rust con activación instantánea, protección anti-DDoS, acceso FTP para mods y soporte 24/7 en español.",
+      path: "/tienda/rust",
+      image: "/images/tienda/rust/rust-bg.webp",
+      prices: rustPlans.map((plan) => plan.price),
+    }),
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+      { name: "Rust", path: "/tienda/rust" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
   <HeroTienda
     titulo="RUST Hosting"
+    descripcion="Los servidores de Rust de Vhost incluyen activación instantánea, protección anti-DDoS y acceso FTP completo para mods, desde 19,99 €/mes."
     imagenFondo="/images/tienda/rust/rust-bg.webp"
   />
 

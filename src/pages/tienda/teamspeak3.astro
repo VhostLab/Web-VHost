@@ -7,6 +7,7 @@ import Card from "@components/products/card.astro";
 import ConsoleSection from "@components/sections/servers/ConsoleSection.astro";
 import ServerMap from "@components/sections/servers/ServerMap.astro";
 import SupportBanner from "@components/ui/SupportBanner.astro";
+import { productSchema, faqSchema, breadcrumbSchema } from "@data/seo";
 
 const tsPlans = [
   {
@@ -74,13 +75,28 @@ const faqs = [
 ---
 
 <MainLayout
-  title="TeamSpeak 3 Hosting"
-  description="Contrata tu servidor de TeamSpeak 3 en Vhost: instalación instantánea, soporte 24/7, protección anti-DDoS y calidad de audio HD."
-  image="https://vhost.tech/SEO/vhost-preview.png"
-  url="https://vhost.tech/tienda/teamspeak3"
+  title="Hosting de Servidores TeamSpeak 3"
+  description="Servidores TeamSpeak 3 con calidad de audio HD, panel web incluido y protección anti-DDoS. Crea tu servidor de voz con Vhost y actívalo en minutos."
+  schemas={[
+    productSchema({
+      name: "Hosting de servidores TeamSpeak 3",
+      description:
+        "Servidores TeamSpeak 3 con calidad de audio HD, panel web incluido y protección anti-DDoS.",
+      path: "/tienda/teamspeak3",
+      image: "/images/tienda/teamspeak3/ts-bg.webp",
+      prices: tsPlans.map((plan) => plan.price),
+    }),
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Tienda", path: "/tienda/tienda" },
+      { name: "TeamSpeak 3", path: "/tienda/teamspeak3" },
+    ]),
+    faqSchema(faqs),
+  ]}
 >
   <HeroTienda
     titulo="TeamSpeak Hosting"
+    descripcion="El servidor TeamSpeak 3 de Vhost incluye 32 slots, calidad de audio HD y panel web por 0,99 €/mes, con protección anti-DDoS y un 99,9 % de uptime."
     imagenFondo="/images/tienda/teamspeak3/ts-bg.webp"
   />
 
