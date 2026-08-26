@@ -4,6 +4,14 @@ description: "Tabla de RAM recomendada para un servidor de Minecraft según juga
 pubDate: 2026-07-14
 updatedDate: 2026-07-14
 author: "Equipo de Vhost"
+game: "Minecraft"
+category: "Rendimiento"
+level: "Principiante"
+summary:
+  - "Entre 2 GB (vanilla, 1-4 jugadores) y 16 GB o más (modpacks grandes o más de 15 jugadores)."
+  - "Mandan tres factores: jugadores a la vez, si usas plugins o mods, y cuánto pesan."
+  - "Los mods pesan más que la gente: un modpack medio con 5-8 jugadores pide más RAM que un vanilla con 15."
+  - "La tabla usa los mismos rangos que los planes de 1 a 16 GB, así que sirve para elegir plan."
 faqs:
   - question: "¿Cuánta RAM necesita un servidor de Minecraft para 2 jugadores?"
     answer: "Para 1-4 jugadores en vanilla bastan 2 GB de RAM. Si vais a usar plugins o mods, es recomendable partir de 4 GB para evitar tirones."

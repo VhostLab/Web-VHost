@@ -4,6 +4,14 @@ description: "Tres formas de crear un servidor de Minecraft para jugar con amigo
 pubDate: 2026-08-26
 updatedDate: 2026-08-26
 author: "Equipo de Vhost"
+game: "Minecraft"
+category: "Instalación"
+level: "Principiante"
+summary:
+  - "Hay tres caminos: abrir tu mundo a la LAN, contratar Realms o levantar un servidor propio."
+  - "La LAN es gratis, pero solo llega a quien esté en tu misma red y se acaba al cerrar el mundo."
+  - "Realms es oficial y sencillo, aunque no admite mods ni plugins."
+  - "Si quieres mods, jugar por internet y no dejar el PC encendido, la opción práctica es un servidor alojado."
 faqs:
   - question: "¿Es gratis crear un servidor de Minecraft?"
     answer: "Montarlo en tu propio PC es gratis: el .jar del servidor lo descargas de minecraft.net sin coste. Lo que no es gratis es mantenerlo online, porque consume tu conexión y obliga a tener el equipo encendido. Un servidor alojado parte de 0,75 €/mes y está disponible 24/7."

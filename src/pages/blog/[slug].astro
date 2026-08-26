@@ -2,8 +2,8 @@
 import { getCollection, render } from "astro:content";
 import MainLayout from "@layouts/MainLayout.astro";
 import "@/styles/global.css";
-import FAQSection from "@components/sections/pages/FAQSection.astro";
 import { articleSchema, breadcrumbSchema, faqSchema } from "@data/seo";
+import { readingMinutes, longDate, shortDate } from "@utils/helpers";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const path = `/blog/${post.id}`;
 const schemas: object[] = [
@@ -36,11 +36,36 @@ if (post.data.faqs.length > 0) {
   schemas.push(faqSchema(post.data.faqs));
 }
 
-const updated = post.data.updatedDate.toLocaleDateString("es-ES", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const actualizado = longDate(post.data.updatedDate);
+const minutos = readingMinutes(post.body ?? "");
+
+// Índice lateral: solo los encabezados de primer nivel del artículo. Con uno
+// o ninguno no aporta nada, así que la columna desaparece.
+const indice = headings.filter((h) => h.depth === 2);
+
+// Quién firma. Hoy todas las guías las firma el equipo; el mapa evita tener
+// que tocar la plantilla cuando empiece a firmarlas alguien concreto.
+const BIOS: Record<string, string> = {
+  "Equipo de Vhost":
+    "Administramos la infraestructura de servidores de juego de Vhost. Escribimos las guías con los casos que llegan al soporte.",
+};
+const bio = BIOS[post.data.author] ?? "";
+
+// Página de producto del juego de la guía, para los dos avisos comerciales.
+const TIENDA: Record<string, string> = {
+  Minecraft: "/tienda/minecraft/",
+  Rust: "/tienda/rust/",
+  ARK: "/tienda/ark/",
+  Hytale: "/tienda/hytale/",
+  TeamSpeak: "/tienda/teamspeak3/",
+};
+const enlaceTienda = TIENDA[post.data.game] ?? "/juegos/";
+
+// Guías relacionadas: mismo juego, las más recientes que no sean esta.
+const relacionadas = (await getCollection("blog", ({ data }) => !data.draft))
+  .filter((otra) => otra.id !== post.id && otra.data.game === post.data.game)
+  .sort((a, b) => b.data.updatedDate.valueOf() - a.data.updatedDate.valueOf())
+  .slice(0, 3);
 ---
 
 <MainLayout
@@ -49,39 +74,493 @@ const updated = post.data.updatedDate.toLocaleDateString("es-ES", {
   ogType="article"
   schemas={schemas}
 >
-  <article class="bg-[#0b0b0b] text-white py-24 px-6">
-    <div class="container mx-auto max-w-3xl">
+  <div class="bg-[#0b0b0b] text-[#f3f1ef]">
+    <div class="mx-auto max-w-[1180px] px-6 md:px-10">
+      <!-- Migas de pan -->
       <nav
-        class="text-sm text-gray-400 font-poppins mb-8"
+        class="flex items-center gap-2 pt-7 font-karla text-[13px] text-[#6f6f6f]"
         aria-label="Migas de pan"
       >
-        <a href="/" class="hover:text-secondary">Inicio</a>
-        <span class="mx-1">›</span>
-        <a href="/blog/" class="hover:text-secondary">Blog</a>
+        <a href="/" class="text-[#8d8d8d] hover:text-secondary">Inicio</a>
+        <span>/</span>
+        <a href="/blog/" class="text-[#8d8d8d] hover:text-secondary">Blog</a>
+        <span>/</span>
+        <span class="min-w-0 truncate text-[#5a5a5a]">{post.data.title}</span>
       </nav>
 
-      <h1 class="text-3xl md:text-4xl font-poppins font-bold leading-tight mb-4">
-        {post.data.title}
-      </h1>
-      <p class="text-gray-500 font-poppins text-sm mb-10">
-        Por {post.data.author} · Actualizado:{" "}
-        <time datetime={post.data.updatedDate.toISOString()}>{updated}</time>
-      </p>
+      <!-- Cabecera -->
+      <header class="max-w-[52rem] border-b border-[#1c1c1c] pb-10 pt-6">
+        <div class="mb-5 flex flex-wrap items-center gap-2.5">
+          <span
+            class="rounded-[5px] border border-secondary/40 bg-secondary/10 px-2.5 py-[5px] font-karla text-[11px] font-bold uppercase tracking-[0.14em] text-secondary"
+          >
+            {post.data.game}
+          </span>
+          <span class="font-karla text-[13px] text-[#8d8d8d]">
+            {post.data.category} · Nivel {post.data.level.toLowerCase()}
+          </span>
+        </div>
+        <h1
+          class="font-poppins text-[30px] font-semibold leading-[1.12] tracking-[-0.025em] md:text-[46px] md:leading-[1.08]"
+        >
+          {post.data.title}
+        </h1>
+        <p
+          class="mt-4 max-w-[60ch] font-karla text-[17px] leading-relaxed text-[#9a9a9a] md:text-[19px]"
+        >
+          {post.data.description}
+        </p>
+        <div
+          class="mt-7 flex flex-wrap items-center gap-3 font-karla text-[13.5px] text-[#8d8d8d]"
+        >
+          <span class="flex items-center gap-2.5">
+            <img
+              src="/images/vhostlogo.webp"
+              alt=""
+              width="28"
+              height="28"
+              class="h-7 w-7 rounded-full bg-[#232323] p-1"
+            />
+            <span class="text-[#c9c9c9]">{post.data.author}</span>
+          </span>
+          <span class="text-[#3a3a3a]">·</span>
+          <span>
+            Actualizado el <time
+              datetime={post.data.updatedDate.toISOString()}>{actualizado}</time
+            >
+          </span>
+          <span class="text-[#3a3a3a]">·</span>
+          <span>{minutos} min de lectura</span>
+        </div>
+      </header>
 
+      <!-- Cuerpo + columna lateral -->
       <div
-        class="prose prose-invert prose-headings:font-poppins prose-a:text-secondary hover:prose-a:text-[#ffb000] max-w-none font-inter"
+        class="grid items-start gap-14 pt-11 lg:grid-cols-[minmax(0,1fr)_250px]"
       >
-        <Content />
-      </div>
-    </div>
-  </article>
+        <article class="max-w-[44rem]">
+          {
+            post.data.summary.length > 0 && (
+              <div class="mb-11 rounded-xl border border-[#232323] border-l-2 border-l-secondary bg-[#111111] p-6 md:px-7">
+                <h2 class="mb-3.5 font-poppins text-[15px] font-semibold tracking-[0.02em] text-[#f3f1ef]">
+                  Resumen rápido
+                </h2>
+                <ul class="flex list-disc flex-col gap-2.5 pl-5 font-karla text-[15px] leading-relaxed text-[#b4b4b4] marker:text-[#6f6f6f] md:text-base">
+                  {post.data.summary.map((punto) => (
+                    <li>{punto}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
 
-  {
-    post.data.faqs.length > 0 && (
-      <FAQSection
-        items={post.data.faqs}
-        inviteLink="https://discord.gg/Ykr85wevrj"
-      />
-    )
-  }
+          <div class="entrada-cuerpo">
+            <Content />
+          </div>
+
+          <!-- Aviso comercial al cierre del cuerpo -->
+          <aside
+            class="my-10 flex flex-wrap items-center justify-between gap-6 rounded-[14px] border border-[#262626] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-6 md:px-7"
+          >
+            <div class="max-w-[46ch]">
+              <h2 class="font-poppins text-lg font-semibold text-[#f3f1ef]">
+                Estos ajustes ya vienen listos en Vhost
+              </h2>
+              <p class="mt-1.5 font-karla text-[15px] leading-relaxed text-[#9a9a9a]">
+                Servidores con panel Pterodactyl, backups automáticos y
+                anti-DDoS, en nodos propios en España.
+              </p>
+            </div>
+            <a
+              href={enlaceTienda}
+              class="whitespace-nowrap rounded-[9px] bg-secondary px-5 py-3 font-inter text-[14.5px] font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+            >
+              Ver planes {post.data.game}
+            </a>
+          </aside>
+
+          {
+            post.data.faqs.length > 0 && (
+              <section class="mt-14 border-t border-[#1c1c1c] pt-10">
+                <h2 class="mb-5 font-poppins text-[26px] font-semibold tracking-[-0.02em] text-[#f3f1ef] md:text-[28px]">
+                  Preguntas frecuentes
+                </h2>
+                <div class="flex flex-col gap-2.5">
+                  {post.data.faqs.map((faq, indice) => (
+                    <details
+                      class="group rounded-[11px] border border-[#1f1f1f] bg-[#111111] p-5"
+                      open={indice === 0}
+                    >
+                      <summary class="flex cursor-pointer items-start justify-between gap-4 font-poppins text-[16.5px] font-semibold text-[#f3f1ef] list-none [&::-webkit-details-marker]:hidden">
+                        <span>{faq.question}</span>
+                        <span
+                          class="mt-0.5 shrink-0 text-lg text-secondary transition-transform group-open:rotate-45"
+                          aria-hidden="true"
+                        >
+                          +
+                        </span>
+                      </summary>
+                      <p class="mt-3 font-karla text-base leading-[1.7] text-[#a8a8a8]">
+                        {faq.answer}
+                      </p>
+                    </details>
+                  ))}
+                </div>
+                <p class="mt-5 font-karla text-sm text-[#8d8d8d]">
+                  ¿No está tu pregunta?{" "}
+                  <a
+                    href="https://discord.gg/Ykr85wevrj"
+                    class="text-secondary hover:text-[#ff9a3c]"
+                  >
+                    Pregúntanos en el Discord
+                  </a>
+                  .
+                </p>
+              </section>
+            )
+          }
+
+          {
+            bio && (
+              <div class="mt-12 flex items-center gap-4 rounded-xl border border-[#1f1f1f] bg-[#0f0f0f] p-5 md:px-6">
+                <img
+                  src="/images/vhostlogo.webp"
+                  alt=""
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                  class="h-11 w-11 shrink-0 rounded-full bg-[#232323] p-2"
+                />
+                <div>
+                  <p class="font-poppins text-[15px] font-semibold text-[#f3f1ef]">
+                    {post.data.author}
+                  </p>
+                  <p class="mt-1 font-karla text-[14.5px] leading-[1.55] text-[#8d8d8d]">
+                    {bio}
+                  </p>
+                </div>
+              </div>
+            )
+          }
+        </article>
+
+        <!-- Columna lateral: índice y producto -->
+        {
+          indice.length > 1 && (
+            <aside class="sticky top-24 hidden lg:block">
+              <p class="mb-3.5 font-karla text-[11px] uppercase tracking-[0.16em] text-[#6f6f6f]">
+                En esta guía
+              </p>
+              <nav
+                id="indice-guia"
+                class="flex flex-col gap-0.5 border-l border-[#1f1f1f]"
+              >
+                {indice.map((encabezado) => (
+                  <a
+                    href={`#${encabezado.slug}`}
+                    class="enlace-indice -ml-px border-l-2 border-transparent py-2 pl-3.5 font-karla text-sm leading-[1.45] text-[#9a9a9a]"
+                  >
+                    {encabezado.text}
+                  </a>
+                ))}
+              </nav>
+              <div class="mt-7 rounded-xl border border-[#1f1f1f] bg-[#111111] p-5">
+                <p class="font-poppins text-[14.5px] font-semibold text-[#f3f1ef]">
+                  Servidores {post.data.game}
+                </p>
+                <p class="mb-3.5 mt-2 font-karla text-[13.5px] leading-[1.55] text-[#8d8d8d]">
+                  Anti-DDoS incluido, backups automáticos y soporte en español.
+                </p>
+                <a
+                  href={enlaceTienda}
+                  class="block rounded-lg bg-secondary py-2.5 text-center font-inter text-[13.5px] font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+                >
+                  Desde 0,75 €/mes
+                </a>
+              </div>
+            </aside>
+          )
+        }
+      </div>
+
+      <!-- Guías relacionadas -->
+      {
+        relacionadas.length > 0 && (
+          <section class="mt-20 border-t border-[#1c1c1c] pb-24 pt-11">
+            <div class="mb-6 flex flex-wrap items-baseline justify-between gap-4">
+              <h2 class="font-poppins text-[22px] font-semibold tracking-[-0.015em]">
+                Sigue con estas guías
+              </h2>
+              <a
+                href="/blog/"
+                class="font-karla text-sm text-secondary hover:text-[#ff9a3c]"
+              >
+                Todas las guías →
+              </a>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {relacionadas.map((otra) => (
+                <a
+                  href={`/blog/${otra.id}/`}
+                  class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 transition-colors hover:border-secondary"
+                >
+                  <span class="font-karla text-[11px] uppercase tracking-[0.12em] text-secondary">
+                    {otra.data.game} · {otra.data.category}
+                  </span>
+                  <h3 class="mt-3 font-poppins text-lg font-semibold leading-[1.3] text-[#f3f1ef]">
+                    {otra.data.title}
+                  </h3>
+                  <p class="mt-2.5 line-clamp-2 font-karla text-sm leading-relaxed text-[#8d8d8d]">
+                    {otra.data.description}
+                  </p>
+                  <p class="mt-3 font-karla text-xs text-[#6f6f6f]">
+                    Act. {shortDate(otra.data.updatedDate)}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </div>
 </MainLayout>
+
+<style>
+  .enlace-indice:hover,
+  .enlace-indice[aria-current="true"] {
+    color: #fc7c04;
+    border-left-color: #fc7c04;
+  }
+</style>
+
+<style is:global>
+  /* Tipografía del cuerpo del artículo. El markdown no lleva clases, así que
+     se estila por etiqueta dentro del contenedor. */
+  .entrada-cuerpo {
+    font-family: Karla, sans-serif;
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: #c6c6c6;
+  }
+
+  @media (min-width: 768px) {
+    .entrada-cuerpo {
+      font-size: 17.5px;
+    }
+  }
+
+  .entrada-cuerpo p {
+    margin: 0 0 22px;
+  }
+
+  .entrada-cuerpo h2 {
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #f3f1ef;
+    margin: 52px 0 16px;
+    padding-top: 18px;
+    border-top: 1px solid #1c1c1c;
+    scroll-margin-top: 100px;
+  }
+
+  @media (min-width: 768px) {
+    .entrada-cuerpo h2 {
+      font-size: 28px;
+    }
+  }
+
+  .entrada-cuerpo h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .entrada-cuerpo h3 {
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.3;
+    color: #f3f1ef;
+    margin: 34px 0 12px;
+    scroll-margin-top: 100px;
+  }
+
+  .entrada-cuerpo ul,
+  .entrada-cuerpo ol {
+    margin: 0 0 24px;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .entrada-cuerpo ul {
+    list-style: disc;
+  }
+
+  .entrada-cuerpo ol {
+    list-style: decimal;
+  }
+
+  .entrada-cuerpo li::marker {
+    color: #6f6f6f;
+  }
+
+  .entrada-cuerpo li > ul,
+  .entrada-cuerpo li > ol {
+    margin: 10px 0 0;
+  }
+
+  .entrada-cuerpo strong {
+    color: #f3f1ef;
+    font-weight: 700;
+  }
+
+  .entrada-cuerpo a {
+    color: #fc7c04;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(252, 124, 4, 0.35);
+  }
+
+  .entrada-cuerpo a:hover {
+    color: #ff9a3c;
+    text-decoration-color: #ff9a3c;
+  }
+
+  .entrada-cuerpo code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.88em;
+    background: #161616;
+    border: 1px solid #232323;
+    border-radius: 6px;
+    padding: 2px 6px;
+    color: #e7e7e7;
+  }
+
+  .entrada-cuerpo pre {
+    background: #111111;
+    border: 1px solid #232323;
+    border-radius: 10px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 0 0 22px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: #d8d8d8;
+  }
+
+  .entrada-cuerpo pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  /* El contenedor lo añade el plugin de rehype de astro.config.mjs. */
+  .entrada-cuerpo .tabla-scroll {
+    overflow-x: auto;
+    margin: 0 0 24px;
+  }
+
+  .entrada-cuerpo table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 15.5px;
+  }
+
+  .entrada-cuerpo th {
+    text-align: left;
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8d8d8d;
+    background: #111111;
+    padding: 12px 14px;
+    border-bottom: 1px solid #2a2a2a;
+    white-space: nowrap;
+  }
+
+  .entrada-cuerpo td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #1c1c1c;
+    color: #c6c6c6;
+    vertical-align: top;
+  }
+
+  .entrada-cuerpo tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  /* Las citas del markdown se pintan como aviso destacado. */
+  .entrada-cuerpo blockquote {
+    background: rgba(252, 124, 4, 0.06);
+    border: 1px solid rgba(252, 124, 4, 0.28);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin: 0 0 24px;
+    color: #d0c4b4;
+    font-size: 16px;
+  }
+
+  .entrada-cuerpo blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  .entrada-cuerpo hr {
+    border: 0;
+    border-top: 1px solid #1c1c1c;
+    margin: 40px 0;
+  }
+
+  .entrada-cuerpo img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+</style>
+
+<script>
+  // Marca en el índice lateral el apartado que se está leyendo.
+  const enlaces = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("#indice-guia a")
+  );
+
+  if (enlaces.length > 0) {
+    const porId = new Map(
+      enlaces.map((enlace) => [decodeURIComponent(enlace.hash.slice(1)), enlace])
+    );
+    const secciones = [...porId.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((seccion): seccion is HTMLElement => seccion !== null);
+
+    const marcar = (id: string) => {
+      for (const enlace of enlaces) {
+        enlace.setAttribute(
+          "aria-current",
+          String(decodeURIComponent(enlace.hash.slice(1)) === id)
+        );
+      }
+    };
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        const visible = entradas
+          .filter((entrada) => entrada.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible) marcar(visible.target.id);
+      },
+      { rootMargin: "-100px 0px -70% 0px" }
+    );
+
+    for (const seccion of secciones) observador.observe(seccion);
+  }
+</script>

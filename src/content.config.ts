@@ -11,6 +11,16 @@ const blog = defineCollection({
     // y el dateModified del schema Article (señal de frescura GEO)
     updatedDate: z.coerce.date(),
     author: z.string(),
+    // Juego al que pertenece la guía. Alimenta el filtro del índice y los
+    // hubs por juego, que aparecen solos en cuanto haya un segundo juego.
+    game: z.string().default("Minecraft"),
+    // Tema de la guía: es lo que filtran los chips del índice.
+    category: z.string().default("General"),
+    level: z.enum(["Principiante", "Intermedio", "Avanzado"]).default("Principiante"),
+    // Puntos del bloque "Resumen rápido" que abre la entrada. Es un resumen
+    // del propio artículo, no información nueva; si se deja vacío, el bloque
+    // no se pinta.
+    summary: z.array(z.string()).default([]),
     faqs: z
       .array(z.object({ question: z.string(), answer: z.string() }))
       .default([]),
