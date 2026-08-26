@@ -61,7 +61,7 @@ export default defineConfig({
   site: 'https://vhost.tech',
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/status/') && !page.includes('/404/'),
+      filter: (page) => !page.includes('/404/'),
     }),
   ],
 
@@ -98,9 +98,6 @@ export default defineConfig({
     build: {
       cssMinify: true,
       minify: 'esbuild',
-    },
-    optimizeDeps: {
-      exclude: ['ping'],
     },
   },
 });
