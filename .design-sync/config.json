@@ -1,0 +1,8 @@
+{
+  "projectId": "1d6cc32f-731b-4b29-8f3e-31815f0132b8",
+  "shape": "package",
+  "pkg": ".",
+  "tokensOnly": true,
+  "builder": ".design-sync/build-tokens.mjs",
+  "outDir": "ds-bundle"
+}

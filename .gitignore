@@ -57,3 +57,5 @@ Thumbs.db
 # pnpm-lock.yaml
 
 .vscode/
+# Salida generada por /design-sync
+ds-bundle/
