@@ -1,0 +1,33 @@
+---
+// Firma al pie de una guía. Sin biografía no se pinta: preferimos no poner
+// nada antes que un recuadro con el nombre y una línea vacía.
+export interface Props {
+  autor: string;
+  bio: string;
+}
+
+const { autor, bio } = Astro.props as Props;
+---
+
+{
+  bio && (
+    <div class="mt-12 flex items-center gap-4 rounded-xl border border-[#1f1f1f] bg-[#0f0f0f] p-5 md:px-6">
+      <img
+        src="/images/vhostlogo.webp"
+        alt=""
+        width="44"
+        height="44"
+        loading="lazy"
+        class="h-11 w-11 shrink-0 rounded-full bg-[#232323] p-2"
+      />
+      <div>
+        <p class="font-poppins text-[15px] font-semibold text-[#f3f1ef]">
+          {autor}
+        </p>
+        <p class="mt-1 font-karla text-[14.5px] leading-[1.55] text-[#8d8d8d]">
+          {bio}
+        </p>
+      </div>
+    </div>
+  )
+}

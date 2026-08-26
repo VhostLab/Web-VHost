@@ -13,9 +13,27 @@ const blog = defineCollection({
     author: z.string(),
     // Juego al que pertenece la guía. Alimenta el filtro del índice y los
     // hubs por juego, que aparecen solos en cuanto haya un segundo juego.
-    game: z.string().default("Minecraft"),
+    //
+    // Es una lista cerrada a propósito: con texto libre, un "minecraft" en
+    // minúscula o un espacio de más crean en silencio un filtro duplicado en
+    // el índice y reparten las guías entre dos chips que parecen el mismo.
+    // Así, un valor mal escrito rompe la build en vez de llegar a producción.
+    // Para añadir un juego o un tema nuevo, añádelo aquí primero.
+    game: z
+      .enum(["Minecraft", "Rust", "ARK", "FiveM", "TeamSpeak", "Hytale"])
+      .default("Minecraft"),
     // Tema de la guía: es lo que filtran los chips del índice.
-    category: z.string().default("General"),
+    category: z
+      .enum([
+        "Instalación",
+        "Configuración",
+        "Mods y plugins",
+        "Rendimiento",
+        "Administración",
+        "Panel",
+        "Errores",
+      ])
+      .default("Panel"),
     level: z.enum(["Principiante", "Intermedio", "Avanzado"]).default("Principiante"),
     // Puntos del bloque "Resumen rápido" que abre la entrada. Es un resumen
     // del propio artículo, no información nueva; si se deja vacío, el bloque

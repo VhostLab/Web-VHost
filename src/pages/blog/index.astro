@@ -4,6 +4,8 @@ import MainLayout from "@layouts/MainLayout.astro";
 import "@/styles/global.css";
 import { breadcrumbSchema } from "@data/seo";
 import { readingMinutes, shortDate } from "@utils/helpers";
+import TarjetaGuia from "@components/blog/TarjetaGuia.astro";
+import TarjetaDestacada from "@components/blog/TarjetaDestacada.astro";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) =>
@@ -175,55 +177,35 @@ const visiblesInicio = Math.min(restantes, POR_PAGINA);
           class="mx-auto max-w-[1180px] px-6 py-10 md:px-10"
         >
           <div class="grid gap-5 lg:grid-cols-[1.55fr_1fr]">
-            <a
-              href={destacadas[0].url}
-              class="flex min-h-[290px] flex-col justify-between rounded-2xl border border-[#262626] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-7 transition-colors hover:border-secondary md:p-9"
-            >
-              <div class="flex flex-wrap items-center gap-2.5">
-                <span class="rounded-[5px] bg-secondary px-2.5 py-[5px] font-karla text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0b0b0b]">
-                  Imprescindible
-                </span>
-                <span class="font-karla text-xs text-[#8d8d8d]">
-                  {destacadas[0].game} · {destacadas[0].category}
-                </span>
-              </div>
-              <div class="mt-10">
-                <h2 class="max-w-[22ch] font-poppins text-[24px] font-semibold leading-[1.15] tracking-[-0.02em] text-[#f3f1ef] md:text-[32px]">
-                  {destacadas[0].title}
-                </h2>
-                <p class="mt-3.5 max-w-[52ch] font-karla text-[15px] leading-relaxed text-[#9a9a9a] md:text-base">
-                  {destacadas[0].description}
-                </p>
-                <div class="mt-5 font-karla text-[13px] text-[#6f6f6f]">
-                  {destacadas[0].author} · Actualizado {destacadas[0].updated} ·{" "}
-                  {destacadas[0].minutos} min
-                </div>
-              </div>
-            </a>
+            <TarjetaDestacada
+              variante="principal"
+              url={destacadas[0].url}
+              titulo={destacadas[0].title}
+              descripcion={destacadas[0].description}
+              juego={destacadas[0].game}
+              tema={destacadas[0].category}
+              actualizado={destacadas[0].updated}
+              minutos={destacadas[0].minutos}
+              autor={destacadas[0].author}
+            />
             <div class="grid gap-5 lg:grid-rows-2">
               {destacadas.slice(1).map((entrada) => (
-                <a
-                  href={entrada.url}
-                  class="flex flex-col justify-between rounded-2xl border border-[#1f1f1f] bg-[#111111] p-6 transition-colors hover:border-[#3a3a3a]"
-                >
-                  <span class="font-karla text-xs uppercase tracking-[0.1em] text-secondary">
-                    {entrada.game} · {entrada.category}
-                  </span>
-                  <div class="mt-4">
-                    <h3 class="font-poppins text-[19px] font-semibold leading-[1.25] text-[#f3f1ef] md:text-xl">
-                      {entrada.title}
-                    </h3>
-                    <div class="mt-3.5 font-karla text-[13px] text-[#6f6f6f]">
-                      Actualizado {entrada.updated} · {entrada.minutos} min
-                    </div>
-                  </div>
-                </a>
+                <TarjetaDestacada
+                  url={entrada.url}
+                  titulo={entrada.title}
+                  descripcion={entrada.description}
+                  juego={entrada.game}
+                  tema={entrada.category}
+                  actualizado={entrada.updated}
+                  minutos={entrada.minutos}
+                />
               ))}
             </div>
           </div>
         </section>
       )
     }
+
 
     <!-- Listado -->
     <section class="mx-auto max-w-[1180px] px-6 pt-4 md:px-10">
@@ -245,52 +227,22 @@ const visiblesInicio = Math.min(restantes, POR_PAGINA);
       <div id="rejilla-guias" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {
           entradas.map((entrada, indice) => (
-            <a
-              href={entrada.url}
-              data-entrada
-              data-juego={entrada.game}
-              data-tema={entrada.category}
-              data-busqueda={`${entrada.title} ${entrada.description} ${entrada.game} ${entrada.category}`}
-              data-destacada={indice < NUM_DESTACADAS ? "1" : "0"}
-              class:list={[
-                "flex flex-col rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 transition-colors hover:border-secondary hover:bg-[#161616]",
-                {
-                  hidden:
-                    indice < NUM_DESTACADAS ||
-                    indice >= NUM_DESTACADAS + POR_PAGINA,
-                },
-              ]}
-            >
-              <div class="flex items-center justify-between gap-3">
-                <span class="font-karla text-[11px] font-medium uppercase tracking-[0.12em] text-secondary">
-                  {entrada.game}
-                </span>
-                <span class="font-karla text-xs text-[#6f6f6f]">
-                  {entrada.minutos} min
-                </span>
-              </div>
-              <h3 class="mt-3.5 font-poppins text-[19px] font-semibold leading-[1.3] tracking-[-0.01em] text-[#f3f1ef]">
-                {entrada.title}
-              </h3>
-              <p class="mt-2.5 flex-1 font-karla text-[14.5px] leading-[1.62] text-[#9a9a9a]">
-                {entrada.description}
-              </p>
-              <div class="mt-[18px] flex flex-wrap items-center gap-2 border-t border-[#1f1f1f] pt-4 font-karla text-[12.5px] text-[#6f6f6f]">
-                <img
-                  src="/images/vhostlogo.webp"
-                  alt=""
-                  width="20"
-                  height="20"
-                  loading="lazy"
-                  class="h-5 w-5 rounded-full bg-[#232323] p-[3px]"
-                />
-                <span>{entrada.author}</span>
-                <span class="text-[#3a3a3a]">·</span>
-                <span>{entrada.category}</span>
-                <span class="text-[#3a3a3a]">·</span>
-                <span>Act. {entrada.updated}</span>
-              </div>
-            </a>
+            <TarjetaGuia
+              url={entrada.url}
+              titulo={entrada.title}
+              descripcion={entrada.description}
+              juego={entrada.game}
+              tema={entrada.category}
+              autor={entrada.author}
+              actualizado={entrada.updated}
+              minutos={entrada.minutos}
+              busqueda={`${entrada.title} ${entrada.description} ${entrada.game} ${entrada.category}`}
+              destacada={indice < NUM_DESTACADAS}
+              oculta={
+                indice < NUM_DESTACADAS ||
+                indice >= NUM_DESTACADAS + POR_PAGINA
+              }
+            />
           ))
         }
       </div>

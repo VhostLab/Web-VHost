@@ -1,0 +1,58 @@
+---
+// Acordeón de preguntas frecuentes de una guía. Se alimenta del campo faqs
+// del frontmatter, que es el mismo que genera el schema FAQPage de la página,
+// así que lo que se ve y lo que leen los buscadores no puede desincronizarse.
+//
+// No reutiliza FAQSection.astro a propósito: aquel es un bloque de ancho
+// completo a dos columnas para las páginas de producto, y aquí hace falta una
+// lista estrecha que viva dentro de la columna del artículo.
+export interface Pregunta {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  faqs: Pregunta[];
+  discord?: string;
+}
+
+const { faqs, discord = "https://discord.gg/Ykr85wevrj" } = Astro.props as Props;
+---
+
+{
+  faqs.length > 0 && (
+    <section class="mt-14 border-t border-[#1c1c1c] pt-10">
+      <h2 class="mb-5 font-poppins text-[26px] font-semibold tracking-[-0.02em] text-[#f3f1ef] md:text-[28px]">
+        Preguntas frecuentes
+      </h2>
+      <div class="flex flex-col gap-2.5">
+        {faqs.map((faq, indice) => (
+          <details
+            class="group rounded-[11px] border border-[#1f1f1f] bg-[#111111] p-5"
+            open={indice === 0}
+          >
+            <summary class="flex cursor-pointer list-none items-start justify-between gap-4 font-poppins text-[16.5px] font-semibold text-[#f3f1ef] [&::-webkit-details-marker]:hidden">
+              <span>{faq.question}</span>
+              <span
+                class="mt-0.5 shrink-0 text-lg text-secondary transition-transform group-open:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
+            </summary>
+            <p class="mt-3 font-karla text-base leading-[1.7] text-[#a8a8a8]">
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+      <p class="mt-5 font-karla text-sm text-[#8d8d8d]">
+        ¿No está tu pregunta?{" "}
+        <a href={discord} class="text-secondary hover:text-[#ff9a3c]">
+          Pregúntanos en el Discord
+        </a>
+        .
+      </p>
+    </section>
+  )
+}
