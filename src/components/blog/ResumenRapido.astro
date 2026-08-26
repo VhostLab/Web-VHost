@@ -1,0 +1,24 @@
+---
+// Bloque "Resumen rápido" que abre una guía: los puntos vienen del campo
+// summary del frontmatter. Si la entrada no lo trae, no se pinta nada.
+export interface Props {
+  puntos: string[];
+}
+
+const { puntos } = Astro.props as Props;
+---
+
+{
+  puntos.length > 0 && (
+    <div class="mb-11 rounded-xl border border-[#232323] border-l-2 border-l-secondary bg-[#111111] p-6 md:px-7">
+      <h2 class="mb-3.5 font-poppins text-[15px] font-semibold tracking-[0.02em] text-[#f3f1ef]">
+        Resumen rápido
+      </h2>
+      <ul class="flex list-disc flex-col gap-2.5 pl-5 font-karla text-[15px] leading-relaxed text-[#b4b4b4] marker:text-[#6f6f6f] md:text-base">
+        {puntos.map((punto) => (
+          <li>{punto}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}

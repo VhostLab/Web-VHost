@@ -1,0 +1,80 @@
+---
+// Índice lateral de una guía. Los encabezados los devuelve render() del
+// contenido, así que se generan del propio artículo y no hay una lista que
+// mantener a mano. Solo se pintan los de primer nivel (##).
+//
+// El apartado que se está leyendo se marca con aria-current desde el script:
+// así el estado activo también llega a un lector de pantalla, no solo al ojo.
+import type { MarkdownHeading } from "astro";
+
+export interface Props {
+  encabezados: MarkdownHeading[];
+}
+
+const { encabezados } = Astro.props as Props;
+---
+
+<p
+  class="mb-3.5 font-karla text-[11px] uppercase tracking-[0.16em] text-[#6f6f6f]"
+>
+  En esta guía
+</p>
+<nav id="indice-guia" class="flex flex-col gap-0.5 border-l border-[#1f1f1f]">
+  {
+    encabezados.map((encabezado) => (
+      <a
+        href={`#${encabezado.slug}`}
+        class="enlace-indice -ml-px border-l-2 border-transparent py-2 pl-3.5 font-karla text-sm leading-[1.45] text-[#9a9a9a]"
+      >
+        {encabezado.text}
+      </a>
+    ))
+  }
+</nav>
+
+<style>
+  .enlace-indice:hover,
+  .enlace-indice[aria-current="true"] {
+    color: #fc7c04;
+    border-left-color: #fc7c04;
+  }
+</style>
+
+<script>
+  // Marca en el índice el apartado que se está leyendo.
+  const enlaces = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("#indice-guia a")
+  );
+
+  if (enlaces.length > 0) {
+    const porId = new Map(
+      enlaces.map((enlace) => [decodeURIComponent(enlace.hash.slice(1)), enlace])
+    );
+    const secciones = [...porId.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((seccion): seccion is HTMLElement => seccion !== null);
+
+    const marcar = (id: string) => {
+      for (const enlace of enlaces) {
+        enlace.setAttribute(
+          "aria-current",
+          String(decodeURIComponent(enlace.hash.slice(1)) === id)
+        );
+      }
+    };
+
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        const visible = entradas
+          .filter((entrada) => entrada.isIntersecting)
+          .sort(
+            (a, b) => a.boundingClientRect.top - b.boundingClientRect.top
+          )[0];
+        if (visible) marcar(visible.target.id);
+      },
+      { rootMargin: "-100px 0px -70% 0px" }
+    );
+
+    for (const seccion of secciones) observador.observe(seccion);
+  }
+</script>
