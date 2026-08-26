@@ -95,9 +95,16 @@ const cropW = maxX - minX + 1;
 const cropH = maxY - minY + 1;
 const removed = ((seen.reduce((a, b) => a + b, 0) / (width * height)) * 100).toFixed(1);
 
+// --square deja un lienzo cuadrado con relleno transparente, util cuando la
+// imagen sustituye a otra cuadrada y no queremos mover la maquetacion.
+const square = args.includes('--square');
+const resize = square
+  ? { width: SIZE, height: SIZE, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }
+  : { width: SIZE, height: SIZE, fit: 'inside', withoutEnlargement: true };
+
 await sharp(out, { raw: { width, height, channels: 4 } })
   .extract({ left: minX, top: minY, width: cropW, height: cropH })
-  .resize({ width: SIZE, height: SIZE, fit: 'inside', withoutEnlargement: true })
+  .resize(resize)
   .webp({ quality: 92, alphaQuality: 100 })
   .toFile(output);
 
