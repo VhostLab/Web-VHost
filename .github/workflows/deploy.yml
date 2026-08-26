@@ -60,20 +60,35 @@ jobs:
     steps:
       - name: Avisar a Coolify
         env:
-          WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          WEBHOOK: ${{ secrets.DEPLOY_URL }}
           TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
+          # Un secreto que falta tiene que romper el job: si se saltase en
+          # verde, main parecería desplegada sin haberlo hecho nunca.
           if [ -z "$WEBHOOK" ]; then
-            echo "::warning::COOLIFY_WEBHOOK no esta configurado; se omite el despliegue."
-            exit 0
+            echo "::error::Falta el secreto DEPLOY_URL (gh secret set DEPLOY_URL)."
+            exit 1
           fi
-          # --fail hace que un 4xx/5xx de Coolify tumbe el job en lugar de
-          # dar por bueno un despliegue que nunca arranco.
-          if [ -n "$TOKEN" ]; then
-            curl --fail --silent --show-error --location \
-              --header "Authorization: Bearer $TOKEN" "$WEBHOOK"
-          else
-            curl --fail --silent --show-error --location "$WEBHOOK"
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Falta el secreto COOLIFY_TOKEN (gh secret set COOLIFY_TOKEN)."
+            exit 1
           fi
-          echo ""
-          echo "despliegue solicitado a Coolify"
+
+          # Guardamos cuerpo y codigo por separado para poder enseñar la
+          # respuesta de Coolify cuando algo falla; sin esto un 401 solo dice
+          # "curl: (22)" y no se sabe si es el token o la URL.
+          codigo=$(curl --silent --show-error --location --output respuesta.txt \
+            --write-out '%{http_code}' \
+            --header "Authorization: Bearer $TOKEN" \
+            --header 'Accept: application/json' \
+            "$WEBHOOK")
+
+          echo "HTTP $codigo"
+          echo "respuesta: $(cat respuesta.txt)"
+
+          case "$codigo" in
+            2*) echo "despliegue solicitado a Coolify" ;;
+            401|403) echo "::error::Coolify rechaza el token ($codigo). Revisa COOLIFY_TOKEN: tiene que ser un token de API de Coolify, no el secreto del webhook de GitHub."; exit 1 ;;
+            404) echo "::error::Coolify no encuentra el recurso ($codigo). Revisa el uuid de DEPLOY_URL."; exit 1 ;;
+            *)   echo "::error::Coolify respondio $codigo."; exit 1 ;;
+          esac
