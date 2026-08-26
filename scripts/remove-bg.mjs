@@ -66,6 +66,42 @@ while (queue.length) {
   push(x + 1, y); push(x - 1, y); push(x, y + 1); push(x, y - 1);
 }
 
+// --pockets: limpia tambien las bolsas de fondo que quedan encerradas por el
+// dibujo (huecos entre un brazo y el cuerpo, por ejemplo), donde el relleno
+// desde el borde no llega. Solo con umbral estricto, asi que unicamente vale
+// cuando el sujeto no contiene el color de fondo.
+if (args.includes('--pockets')) {
+  for (let p = 0; p < width * height; p++) {
+    if (alpha[p] !== 255) continue;
+    const d = dist(p * channels);
+    // Mismo criterio que el relleno exterior: el amarillo puro desaparece y
+    // el borde mezclado recibe alfa parcial. Si solo borraramos el color puro
+    // quedaria un aro del color de fondo rodeando cada hueco.
+    if (d < FEATHER) alpha[p] = d <= SOLID ? 0 : Math.round(((d - SOLID) / (FEATHER - SOLID)) * 255);
+  }
+}
+
+// --erode N: come N pixeles del borde opaco. En dibujo con trazo grueso el
+// contorno mezcla fondo y linea, y esa franja es la que produce el halo de
+// color; recortarla es mas fiable que intentar adivinar su transparencia.
+const ERODE = Number(flag('erode', 0));
+for (let pass = 0; pass < ERODE; pass++) {
+  const snapshot = alpha.slice();
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const p = y * width + x;
+      if (snapshot[p] === 0) continue;
+      const n = [
+        x > 0 ? snapshot[p - 1] : 0,
+        x < width - 1 ? snapshot[p + 1] : 0,
+        y > 0 ? snapshot[p - width] : 0,
+        y < height - 1 ? snapshot[p + width] : 0,
+      ];
+      if (n.some((v) => v < 128)) alpha[p] = 0;
+    }
+  }
+}
+
 // Recorte al contenido visible.
 let minX = width, minY = height, maxX = -1, maxY = -1;
 for (let y = 0; y < height; y++) {
