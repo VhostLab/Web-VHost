@@ -34,6 +34,8 @@ falta saber cron**: el formulario se abre en modo fácil, con desplegables.
 
 Pulsa **Create schedule**. En el formulario:
 
+![Ventana Create new schedule con el nombre puesto, el modo fácil activo, los cinco desplegables de periodicidad y la vista previa que dice At 06:00 AM](../../images/blog/panel/tarea-crear.webp)
+
 - **Schedule name**: un nombre que se entienda, como `Reinicio diario`.
 - **Easy / Advanced**: el modo fácil usa desplegables con opciones ya hechas
   (*Cada 5 minutos*, *Cada día a medianoche*, *Días laborables*, *Fin de
@@ -54,6 +56,8 @@ ejecución.
 
 Una tarea vacía no hace nada: hay que darle acciones. Entra en ella y pulsa
 **New Task**:
+
+![Ventana Create Task con el desplegable Action en Send command, el campo Time offset, el Payload con el comando say del aviso y el interruptor Continue on Failure](../../images/blog/panel/tarea-accion.webp)
 
 | Acción | Qué hace |
 | --- | --- |

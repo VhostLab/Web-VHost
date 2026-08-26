@@ -35,6 +35,8 @@ dos registros: uno `A` y uno `SRV`.
 
 En tu servidor, abre la pestaña **Subdomains** y pulsa **Create subdomain**:
 
+![Ventana Create subdomain con el campo del nombre relleno, el desplegable del dominio en .vhost.tech y el de la asignación del servidor](../../images/blog/panel/subdominio-crear.webp)
+
 1. Escribe el nombre que quieras, por ejemplo `misurvival`.
 2. Elige el dominio del desplegable: **`.vhost.tech`**.
 3. Elige la asignación de tu servidor, que aparece marcada como *Primary*.
@@ -49,16 +51,25 @@ dirección decente para una comunidad pequeña.
 ## Opción con marca: tu propio dominio
 
 Si ya tienes un dominio, la pestaña **Network** del panel trae un **Record
-Generator** que te muestra los dos registros a copiar, rellenos con la IP y el
-puerto reales de tu servidor. Este es el aspecto que tienen:
+Generator**. Escribe en él el subdominio que quieras usar y te calcula los dos
+registros:
+
+![Record Generator de la pestaña Network, con el subdominio escrito y los dos registros generados debajo: uno de tipo A y otro de tipo SRV](../../images/blog/panel/dns-generador.webp)
 
 | Tipo | Nombre | Contenido |
 | --- | --- | --- |
 | `A` | `play.tudominio.com` | La IP de tu servidor |
 | `SRV` | `_minecraft._tcp.play.tudominio.com` | `0 5 PUERTO play.tudominio.com` |
 
-Cópialos tal cual en el panel DNS de tu proveedor —el registrador donde
-compraste el dominio, Cloudflare, o quien te lleve la zona—.
+> **Ojo con el registro A: el generador enseña `0.0.0.0` como contenido y ese
+> valor no sirve.** Es la dirección interna con la que el servidor escucha, no
+> su IP pública. En el registro A tienes que poner **la IP que aparece arriba,
+> en la barra de estado del servidor**, la misma a la que se conectan tus
+> jugadores. El registro SRV sí viene bien calculado, con el puerto correcto.
+
+Con esa corrección hecha, copia los dos registros en el panel DNS de tu
+proveedor —el registrador donde compraste el dominio, Cloudflare, o quien te
+lleve la zona—.
 
 ### Qué hace cada uno
 

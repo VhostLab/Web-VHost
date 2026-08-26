@@ -32,6 +32,8 @@ mover y cambiar permisos, sin instalar nada.
 
 ## Lo que ves al entrar
 
+![Gestor de archivos del panel, con la barra de herramientas arriba y el listado de archivos de un servidor de Minecraft](../../images/blog/panel/archivos-gestor.webp)
+
 La barra superior tiene cinco herramientas:
 
 - **Search**: busca por nombre dentro de la carpeta en la que estés.
@@ -77,6 +79,8 @@ el `motd` o poner el servidor en modo creativo para una prueba.
 
 El botón de los tres puntos al final de cada fila abre siete acciones:
 
+![Menú de una fila del gestor de archivos, con las opciones Rename, Move, Permissions, Copy, Archive, Download y Delete](../../images/blog/panel/archivos-menu-fila.webp)
+
 | Acción | Para qué |
 | --- | --- |
 | **Rename** | Cambiar el nombre |
@@ -94,6 +98,8 @@ una carpeta de plugins.
 ## Los dos atajos del botón Advanced
 
 **Advanced** despliega dos herramientas que no están en un Pterodactyl normal:
+
+![Menú del botón Advanced, con las opciones Server Properties y Upload Minecraft Icon](../../images/blog/panel/archivos-avanzado.webp)
 
 - **Server Properties**: presenta los ajustes de `server.properties` en un
   formulario, en vez de dejarte a solas con el archivo de texto. Va bien para

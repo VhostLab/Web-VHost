@@ -35,6 +35,8 @@ ni el gestor de archivos ni el SFTP tienen papelera.
 
 Pulsa **Create backup** y verás tres campos:
 
+![Ventana Create Backup del panel, con los campos Backup name, Ignored Files & Directories, el interruptor Locked y el botón Start backup](../../images/blog/panel/backup-crear.webp)
+
 - **Backup name**: el nombre con el que la reconocerás. Si lo dejas vacío se
   genera uno automático, pero un nombre como `antes-de-subir-a-1.21` te va a
   ahorrar tiempo dentro de dos meses.
