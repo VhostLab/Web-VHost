@@ -33,8 +33,14 @@ WinSCP se conectan en menos de un minuto.
 
 ## Dónde están tus datos de acceso
 
-Entra en el panel, abre tu servidor y ve a **Settings**. El primer bloque,
-**SFTP Details**, tiene lo que necesitas:
+Entra en el panel, abre tu servidor y pulsa **Settings** en el menú de la
+izquierda. El primer bloque de esa página es **SFTP Details**:
+
+![Pestaña Settings del panel de Vhost, con Settings resaltado en el menú lateral y el bloque SFTP Details arriba a la izquierda](../../images/blog/panel/sftp-donde-esta.webp)
+
+De ese bloque salen los dos datos que hay que copiar al cliente:
+
+![Bloque SFTP Details con el campo Server Address, el campo Username y el botón Launch SFTP](../../images/blog/panel/sftp-datos-acceso.webp)
 
 | Campo | Ejemplo | Qué es |
 | --- | --- | --- |
@@ -109,9 +115,14 @@ abre el panel: llegas antes.
 
 ## Entrar sin escribir la contraseña
 
-Si te conectas a diario, añade una **clave SSH**: en el panel, ve a **Account →
-SSH Key**, dale un nombre y pega tu clave pública. A partir de ahí el cliente
-autentica con la clave y te olvidas de la contraseña.
+Si te conectas a diario, añade una **clave SSH**. En el panel, entra en
+**Account** y abre la pestaña **SSH Key**:
+
+![Sección SSH Key de la página Account, con los campos SSH Key Name y Public Key y el botón save](../../images/blog/panel/sftp-clave-ssh.webp)
+
+Ponle un nombre que reconozcas —normalmente el del ordenador desde el que te
+conectas—, pega tu **clave pública** en el campo grande y guarda. A partir de
+ahí el cliente autentica con la clave y te olvidas de escribir la contraseña.
 
 ## Antes de tocar archivos grandes
 

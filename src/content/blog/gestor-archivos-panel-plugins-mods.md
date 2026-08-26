@@ -36,9 +36,10 @@ La barra superior tiene cinco herramientas:
 
 - **Search**: busca por nombre dentro de la carpeta en la que estés.
 - **Create Directory**: crea una carpeta.
-- **Upload**: sube archivos desde tu equipo. La flecha de al lado abre una
-  segunda opción, **subir desde una URL**: pegas el enlace directo al archivo y
-  el panel lo descarga por su cuenta, sin pasar por tu conexión.
+- **Upload**: la flecha de al lado despliega tres formas de subir —**Upload
+  Files** para archivos sueltos, **Upload Folders** para una carpeta entera y
+  **Upload from URL**, donde pegas el enlace directo a un archivo y lo descarga
+  el propio servidor, sin pasar por tu conexión.
 - **New file**: crea un archivo vacío y lo abre en el editor.
 - **Advanced**: dos atajos que merece la pena conocer, y que vemos más abajo.
 

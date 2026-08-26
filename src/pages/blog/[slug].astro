@@ -521,9 +521,14 @@ const relacionadas = (await getCollection("blog", ({ data }) => !data.draft))
     margin: 40px 0;
   }
 
+  /* Capturas del panel: se leen mejor con un borde que las separe del fondo,
+     porque el propio panel es oscuro y sin él se funden con la página. */
   .entrada-cuerpo img {
+    display: block;
     max-width: 100%;
     height: auto;
+    margin: 0 0 24px;
+    border: 1px solid #262626;
     border-radius: 12px;
   }
 </style>
