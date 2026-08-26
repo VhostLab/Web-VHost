@@ -57,6 +57,16 @@ servidor.
 
 ## FileZilla, paso a paso
 
+Descárgalo de la web oficial, [filezilla-project.org](https://filezilla-project.org/).
+Ahí verás dos productos y solo uno te vale:
+
+> **Descarga «FileZilla Client», no «FileZilla Server».** El *Client* es el
+> programa con el que te conectas a tu servidor, que es lo que necesitas. El
+> *Server* sirve para montar tu propio servicio de archivos y no tiene nada que
+> ver con esto.
+
+Es gratuito y funciona en Windows, macOS y Linux.
+
 1. Abre **Archivo → Gestor de sitios** y pulsa **Nuevo sitio**.
 2. En **Protocolo**, elige `SFTP - SSH File Transfer Protocol`.
 3. En **Servidor**, escribe el host sin el `sftp://` (por ejemplo
@@ -67,6 +77,10 @@ servidor.
    clave del servidor: acéptala y marca la casilla para no volver a verla.
 
 ## WinSCP, paso a paso
+
+Descárgalo de [winscp.net/eng/download.php](https://winscp.net/eng/download.php).
+También es gratuito, pero **solo existe para Windows**: si vas con macOS o
+Linux, quédate con FileZilla.
 
 1. En la ventana de **Nueva sesión**, elige **Protocolo de archivo: SFTP**.
 2. **Nombre del servidor**: el host del panel. **Número de puerto**: `2022`.
