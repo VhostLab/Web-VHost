@@ -31,6 +31,31 @@ function rehypeTablasConScroll() {
   };
 }
 
+/**
+ * Abre en otra pestaña los enlaces del markdown que salen del sitio, para no
+ * sacar al lector de la guía a medias. Los enlaces internos se quedan como
+ * están. El rel evita que la página destino pueda tocar la nuestra.
+ */
+function rehypeEnlacesExternos() {
+  return (/** @type {any} */ tree) => {
+    const recorrer = (/** @type {any} */ nodo) => {
+      if (!Array.isArray(nodo.children)) return;
+      for (const hijo of nodo.children) {
+        if (hijo.type === 'element' && hijo.tagName === 'a') {
+          const destino = String(hijo.properties?.href ?? '');
+          const esExterno = /^https?:\/\//i.test(destino) && !/^https?:\/\/([a-z0-9-]+\.)*vhost\.tech(\/|$)/i.test(destino);
+          if (esExterno) {
+            hijo.properties.target = '_blank';
+            hijo.properties.rel = ['noopener', 'noreferrer'];
+          }
+        }
+        recorrer(hijo);
+      }
+    };
+    recorrer(tree);
+  };
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://vhost.tech',
@@ -41,7 +66,7 @@ export default defineConfig({
   ],
 
   markdown: {
-    rehypePlugins: [rehypeTablasConScroll],
+    rehypePlugins: [rehypeTablasConScroll, rehypeEnlacesExternos],
   },
 
   // Optimizaciones de build
