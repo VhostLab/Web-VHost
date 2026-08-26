@@ -13,13 +13,11 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
-    "astro": "^5.16.6",
-    "ping": "^0.4.4"
+    "astro": "^5.16.6"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@tailwindcss/typography": "^0.5.20",
-    "@types/ping": "^0.4.4",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
