@@ -4,6 +4,14 @@ description: "Cómo diagnosticar y arreglar el lag de un servidor de Minecraft: 
 pubDate: 2026-08-26
 updatedDate: 2026-08-26
 author: "Equipo de Vhost"
+game: "Minecraft"
+category: "Rendimiento"
+level: "Intermedio"
+summary:
+  - "20 TPS es lo normal; por debajo, el mundo entero se ralentiza para todos."
+  - "El orden correcto es medir con /tps y spark, identificar qué se come el tick y solo entonces ajustar."
+  - "Bajar view-distance de 10 a 6-8 es el cambio con mejor relación esfuerzo-resultado."
+  - "Ampliar la RAM es lo último: si los TPS caen con memoria libre, el problema es la CPU o un plugin."
 faqs:
   - question: "¿Qué son los TPS en un servidor de Minecraft?"
     answer: "TPS son los ticks por segundo que procesa el servidor. El máximo es 20 y significa que todo va a velocidad normal. Si bajan de 20, el mundo entero se ralentiza: los mobs se mueven a tirones, los cultivos crecen despacio y las máquinas de redstone fallan."

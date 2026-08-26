@@ -4,6 +4,14 @@ description: "Diferencias entre Vanilla, Spigot, Paper, Purpur, Forge, NeoForge 
 pubDate: 2026-08-26
 updatedDate: 2026-08-26
 author: "Equipo de Vhost"
+game: "Minecraft"
+category: "Mods y plugins"
+level: "Principiante"
+summary:
+  - "Todo se reduce a una pregunta: ¿quieres plugins o quieres mods?"
+  - "Los plugins solo se instalan en el servidor y tus amigos entran con su Minecraft normal: ahí Paper es la opción por defecto."
+  - "Los mods se instalan también en cada jugador y con la misma versión: Forge, NeoForge o Fabric según lo pida el modpack."
+  - "Vanilla solo tiene sentido si no vas a añadir absolutamente nada."
 faqs:
   - question: "¿Cuál es la diferencia entre un plugin y un mod?"
     answer: "Un plugin se instala solo en el servidor y los jugadores entran con el Minecraft normal, sin tocar nada. Un mod tiene que estar instalado en el servidor y también en el cliente de cada jugador, con la misma versión, o la conexión será rechazada."

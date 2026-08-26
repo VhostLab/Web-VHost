@@ -3,17 +3,53 @@ import { getCollection } from "astro:content";
 import MainLayout from "@layouts/MainLayout.astro";
 import "@/styles/global.css";
 import { breadcrumbSchema } from "@data/seo";
+import { readingMinutes, shortDate } from "@utils/helpers";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.updatedDate.valueOf() - a.data.updatedDate.valueOf()
+  (a, b) =>
+    b.data.updatedDate.valueOf() - a.data.updatedDate.valueOf() ||
+    a.data.title.localeCompare(b.data.title, "es")
 );
 
-const formatDate = (date: Date) =>
-  date.toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+const entradas = posts.map((post) => ({
+  url: `/blog/${post.id}/`,
+  title: post.data.title,
+  description: post.data.description,
+  game: post.data.game,
+  category: post.data.category,
+  author: post.data.author,
+  inicial: post.data.author.trim().charAt(0).toUpperCase(),
+  updated: shortDate(post.data.updatedDate),
+  minutos: readingMinutes(post.body ?? ""),
+}));
+
+/** Recuento de entradas por juego o por tema, de más a menos. */
+const recuento = (clave: "game" | "category") => {
+  const mapa = new Map<string, number>();
+  for (const entrada of entradas) {
+    mapa.set(entrada[clave], (mapa.get(entrada[clave]) ?? 0) + 1);
+  }
+  return [...mapa.entries()].sort(
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es")
+  );
+};
+
+const juegos = recuento("game");
+const temas = recuento("category");
+
+// Los filtros por juego y los hubs solo tienen sentido cuando hay más de un
+// juego en el blog: aparecen solos en cuanto se publique la primera guía de
+// otro juego, sin tocar esta plantilla.
+const variosJuegos = juegos.length > 1;
+
+// Las tres más recientes van al bloque destacado. Se sacan de la cuadrícula
+// para no repetirlas, pero solo si queda material suficiente debajo.
+const NUM_DESTACADAS = entradas.length >= 4 ? 3 : 0;
+const POR_PAGINA = 9;
+
+const destacadas = entradas.slice(0, NUM_DESTACADAS);
+const restantes = entradas.length - NUM_DESTACADAS;
+const visiblesInicio = Math.min(restantes, POR_PAGINA);
 ---
 
 <MainLayout
@@ -26,37 +62,494 @@ const formatDate = (date: Date) =>
     ]),
   ]}
 >
-  <section class="bg-[#0b0b0b] text-white min-h-screen py-24 px-6">
-    <div class="container mx-auto max-w-3xl">
-      <h1 class="text-4xl md:text-5xl font-poppins font-bold mb-4">
-        Blog de <span class="text-secondary">Vhost</span>
+  <div class="bg-[#0b0b0b] text-[#f3f1ef] pb-24">
+    <!-- Cabecera y buscador -->
+    <section class="mx-auto max-w-[1180px] px-6 pt-16 pb-10 md:px-10 md:pt-20">
+      <span
+        class="mb-4 inline-block font-karla text-xs uppercase tracking-[0.16em] text-secondary"
+      >
+        Centro de guías
+      </span>
+      <h1
+        class="max-w-[15ch] font-poppins text-[34px] font-semibold leading-[1.08] tracking-[-0.025em] md:text-[52px] md:leading-[1.06]"
+      >
+        Guías técnicas de servidores de juego
       </h1>
-      <p class="text-gray-400 font-poppins mb-12">
-        Guías prácticas sobre servidores de juegos escritas por el equipo que
-        opera la infraestructura de Vhost: RAM, mods, optimización y
-        administración de servidores.
+      <p
+        class="mt-5 max-w-[56ch] font-karla text-base leading-relaxed text-[#9a9a9a] md:text-lg"
+      >
+        Instalación, rendimiento, mods y plugins para tu servidor de Minecraft.
+        Escritas y revisadas por el equipo que administra la infraestructura de
+        Vhost.
       </p>
 
-      <div class="space-y-8">
-        {
-          posts.map((post) => (
-            <a
-              href={`/blog/${post.id}/`}
-              class="block bg-[#111111] rounded-lg p-6 border border-transparent hover:border-secondary transition-colors duration-300"
+      <label
+        class="mt-8 flex max-w-[620px] items-center gap-3 rounded-xl border border-[#242424] bg-[#111111] px-4 focus-within:border-secondary"
+      >
+        <i class="fas fa-search text-sm text-[#6f6f6f]" aria-hidden="true"></i>
+        <span class="sr-only">Buscar guías</span>
+        <input
+          id="buscador-guias"
+          type="search"
+          autocomplete="off"
+          placeholder="Buscar: RAM, plugins, lag..."
+          class="flex-1 border-0 bg-transparent py-[15px] font-inter text-[15px] text-[#f3f1ef] outline-none placeholder:text-[#6f6f6f]"
+        />
+        <span class="whitespace-nowrap font-karla text-xs text-[#6f6f6f]">
+          {entradas.length}
+          {entradas.length === 1 ? "guía" : "guías"}
+        </span>
+      </label>
+    </section>
+
+    <!-- Filtros -->
+    <section class="mx-auto max-w-[1180px] px-6 md:px-10">
+      {
+        variosJuegos && (
+          <div
+            class="flex flex-wrap gap-2 pb-3.5"
+            role="group"
+            aria-label="Filtrar por juego"
+          >
+            <button
+              type="button"
+              class="chip chip-juego"
+              data-filtro="juego"
+              data-valor="Todos"
+              aria-pressed="true"
             >
-              <h2 class="text-2xl font-poppins font-semibold text-white mb-2">
-                {post.data.title}
-              </h2>
-              <p class="text-gray-400 font-inter mb-3">
-                {post.data.description}
+              Todos<span class="ml-[7px] opacity-60">{entradas.length}</span>
+            </button>
+            {juegos.map(([nombre, total]) => (
+              <button
+                type="button"
+                class="chip chip-juego"
+                data-filtro="juego"
+                data-valor={nombre}
+                aria-pressed="false"
+              >
+                {nombre}
+                <span class="ml-[7px] opacity-60">{total}</span>
+              </button>
+            ))}
+          </div>
+        )
+      }
+      <div
+        class="flex flex-wrap gap-2 border-b border-[#1c1c1c] pb-6"
+        role="group"
+        aria-label="Filtrar por tema"
+      >
+        <button
+          type="button"
+          class="chip chip-tema"
+          data-filtro="tema"
+          data-valor="Todos"
+          aria-pressed="true"
+        >
+          Todos
+        </button>
+        {
+          temas.map(([nombre]) => (
+            <button
+              type="button"
+              class="chip chip-tema"
+              data-filtro="tema"
+              data-valor={nombre}
+              aria-pressed="false"
+            >
+              {nombre}
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Destacadas -->
+    {
+      destacadas.length === 3 && (
+        <section
+          id="destacadas"
+          class="mx-auto max-w-[1180px] px-6 py-10 md:px-10"
+        >
+          <div class="grid gap-5 lg:grid-cols-[1.55fr_1fr]">
+            <a
+              href={destacadas[0].url}
+              class="flex min-h-[290px] flex-col justify-between rounded-2xl border border-[#262626] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-7 transition-colors hover:border-secondary md:p-9"
+            >
+              <div class="flex flex-wrap items-center gap-2.5">
+                <span class="rounded-[5px] bg-secondary px-2.5 py-[5px] font-karla text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0b0b0b]">
+                  Imprescindible
+                </span>
+                <span class="font-karla text-xs text-[#8d8d8d]">
+                  {destacadas[0].game} · {destacadas[0].category}
+                </span>
+              </div>
+              <div class="mt-10">
+                <h2 class="max-w-[22ch] font-poppins text-[24px] font-semibold leading-[1.15] tracking-[-0.02em] text-[#f3f1ef] md:text-[32px]">
+                  {destacadas[0].title}
+                </h2>
+                <p class="mt-3.5 max-w-[52ch] font-karla text-[15px] leading-relaxed text-[#9a9a9a] md:text-base">
+                  {destacadas[0].description}
+                </p>
+                <div class="mt-5 font-karla text-[13px] text-[#6f6f6f]">
+                  {destacadas[0].author} · Actualizado {destacadas[0].updated} ·{" "}
+                  {destacadas[0].minutos} min
+                </div>
+              </div>
+            </a>
+            <div class="grid gap-5 lg:grid-rows-2">
+              {destacadas.slice(1).map((entrada) => (
+                <a
+                  href={entrada.url}
+                  class="flex flex-col justify-between rounded-2xl border border-[#1f1f1f] bg-[#111111] p-6 transition-colors hover:border-[#3a3a3a]"
+                >
+                  <span class="font-karla text-xs uppercase tracking-[0.1em] text-secondary">
+                    {entrada.game} · {entrada.category}
+                  </span>
+                  <div class="mt-4">
+                    <h3 class="font-poppins text-[19px] font-semibold leading-[1.25] text-[#f3f1ef] md:text-xl">
+                      {entrada.title}
+                    </h3>
+                    <div class="mt-3.5 font-karla text-[13px] text-[#6f6f6f]">
+                      Actualizado {entrada.updated} · {entrada.minutos} min
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Listado -->
+    <section class="mx-auto max-w-[1180px] px-6 pt-4 md:px-10">
+      <div class="mb-6 flex items-baseline justify-between gap-4">
+        <h2
+          id="titulo-resultados"
+          class="font-poppins text-[22px] font-semibold tracking-[-0.01em]"
+        >
+          {NUM_DESTACADAS > 0 ? "Más guías" : "Últimas guías"}
+        </h2>
+        <span
+          id="contador-resultados"
+          class="font-karla text-[13px] text-[#6f6f6f]"
+        >
+          {visiblesInicio > 0 ? `${visiblesInicio} de ${restantes}` : ""}
+        </span>
+      </div>
+
+      <div id="rejilla-guias" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          entradas.map((entrada, indice) => (
+            <a
+              href={entrada.url}
+              data-entrada
+              data-juego={entrada.game}
+              data-tema={entrada.category}
+              data-busqueda={`${entrada.title} ${entrada.description} ${entrada.game} ${entrada.category}`}
+              data-destacada={indice < NUM_DESTACADAS ? "1" : "0"}
+              class:list={[
+                "flex flex-col rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 transition-colors hover:border-secondary hover:bg-[#161616]",
+                {
+                  hidden:
+                    indice < NUM_DESTACADAS ||
+                    indice >= NUM_DESTACADAS + POR_PAGINA,
+                },
+              ]}
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span class="font-karla text-[11px] font-medium uppercase tracking-[0.12em] text-secondary">
+                  {entrada.game}
+                </span>
+                <span class="font-karla text-xs text-[#6f6f6f]">
+                  {entrada.minutos} min
+                </span>
+              </div>
+              <h3 class="mt-3.5 font-poppins text-[19px] font-semibold leading-[1.3] tracking-[-0.01em] text-[#f3f1ef]">
+                {entrada.title}
+              </h3>
+              <p class="mt-2.5 flex-1 font-karla text-[14.5px] leading-[1.62] text-[#9a9a9a]">
+                {entrada.description}
               </p>
-              <span class="text-sm text-gray-500 font-poppins">
-                Actualizado: {formatDate(post.data.updatedDate)}
-              </span>
+              <div class="mt-[18px] flex flex-wrap items-center gap-2 border-t border-[#1f1f1f] pt-4 font-karla text-[12.5px] text-[#6f6f6f]">
+                <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#232323] text-[10px] text-[#9a9a9a]">
+                  {entrada.inicial}
+                </span>
+                <span>{entrada.author}</span>
+                <span class="text-[#3a3a3a]">·</span>
+                <span>{entrada.category}</span>
+                <span class="text-[#3a3a3a]">·</span>
+                <span>Act. {entrada.updated}</span>
+              </div>
             </a>
           ))
         }
       </div>
-    </div>
-  </section>
+
+      <div
+        id="sin-resultados"
+        class="hidden rounded-[14px] border border-dashed border-[#262626] p-12 text-center"
+      >
+        <p class="font-poppins text-[17px]">Sin resultados para esa búsqueda</p>
+        <p class="mt-2 font-karla text-sm text-[#8d8d8d]">
+          Prueba con otro término o quita los filtros activos.
+        </p>
+        <button
+          type="button"
+          id="reiniciar-filtros"
+          class="mt-5 rounded-lg bg-secondary px-[18px] py-2.5 font-inter text-sm font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+        >
+          Ver todas las guías
+        </button>
+      </div>
+
+      <div class="mt-9 flex justify-center">
+        <button
+          type="button"
+          id="cargar-mas"
+          class:list={[
+            "rounded-[10px] border border-[#2a2a2a] px-6 py-3 font-inter text-sm font-medium text-[#f3f1ef] transition-colors hover:border-secondary hover:text-secondary",
+            { hidden: restantes <= POR_PAGINA },
+          ]}
+        >
+          Cargar más guías
+        </button>
+      </div>
+    </section>
+
+    <!-- Hubs por juego: se pintan solos cuando haya un segundo juego -->
+    {
+      variosJuegos && (
+        <section class="mx-auto max-w-[1180px] px-6 pt-20 md:px-10">
+          <div class="border-t border-[#1c1c1c] pt-10">
+            <h2 class="font-poppins text-2xl font-semibold tracking-[-0.015em]">
+              Empieza por tu juego
+            </h2>
+            <p class="mb-6 mt-2.5 max-w-[60ch] font-karla text-[15px] text-[#8d8d8d]">
+              Cada juego tiene su recorrido: desde crear el servidor hasta
+              administrarlo con jugadores dentro.
+            </p>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {juegos.map(([nombre, total]) => (
+                <button
+                  type="button"
+                  class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 text-left transition-colors hover:border-secondary"
+                  data-hub={nombre}
+                >
+                  <div class="flex items-baseline justify-between">
+                    <h3 class="font-poppins text-lg font-semibold text-[#f3f1ef]">
+                      {nombre}
+                    </h3>
+                    <span class="font-karla text-xs text-[#6f6f6f]">
+                      {total} {total === 1 ? "guía" : "guías"}
+                    </span>
+                  </div>
+                  <span class="mt-3.5 inline-block font-karla text-[13px] text-secondary">
+                    Ver todas las guías →
+                  </span>
+                </button>
+              ))}
+              <div class="flex flex-col justify-center rounded-[14px] border border-dashed border-[#262626] bg-[#0f0f0f] p-6">
+                <p class="mb-3 font-karla text-sm leading-relaxed text-[#8d8d8d]">
+                  ¿Falta tu juego o tienes una duda concreta?
+                </p>
+                <a
+                  href="https://discord.gg/Ykr85wevrj"
+                  class="font-karla text-sm text-secondary hover:text-[#ff9a3c]"
+                >
+                  Pídenos una guía →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Cierre comercial -->
+    <section class="mx-auto max-w-[1180px] px-6 pt-20 md:px-10">
+      <div
+        class="flex flex-wrap items-center justify-between gap-8 rounded-[18px] border border-[#262626] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-8 md:p-11"
+      >
+        <div class="max-w-[52ch]">
+          <h2 class="font-poppins text-2xl font-semibold tracking-[-0.015em]">
+            Deja de pelearte con la configuración
+          </h2>
+          <p class="mt-2.5 font-karla text-base leading-relaxed text-[#9a9a9a]">
+            Servidores con panel Pterodactyl, backups automáticos, anti-DDoS y
+            soporte en español desde nodos propios en España.
+          </p>
+        </div>
+        <a
+          href="/tienda/minecraft/"
+          class="whitespace-nowrap rounded-[10px] bg-secondary px-6 py-3.5 font-inter text-[15px] font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+        >
+          Ver planes desde 0,75 €
+        </a>
+      </div>
+    </section>
+  </div>
 </MainLayout>
+
+<style>
+  .chip {
+    font-family: Karla, sans-serif;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+      border-color 0.15s,
+      background-color 0.15s,
+      color 0.15s;
+  }
+
+  .chip-juego {
+    border: 1px solid #242424;
+    background: #111111;
+    color: #b8b8b8;
+  }
+  .chip-juego:hover {
+    border-color: #3a3a3a;
+    color: #f3f1ef;
+  }
+  .chip-juego[aria-pressed="true"] {
+    border-color: #fc7c04;
+    background: #fc7c04;
+    color: #0b0b0b;
+    font-weight: 600;
+  }
+
+  .chip-tema {
+    border: 1px solid #1f1f1f;
+    background: transparent;
+    color: #8d8d8d;
+  }
+  .chip-tema:hover {
+    border-color: #3a3a3a;
+    color: #f3f1ef;
+  }
+  .chip-tema[aria-pressed="true"] {
+    border-color: #fc7c04;
+    background: rgba(252, 124, 4, 0.12);
+    color: #fc7c04;
+    font-weight: 600;
+  }
+</style>
+
+<script define:vars={{ POR_PAGINA, NUM_DESTACADAS }}>
+  const tarjetas = Array.from(document.querySelectorAll("[data-entrada]"));
+  const chips = Array.from(document.querySelectorAll("[data-filtro]"));
+  const buscador = document.getElementById("buscador-guias");
+  const bloqueDestacadas = document.getElementById("destacadas");
+  const sinResultados = document.getElementById("sin-resultados");
+  const rejilla = document.getElementById("rejilla-guias");
+  const botonMas = document.getElementById("cargar-mas");
+  const titulo = document.getElementById("titulo-resultados");
+  const contador = document.getElementById("contador-resultados");
+
+  const TILDES = { á: "a", é: "e", í: "i", ó: "o", ú: "u", ü: "u", ñ: "n" };
+  const normaliza = (texto) =>
+    texto.toLowerCase().replace(/[áéíóúüñ]/g, (letra) => TILDES[letra] ?? letra);
+
+  const estado = {
+    texto: "",
+    juego: "Todos",
+    tema: "Todos",
+    visibles: POR_PAGINA,
+  };
+
+  function aplicar() {
+    const busqueda = normaliza(estado.texto.trim());
+    const filtrando =
+      busqueda !== "" || estado.juego !== "Todos" || estado.tema !== "Todos";
+
+    let coincidencias = 0;
+    let mostradas = 0;
+
+    for (const tarjeta of tarjetas) {
+      const coincide =
+        (estado.juego === "Todos" || tarjeta.dataset.juego === estado.juego) &&
+        (estado.tema === "Todos" || tarjeta.dataset.tema === estado.tema) &&
+        (!busqueda || normaliza(tarjeta.dataset.busqueda).includes(busqueda));
+      // Sin filtros, las destacadas ya están arriba y no se repiten aquí.
+      const elegible =
+        coincide && (filtrando || tarjeta.dataset.destacada !== "1");
+
+      if (!elegible) {
+        tarjeta.classList.add("hidden");
+        continue;
+      }
+      coincidencias += 1;
+      const visible = coincidencias <= estado.visibles;
+      tarjeta.classList.toggle("hidden", !visible);
+      if (visible) mostradas += 1;
+    }
+
+    bloqueDestacadas?.classList.toggle("hidden", filtrando);
+    rejilla.classList.toggle("hidden", coincidencias === 0);
+    sinResultados.classList.toggle("hidden", coincidencias !== 0);
+    botonMas.classList.toggle("hidden", mostradas >= coincidencias);
+    titulo.textContent = filtrando
+      ? "Resultados"
+      : NUM_DESTACADAS > 0
+        ? "Más guías"
+        : "Últimas guías";
+    contador.textContent = coincidencias
+      ? mostradas + " de " + coincidencias
+      : "";
+  }
+
+  function marcarChips() {
+    for (const chip of chips) {
+      const activo =
+        chip.dataset.filtro === "juego" ? estado.juego : estado.tema;
+      chip.setAttribute("aria-pressed", String(chip.dataset.valor === activo));
+    }
+  }
+
+  for (const chip of chips) {
+    chip.addEventListener("click", () => {
+      const clave = chip.dataset.filtro === "juego" ? "juego" : "tema";
+      estado[clave] = chip.dataset.valor;
+      estado.visibles = POR_PAGINA;
+      marcarChips();
+      aplicar();
+    });
+  }
+
+  buscador?.addEventListener("input", (evento) => {
+    estado.texto = evento.target.value;
+    estado.visibles = POR_PAGINA;
+    aplicar();
+  });
+
+  botonMas?.addEventListener("click", () => {
+    estado.visibles += POR_PAGINA;
+    aplicar();
+  });
+
+  document
+    .getElementById("reiniciar-filtros")
+    ?.addEventListener("click", () => {
+      estado.texto = "";
+      estado.juego = "Todos";
+      estado.tema = "Todos";
+      estado.visibles = POR_PAGINA;
+      if (buscador) buscador.value = "";
+      marcarChips();
+      aplicar();
+    });
+
+  for (const hub of document.querySelectorAll("[data-hub]")) {
+    hub.addEventListener("click", () => {
+      estado.juego = hub.dataset.hub;
+      estado.visibles = POR_PAGINA;
+      marcarChips();
+      aplicar();
+      titulo.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+</script>
