@@ -1,0 +1,79 @@
+name: Build y despliegue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Menos privilegios de los que da por defecto: el workflow solo lee el codigo.
+permissions:
+  contents: read
+
+# Si se empujan dos commits seguidos a main, no queremos dos despliegues
+# pisandose. El ultimo gana y el anterior se cancela.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Compilar y verificar
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 22 para igualar el Dockerfile con el que Coolify construye la
+      # imagen. Si aqui compila, alli tambien.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      # astro check valida tipos y el esquema de las entradas del blog: una
+      # fecha mal puesta o un campo que falte se cazan aqui, no en produccion.
+      - name: Verificar tipos y contenido
+        run: npm run check
+
+      - name: Compilar el sitio
+        run: npm run build
+
+      # Red de seguridad: una build puede terminar sin error y dejar dist/ a
+      # medias. Si falta la home o el sitemap, no se despliega.
+      - name: Comprobar la salida
+        run: |
+          test -f dist/index.html || { echo "falta dist/index.html"; exit 1; }
+          test -f dist/sitemap-index.xml || { echo "falta el sitemap"; exit 1; }
+          echo "paginas generadas: $(find dist -name '*.html' | wc -l)"
+
+  deploy:
+    name: Desplegar en Coolify
+    needs: build
+    # Solo en push a main: las pull requests se quedan en la verificacion.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Avisar a Coolify
+        env:
+          WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
+          TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "::warning::COOLIFY_WEBHOOK no esta configurado; se omite el despliegue."
+            exit 0
+          fi
+          # --fail hace que un 4xx/5xx de Coolify tumbe el job en lugar de
+          # dar por bueno un despliegue que nunca arranco.
+          if [ -n "$TOKEN" ]; then
+            curl --fail --silent --show-error --location \
+              --header "Authorization: Bearer $TOKEN" "$WEBHOOK"
+          else
+            curl --fail --silent --show-error --location "$WEBHOOK"
+          fi
+          echo ""
+          echo "despliegue solicitado a Coolify"
