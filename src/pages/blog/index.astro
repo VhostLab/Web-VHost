@@ -18,7 +18,6 @@ const entradas = posts.map((post) => ({
   game: post.data.game,
   category: post.data.category,
   author: post.data.author,
-  inicial: post.data.author.trim().charAt(0).toUpperCase(),
   updated: shortDate(post.data.updatedDate),
   minutos: readingMinutes(post.body ?? ""),
 }));
@@ -277,9 +276,14 @@ const visiblesInicio = Math.min(restantes, POR_PAGINA);
                 {entrada.description}
               </p>
               <div class="mt-[18px] flex flex-wrap items-center gap-2 border-t border-[#1f1f1f] pt-4 font-karla text-[12.5px] text-[#6f6f6f]">
-                <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#232323] text-[10px] text-[#9a9a9a]">
-                  {entrada.inicial}
-                </span>
+                <img
+                  src="/images/vhostlogo.webp"
+                  alt=""
+                  width="20"
+                  height="20"
+                  loading="lazy"
+                  class="h-5 w-5 rounded-full bg-[#232323] p-[3px]"
+                />
                 <span>{entrada.author}</span>
                 <span class="text-[#3a3a3a]">·</span>
                 <span>{entrada.category}</span>

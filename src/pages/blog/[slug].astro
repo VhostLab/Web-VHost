@@ -38,7 +38,6 @@ if (post.data.faqs.length > 0) {
 
 const actualizado = longDate(post.data.updatedDate);
 const minutos = readingMinutes(post.body ?? "");
-const inicial = post.data.author.trim().charAt(0).toUpperCase();
 
 // Índice lateral: solo los encabezados de primer nivel del artículo. Con uno
 // o ninguno no aporta nada, así que la columna desaparece.
@@ -115,11 +114,13 @@ const relacionadas = (await getCollection("blog", ({ data }) => !data.draft))
           class="mt-7 flex flex-wrap items-center gap-3 font-karla text-[13.5px] text-[#8d8d8d]"
         >
           <span class="flex items-center gap-2.5">
-            <span
-              class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#232323] text-xs text-[#c9c9c9]"
-            >
-              {inicial}
-            </span>
+            <img
+              src="/images/vhostlogo.webp"
+              alt=""
+              width="28"
+              height="28"
+              class="h-7 w-7 rounded-full bg-[#232323] p-1"
+            />
             <span class="text-[#c9c9c9]">{post.data.author}</span>
           </span>
           <span class="text-[#3a3a3a]">·</span>
@@ -222,9 +223,14 @@ const relacionadas = (await getCollection("blog", ({ data }) => !data.draft))
           {
             bio && (
               <div class="mt-12 flex items-center gap-4 rounded-xl border border-[#1f1f1f] bg-[#0f0f0f] p-5 md:px-6">
-                <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#232323] font-poppins text-[15px] text-[#c9c9c9]">
-                  {inicial}
-                </span>
+                <img
+                  src="/images/vhostlogo.webp"
+                  alt=""
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                  class="h-11 w-11 shrink-0 rounded-full bg-[#232323] p-2"
+                />
                 <div>
                   <p class="font-poppins text-[15px] font-semibold text-[#f3f1ef]">
                     {post.data.author}
