@@ -19,7 +19,15 @@ interface Entrada {
 }
 
 export type Lado = "cliente" | "servidor" | "ambos" | "proxy" | "sin-declarar";
-export type Cargador = "Fabric" | "Forge" | "NeoForge" | "Quilt" | "Bukkit" | "Proxy" | "?";
+export type Cargador =
+  | "Fabric"
+  | "Forge"
+  | "NeoForge"
+  | "Quilt"
+  | "Bukkit"
+  | "Proxy"
+  | "Varios"
+  | "?";
 
 export interface Analisis {
   archivo: string;
@@ -31,12 +39,12 @@ export interface Analisis {
   /** Versión de Minecraft que declara, tal cual viene. */
   minecraft: string;
   nombreMod: string;
-  /** Ids de los que depende, para detectar dependencias que faltan. */
+  /** Ids obligatorios de los que depende, para detectar los que faltan. */
   dependencias: string[];
   /** Id propio, para saber si otro archivo lo aporta. */
   id: string;
-  /** En qué nos basamos para decir lo que decimos. */
-  evidencias: string[];
+  /** Trae metadatos de varias plataformas: vale para todas, no para una. */
+  universal: boolean;
   error?: string;
 }
 
@@ -45,18 +53,6 @@ export interface Analisis {
 const MAX_ENTRADAS = 20000;
 const MAX_METADATO = 2 * 1024 * 1024;
 const TAM_COLA = 66_000; // 64 KB de comentario máximo + la cabecera del índice
-
-const FICHEROS = [
-  "fabric.mod.json",
-  "quilt.mod.json",
-  "META-INF/mods.toml",
-  "META-INF/neoforge.mods.toml",
-  "mcmod.info",
-  "plugin.yml",
-  "paper-plugin.yml",
-  "bungee.yml",
-  "velocity-plugin.json",
-];
 
 const leer = async (trozo: Blob) => new DataView(await trozo.arrayBuffer());
 
@@ -130,6 +126,70 @@ async function texto(fichero: File, e: Entrada): Promise<string> {
 // necesitamos. Es suficiente porque estos ficheros los genera siempre la misma
 // herramienta de construcción y su forma es muy estable.
 
+/**
+ * JSON tal y como lo escriben los mods, no como manda la norma.
+ *
+ * Fabric lee sus metadatos con un parser permisivo, así que hay muchos mods
+ * publicados con un fabric.mod.json que trae saltos de línea sin escapar
+ * dentro de la descripción, comentarios o comas de más. En el juego funcionan
+ * y JSON.parse los rechaza, así que aquí se normaliza antes de parsear en vez
+ * de dar por ilegible un mod que está perfectamente bien.
+ */
+function jsonTolerante(texto: string): Record<string, unknown> {
+  const fuente = texto.replace(/^\uFEFF/, "");
+  let salida = "";
+  let enCadena = false;
+  let escapado = false;
+
+  for (let i = 0; i < fuente.length; i++) {
+    const c = fuente[i];
+
+    if (enCadena) {
+      if (escapado) {
+        salida += c;
+        escapado = false;
+      } else if (c === "\\") {
+        salida += c;
+        escapado = true;
+      } else if (c === '"') {
+        salida += c;
+        enCadena = false;
+      } else if (fuente.charCodeAt(i) < 0x20) {
+        // Un carácter de control a pelo dentro de una cadena: escaparlo.
+        const codigo = fuente.charCodeAt(i);
+        salida += codigo === 10 ? "\\n" : codigo === 13 ? "\\r" : codigo === 9 ? "\\t" : " ";
+      } else {
+        salida += c;
+      }
+      continue;
+    }
+
+    if (c === '"') {
+      salida += c;
+      enCadena = true;
+    } else if (c === "/" && fuente[i + 1] === "/") {
+      while (i < fuente.length && fuente[i] !== "\n") i++;
+    } else if (c === "/" && fuente[i + 1] === "*") {
+      i += 2;
+      while (i < fuente.length && !(fuente[i] === "*" && fuente[i + 1] === "/")) i++;
+      i++;
+    } else if (c === ",") {
+      // Coma sobrante justo antes de cerrar un objeto o una lista.
+      let j = i + 1;
+      while (j < fuente.length && /\s/.test(fuente[j])) j++;
+      if (fuente[j] !== "}" && fuente[j] !== "]") salida += c;
+    } else {
+      salida += c;
+    }
+  }
+
+  try {
+    return JSON.parse(salida) as Record<string, unknown>;
+  } catch {
+    throw new Error("json-invalido");
+  }
+}
+
 const campoYaml = (t: string, clave: string) =>
   t.match(new RegExp(`^${clave}\\s*:\\s*["']?([^"'\\n#]+)`, "m"))?.[1].trim() ?? "";
 
@@ -141,7 +201,13 @@ const versionMinecraft = (rango: string) =>
   rango.match(/\d+\.\d+(\.\d+)?/)?.[0] ?? "";
 
 function deFabric(json: string, a: Analisis) {
-  const d = JSON.parse(json);
+  const d = jsonTolerante(json) as {
+    id?: string;
+    name?: string;
+    depends?: Record<string, unknown>;
+    environment?: string;
+    entrypoints?: Record<string, unknown>;
+  };
   a.cargador = "Fabric";
   a.tipo = "Mod de Fabric";
   a.id = d.id ?? "";
@@ -151,29 +217,20 @@ function deFabric(json: string, a: Analisis) {
 
   const entorno = d.environment ?? "*";
   a.lado = entorno === "client" ? "cliente" : entorno === "server" ? "servidor" : "ambos";
-  a.evidencias.push(
-    d.environment
-      ? `fabric.mod.json declara "environment": "${entorno}".`
-      : 'fabric.mod.json no trae "environment", y su valor por defecto es "*" (ambos lados).'
-  );
 
   // Un mod que solo registra puntos de entrada de cliente casi nunca hace nada
   // en un servidor, aunque su "environment" diga que vale para los dos.
   const puntos = Object.keys(d.entrypoints ?? {});
-  if (puntos.length) {
-    a.evidencias.push(`Puntos de entrada declarados: ${puntos.join(", ")}.`);
-    const soloCliente = puntos.length > 0 && puntos.every((p) => p === "client");
-    if (soloCliente && a.lado === "ambos") {
-      a.lado = "cliente";
-      a.evidencias.push(
-        "Solo tiene punto de entrada de cliente, así que en un servidor no ejecutaría nada."
-      );
-    }
+  if (puntos.length && puntos.every((p) => p === "client") && a.lado === "ambos") {
+    a.lado = "cliente";
   }
 }
 
 function deQuilt(json: string, a: Analisis) {
-  const d = JSON.parse(json);
+  const d = jsonTolerante(json) as {
+    quilt_loader?: { id?: string; metadata?: { name?: string }; depends?: unknown[] };
+    minecraft?: { environment?: string };
+  };
   const q = d.quilt_loader ?? {};
   a.cargador = "Quilt";
   a.tipo = "Mod de Quilt";
@@ -185,7 +242,27 @@ function deQuilt(json: string, a: Analisis) {
   const entorno = d.minecraft?.environment ?? "*";
   a.lado =
     entorno === "client" ? "cliente" : entorno === "dedicated_server" ? "servidor" : "ambos";
-  a.evidencias.push(`quilt.mod.json declara environment "${entorno}".`);
+}
+
+/**
+ * Solo las dependencias obligatorias.
+ *
+ * Forge y NeoForge declaran también las opcionales, y avisar de que falta una
+ * opcional es un aviso falso: el mod arranca igual sin ella.
+ */
+function dependenciasForge(toml: string, neo: boolean, propio: string): string[] {
+  const ids: string[] = [];
+  // Cada bloque [[dependencies.x]] llega hasta la siguiente cabecera de sección.
+  for (const bloque of toml.split(/^\s*\[/m)) {
+    if (!bloque.startsWith("[dependencies.")) continue;
+    const id = bloque.match(/modId\s*=\s*["']([^"']+)/)?.[1];
+    if (!id || id === propio || id === "minecraft") continue;
+    const opcional = neo
+      ? /type\s*=\s*["']optional["']/.test(bloque)
+      : /mandatory\s*=\s*false/.test(bloque);
+    if (!opcional) ids.push(id);
+  }
+  return [...new Set(ids)];
 }
 
 function deForge(toml: string, a: Analisis, neo: boolean) {
@@ -193,34 +270,22 @@ function deForge(toml: string, a: Analisis, neo: boolean) {
   a.tipo = neo ? "Mod de NeoForge" : "Mod de Forge";
   a.id = campoToml(toml, "modId");
   a.nombreMod = campoToml(toml, "displayName") || a.id;
-  a.evidencias.push(
-    `${neo ? "META-INF/neoforge.mods.toml" : "META-INF/mods.toml"} presente.`
+  a.dependencias = dependenciasForge(toml, neo, a.id);
+
+  const mc = toml.match(
+    /modId\s*=\s*["']minecraft["'][\s\S]{0,240}?versionRange\s*=\s*["']([^"']+)/
   );
+  if (mc) a.minecraft = versionMinecraft(mc[1]);
 
-  const mc = toml.match(/modId\s*=\s*["']minecraft["'][\s\S]{0,240}?versionRange\s*=\s*["']([^"']+)/);
-  if (mc) {
-    a.minecraft = versionMinecraft(mc[1]);
-    a.evidencias.push(`Declara compatibilidad con Minecraft ${mc[1]}.`);
-  }
-
-  a.dependencias = [...toml.matchAll(/modId\s*=\s*["']([^"']+)/g)]
-    .map((m) => m[1])
-    .filter((id) => id !== a.id && id !== "minecraft");
-
-  // Forge no obliga a declarar el lado del mod, solo el de sus dependencias.
+  // Forge no tiene un campo para decir el lado del mod, solo el de cada
+  // dependencia. Si todas son de un lado, el mod lo es; si no, no se sabe.
   const lados = [...toml.matchAll(/^\s*side\s*=\s*["'](\w+)/gm)].map((m) => m[1].toUpperCase());
-  if (lados.length && lados.every((l) => l === "CLIENT")) {
-    a.lado = "cliente";
-    a.evidencias.push('Todas sus dependencias declaran side = "CLIENT".');
-  } else if (lados.length && lados.every((l) => l === "SERVER")) {
-    a.lado = "servidor";
-    a.evidencias.push('Sus dependencias declaran side = "SERVER".');
-  } else {
-    a.lado = "sin-declarar";
-    a.evidencias.push(
-      "No declara en qué lado funciona: Forge no obliga a decirlo, así que hay que mirarlo en la página del mod."
-    );
-  }
+  a.lado =
+    lados.length && lados.every((l) => l === "CLIENT")
+      ? "cliente"
+      : lados.length && lados.every((l) => l === "SERVER")
+        ? "servidor"
+        : "sin-declarar";
 }
 
 function dePlugin(yml: string, a: Analisis, paper: boolean) {
@@ -231,20 +296,23 @@ function dePlugin(yml: string, a: Analisis, paper: boolean) {
   a.nombreMod = a.id;
   a.minecraft = campoYaml(yml, "api-version");
   a.dependencias = (campoYaml(yml, "depend").match(/[\w-]+/g) ?? []).filter(Boolean);
-  a.evidencias.push(
-    `${paper ? "paper-plugin.yml" : "plugin.yml"} presente: es un plugin, y los plugins solo existen en el servidor.`
-  );
-  if (a.minecraft) a.evidencias.push(`Declara api-version ${a.minecraft}.`);
 }
 
 function deProxy(a: Analisis, cual: string) {
   a.cargador = "Proxy";
   a.tipo = `Plugin de ${cual}`;
   a.lado = "proxy";
-  a.evidencias.push(
-    `Contiene ${cual === "Velocity" ? "velocity-plugin.json" : "bungee.yml"}: va en el proxy, no en el servidor de juego.`
-  );
 }
+
+const MENSAJES: Record<string, string> = {
+  "no-es-zip": "No parece un .jar. Puede que la descarga se cortara a medias.",
+  "cabecera-invalida": "El archivo está dañado por dentro. Vuelve a descargarlo.",
+  zip64: "Usa ZIP64, un formato de archivo que este lector no cubre.",
+  "json-invalido": "Sus datos de mod están mal escritos y no hay forma de leerlos.",
+  "compresion-no-soportada": "Está comprimido de una forma que este lector no cubre.",
+  "metadato-enorme": "Tiene una estructura anómala y se ha descartado por seguridad.",
+  "demasiadas-entradas": "Tiene una estructura anómala y se ha descartado por seguridad.",
+};
 
 /** Analiza un .jar y devuelve qué es y en qué lado funciona. */
 export async function analizarJar(fichero: File): Promise<Analisis> {
@@ -258,16 +326,14 @@ export async function analizarJar(fichero: File): Promise<Analisis> {
     nombreMod: "",
     dependencias: [],
     id: "",
-    evidencias: [],
+    universal: false,
   };
 
   try {
     const entradas = await indice(fichero);
     const mapa = new Map(entradas.map((e) => [e.nombre, e]));
-    const buscar = (n: string) => mapa.get(n);
-
     const leerSi = async (n: string) => {
-      const e = buscar(n);
+      const e = mapa.get(n);
       return e ? await texto(fichero, e) : null;
     };
 
@@ -277,55 +343,45 @@ export async function analizarJar(fichero: File): Promise<Analisis> {
     const forge = await leerSi("META-INF/mods.toml");
     const paper = await leerSi("paper-plugin.yml");
     const plugin = await leerSi("plugin.yml");
-    const velocity = buscar("velocity-plugin.json");
-    const bungee = buscar("bungee.yml");
+    const velocity = mapa.has("velocity-plugin.json");
+    const bungee = mapa.has("bungee.yml");
 
-    if (velocity) deProxy(a, "Velocity");
-    else if (bungee) deProxy(a, "BungeeCord");
-    else if (paper) dePlugin(paper, a, true);
+    // El proxy se mira el último: hay plugins que traen los metadatos de todas
+    // las plataformas a la vez, y los de servidor o mod dicen más de lo que hace.
+    if (paper) dePlugin(paper, a, true);
     else if (plugin) dePlugin(plugin, a, false);
     else if (fabric) deFabric(fabric, a);
     else if (quilt) deQuilt(quilt, a);
     else if (neo) deForge(neo, a, true);
     else if (forge) deForge(forge, a, false);
-    else if (buscar("mcmod.info")) {
+    else if (velocity) deProxy(a, "Velocity");
+    else if (bungee) deProxy(a, "BungeeCord");
+    else if (mapa.has("mcmod.info")) {
       a.cargador = "Forge";
       a.tipo = "Mod de Forge antiguo";
-      a.evidencias.push(
-        "Solo trae mcmod.info, el formato de Forge anterior a 1.13, que no dice en qué lado funciona."
-      );
-    } else {
-      a.evidencias.push(
-        "No contiene fabric.mod.json, mods.toml, quilt.mod.json ni plugin.yml, así que no se identifica como mod ni como plugin."
-      );
-      const clases = entradas.filter((e) => e.nombre.endsWith(".class")).length;
-      a.evidencias.push(
-        clases
-          ? `Sí tiene ${clases} clases compiladas: puede ser una librería o un mod con los metadatos mal empaquetados.`
-          : "Tampoco tiene clases compiladas: probablemente no sea un mod."
-      );
+    }
+
+    // Un mismo .jar puede traer los metadatos de varias plataformas. Entonces
+    // vale para todas, y decir que es "de proxy" o "de Fabric" sería falso.
+    const familias = [
+      Boolean(paper || plugin),
+      Boolean(fabric || quilt),
+      Boolean(neo || forge),
+      velocity || bungee,
+    ].filter(Boolean).length;
+    if (familias > 1) {
+      a.universal = true;
+      a.cargador = "Varios";
+      a.tipo = "Vale para varias plataformas";
+      a.lado = "ambos";
     }
 
     if (!a.nombreMod) a.nombreMod = fichero.name.replace(/\.jar$/i, "");
   } catch (e) {
     const clave = e instanceof Error ? e.message : "error";
     a.error =
-      clave === "no-es-zip" || clave === "cabecera-invalida"
-        ? "No se puede abrir: no es un .jar válido o está dañado."
-        : clave === "zip64"
-          ? "El archivo usa ZIP64 y este lector no lo cubre."
-          : clave === "metadato-enorme" || clave === "demasiadas-entradas"
-            ? "El archivo tiene una estructura anómala y se ha descartado por seguridad."
-            : "No se ha podido leer el archivo.";
+      MENSAJES[clave] ?? "No se ha podido leer. Vuelve a descargarlo y súbelo otra vez.";
   }
 
   return a;
 }
-
-/** ¿Sirve este archivo en un servidor? */
-export const sirveEnServidor = (a: Analisis): "si" | "no" | "duda" => {
-  if (a.error) return "duda";
-  if (a.lado === "cliente") return "no";
-  if (a.lado === "servidor" || a.lado === "ambos") return "si";
-  return "duda";
-};
