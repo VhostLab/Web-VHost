@@ -1,0 +1,25 @@
+---
+import { TRAZOS, type NombreIcono } from "./iconos";
+
+export interface Props {
+  nombre: NombreIcono;
+  tamano?: number;
+  class?: string;
+}
+
+const { nombre, tamano = 20, class: clase = "" } = Astro.props as Props;
+---
+
+<svg
+  width={tamano}
+  height={tamano}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={clase}
+  aria-hidden="true"
+  set:html={TRAZOS[nombre]}
+/>

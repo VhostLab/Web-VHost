@@ -1,0 +1,277 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import { breadcrumbSchema } from "@data/seo";
+import CabeceraUtilidad from "@components/utilidades/CabeceraUtilidad.astro";
+import EnlaceGuia from "@components/utilidades/EnlaceGuia.astro";
+import Icono from "@components/utilidades/Icono.astro";
+import { PLANES, TIPOS, topeDe } from "@utils/planes";
+
+// Los rangos salen de src/data/products.ts, que es la misma tabla que publica
+// la tienda. Aquí solo se pasan al navegador para calcular sin recargar.
+const planes = PLANES.map((p) => ({
+  nombre: p.nombre,
+  gb: p.gb,
+  precio: p.precioDesde,
+  rangos: p.rangos,
+}));
+
+const topes = {
+  vanilla: topeDe("vanilla"),
+  plugins: topeDe("plugins"),
+  mods: topeDe("mods"),
+  ambos: topeDe("ambos"),
+};
+
+// El deslizador no llega más allá de lo que cubre el catálogo con algo de
+// margen: enseñar 200 jugadores cuando el plan más grande aguanta 18 sería
+// prometer algo que no existe.
+const MAX_JUGADORES = Math.max(...Object.values(topes)) + 4;
+---
+
+<MainLayout
+  title="Calculadora de RAM para servidores de Minecraft"
+  description="Calcula cuánta RAM necesita tu servidor de Minecraft según jugadores y tipo de servidor, y qué plan de Vhost le encaja. Basada en nuestra tabla real de planes."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Utilidades", path: "/utilidades" },
+      { name: "Calculadora de RAM", path: "/utilidades/calculadora-ram" },
+    ]),
+  ]}
+>
+  <div class="bg-[#0b0b0b] text-[#f3f1ef]">
+    <div class="mx-auto max-w-[1080px] px-6 pt-12 pb-20 md:px-10 md:pt-14">
+      <CabeceraUtilidad
+        miga="Calculadora de RAM"
+        titulo="Calculadora de RAM para Minecraft"
+        descripcion="Dinos cuántos jugadores esperas y qué tipo de servidor quieres montar. Te decimos la memoria que necesita y el plan que le encaja, sin quedarte corto ni pagar de más."
+      />
+
+      <div class="mt-9 grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <!-- Entradas -->
+        <div class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 md:p-7">
+          <div class="flex items-baseline justify-between gap-4">
+            <label
+              for="jugadores"
+              class="font-inter text-[14.5px] font-semibold text-[#f3f1ef]"
+            >
+              Jugadores a la vez
+            </label>
+            <span
+              id="valor-jugadores"
+              class="font-poppins text-xl text-secondary"
+              aria-live="polite">8</span
+            >
+          </div>
+          <input
+            id="jugadores"
+            type="range"
+            min="1"
+            max={MAX_JUGADORES}
+            step="1"
+            value="8"
+            class="mt-3.5 w-full accent-[#fc7c04]"
+          />
+          <div
+            class="mt-1.5 flex justify-between font-karla text-xs text-[#6f6f6f]"
+          >
+            <span>1</span>
+            <span>{MAX_JUGADORES}</span>
+          </div>
+
+          <p class="mt-7 font-inter text-[14.5px] font-semibold text-[#f3f1ef]">
+            Tipo de servidor
+          </p>
+          <div class="mt-3 flex flex-col gap-2" role="radiogroup" aria-label="Tipo de servidor">
+            {
+              TIPOS.map((t, i) => (
+                <button
+                  type="button"
+                  class="tipo flex w-full items-center justify-between gap-4 rounded-[10px] border p-4 text-left transition-colors"
+                  data-tipo={t.id}
+                  role="radio"
+                  aria-checked={i === 1 ? "true" : "false"}
+                >
+                  <span class="flex flex-col gap-1">
+                    <span class="font-inter text-[14.5px] font-semibold text-[#f3f1ef]">
+                      {t.etiqueta}
+                    </span>
+                    <span class="font-karla text-[13px] text-[#9a9a9a]">
+                      {t.pista}
+                    </span>
+                  </span>
+                  <span class="tope whitespace-nowrap font-karla text-[12.5px] text-[#6f6f6f]">
+                    hasta {topes[t.id]}
+                  </span>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Resultado -->
+        <div
+          class="rounded-[14px] border border-[#242424] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-6 md:p-7 lg:sticky lg:top-24"
+        >
+          <div id="resultado-ok">
+            <p
+              class="font-karla text-[11px] uppercase tracking-[0.14em] text-secondary"
+            >
+              RAM recomendada
+            </p>
+            <p class="mt-2.5 flex items-baseline gap-2">
+              <span
+                id="ram"
+                class="font-poppins text-[54px] font-semibold leading-none tracking-[-0.03em]"
+                >8</span
+              >
+              <span class="font-poppins text-[22px] text-[#9a9a9a]">GB</span>
+            </p>
+            <p
+              id="nota-ram"
+              class="mt-3 font-karla text-sm leading-relaxed text-[#9a9a9a]"
+            >
+            </p>
+
+            <div class="my-6 h-px bg-[#242424]"></div>
+
+            <p
+              class="font-karla text-[11px] uppercase tracking-[0.14em] text-[#6f6f6f]"
+            >
+              Plan que te encaja
+            </p>
+            <p id="plan" class="mt-2 font-poppins text-[22px] font-semibold">
+              Lapis
+            </p>
+            <p id="plan-detalle" class="mt-1.5 font-karla text-sm text-[#9a9a9a]">
+            </p>
+            <a
+              href="/tienda/minecraft/"
+              class="mt-5 block rounded-[10px] bg-secondary py-3.5 text-center font-inter text-[15px] font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+            >
+              Ver planes de Minecraft
+            </a>
+            <p
+              class="mt-3 text-center font-karla text-[12.5px] text-[#6f6f6f]"
+            >
+              Cambia de plan cuando quieras, sin permanencia.
+            </p>
+          </div>
+
+          <!-- Cuando ningún plan estándar llega, lo decimos en vez de
+               recomendar uno que se quedaría corto. -->
+          <div id="resultado-sin-plan" class="hidden">
+            <Icono nombre="aviso" tamano={22} class="text-secondary" />
+            <p class="mt-3 font-poppins text-[19px] font-semibold leading-snug">
+              Esto ya se sale de un plan estándar
+            </p>
+            <p
+              id="nota-sin-plan"
+              class="mt-3 font-karla text-sm leading-relaxed text-[#9a9a9a]"
+            >
+            </p>
+            <a
+              href="https://discord.gg/Ykr85wevrj"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-5 block rounded-[10px] border border-[#2a2a2a] py-3.5 text-center font-inter text-[15px] font-medium text-[#f3f1ef] transition-colors hover:border-secondary hover:text-secondary"
+            >
+              Cuéntanos tu caso en Discord
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <EnlaceGuia
+        titulo="¿Quieres entender de dónde sale este número?"
+        descripcion="La guía explica qué factores mueven la memoria de verdad y por qué ampliar RAM no siempre arregla el lag."
+        enlace="/blog/cuanta-ram-servidor-minecraft/"
+        texto="Leer la guía de RAM"
+      />
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .tipo {
+    border-color: #242424;
+    background: #0f0f0f;
+  }
+  .tipo:hover {
+    border-color: #3a3a3a;
+  }
+  .tipo[aria-checked="true"] {
+    border-color: #fc7c04;
+    background: rgba(252, 124, 4, 0.08);
+  }
+  .tipo[aria-checked="true"] .tope {
+    color: #fc7c04;
+  }
+</style>
+
+<script define:vars={{ planes, topes }}>
+  const $ = (id) => document.getElementById(id);
+  const deslizador = $("jugadores");
+  const botones = Array.from(document.querySelectorAll(".tipo"));
+
+  const NOMBRE_TIPO = {
+    vanilla: "vanilla",
+    plugins: "con plugins",
+    mods: "con mods",
+    ambos: "con mods y plugins a la vez",
+  };
+
+  const estado = { jugadores: Number(deslizador.value), tipo: "plugins" };
+
+  /** El plan más barato cuyo rango oficial cubre estos jugadores. */
+  const recomendar = () =>
+    planes.find((p) => {
+      const r = p.rangos[estado.tipo];
+      return r && estado.jugadores <= r[1];
+    }) ?? null;
+
+  function pintar() {
+    $("valor-jugadores").textContent = String(estado.jugadores);
+    for (const b of botones) {
+      b.setAttribute("aria-checked", String(b.dataset.tipo === estado.tipo));
+    }
+
+    const plan = recomendar();
+    const conPlan = $("resultado-ok");
+    const sinPlan = $("resultado-sin-plan");
+
+    if (!plan) {
+      conPlan.classList.add("hidden");
+      sinPlan.classList.remove("hidden");
+      $("nota-sin-plan").textContent =
+        `Nuestro plan más grande aguanta ${topes[estado.tipo]} jugadores en un servidor ${NOMBRE_TIPO[estado.tipo]}. Para ${estado.jugadores} hace falta hardware dedicado o repartir la gente en varios servidores detrás de un proxy, y eso lo miramos contigo.`;
+      return;
+    }
+
+    sinPlan.classList.add("hidden");
+    conPlan.classList.remove("hidden");
+
+    const rango = plan.rangos[estado.tipo];
+    $("ram").textContent = String(plan.gb);
+    $("nota-ram").textContent =
+      `Para ${estado.jugadores} ${estado.jugadores === 1 ? "jugador" : "jugadores"} en un servidor ${NOMBRE_TIPO[estado.tipo]}. No asignes toda la memoria del plan a la JVM: deja margen para el propio sistema.`;
+    $("plan").textContent = plan.nombre;
+    $("plan-detalle").textContent =
+      `${plan.gb} GB de RAM · desde ${plan.precio}. Lo recomendamos para ${rango[0]}-${rango[1]} jugadores con esta configuración.`;
+  }
+
+  deslizador.addEventListener("input", () => {
+    estado.jugadores = Number(deslizador.value);
+    pintar();
+  });
+
+  for (const b of botones) {
+    b.addEventListener("click", () => {
+      estado.tipo = b.dataset.tipo;
+      pintar();
+    });
+  }
+
+  pintar();
+</script>

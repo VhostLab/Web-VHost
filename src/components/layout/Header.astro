@@ -3,6 +3,7 @@ import vhostLogo from "/src/images/vhosthostingservices.webp";
 import discordIcon from "/src/images/discord-icon.webp";
 import twitterIcon from "/src/images/twitter-icon.webp";
 import emailIcon from "/src/images/email-icon.webp";
+import Icono from "@components/utilidades/Icono.astro";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -72,7 +73,7 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href="/"
-              class="text-lg font-poppins font-bold text-white px-3 py-1"
+              class="text-lg font-poppins font-bold text-white px-3 py-1 inline-flex items-center"
               >INICIO</a
             >
           </li>
@@ -213,23 +214,111 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href="/partners"
-              class="text-lg font-poppins font-bold text-white px-3 py-1"
+              class="text-lg font-poppins font-bold text-white px-3 py-1 inline-flex items-center"
               >PARTNERS</a
             >
           </li>
           <li>
             <a
               href="/blog"
-              class="text-lg font-poppins font-bold text-white px-3 py-1"
+              class="text-lg font-poppins font-bold text-white px-3 py-1 inline-flex items-center"
               >BLOG</a
             >
+          </li>
+          <li class="relative group" tabindex="0">
+            <button
+              class="text-lg font-poppins font-bold text-white px-3 py-1 flex items-center focus:outline-none"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              UTILIDADES
+              <svg
+                class="w-4 h-4 ml-1 transition-transform duration-300 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div
+              class="absolute left-1/2 -translate-x-1/2 top-full w-72 bg-[#151515] border border-white/10 rounded-xl shadow-2xl z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 focus-within:visible focus-within:opacity-100 transition-all duration-300 p-2"
+            >
+              <a
+                href="/utilidades/comprobador-mods/"
+                class="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5"
+              >
+                <Icono
+                  nombre="paquete"
+                  tamano={18}
+                  class="mt-0.5 shrink-0 text-secondary"
+                />
+                <span>
+                  <span
+                    class="block text-sm font-semibold text-white group-hover/item:text-secondary"
+                    >Comprobador de mods</span
+                  >
+                  <span class="block text-xs text-gray-400"
+                    >¿Sirve en un servidor?</span
+                  >
+                </span>
+              </a>
+              <a
+                href="/utilidades/calculadora-ram/"
+                class="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5"
+              >
+                <Icono
+                  nombre="calculadora"
+                  tamano={18}
+                  class="mt-0.5 shrink-0 text-secondary"
+                />
+                <span>
+                  <span
+                    class="block text-sm font-semibold text-white group-hover/item:text-secondary"
+                    >Calculadora de RAM</span
+                  >
+                  <span class="block text-xs text-gray-400"
+                    >Qué plan necesitas</span
+                  >
+                </span>
+              </a>
+              <a
+                href="/utilidades/registros-dns/"
+                class="group/item flex items-start gap-3 rounded-lg px-3 py-2.5 hover:bg-white/5"
+              >
+                <Icono
+                  nombre="globo"
+                  tamano={18}
+                  class="mt-0.5 shrink-0 text-secondary"
+                />
+                <span>
+                  <span
+                    class="block text-sm font-semibold text-white group-hover/item:text-secondary"
+                    >Registros DNS</span
+                  >
+                  <span class="block text-xs text-gray-400"
+                    >Tu dominio en el servidor</span
+                  >
+                </span>
+              </a>
+              <a
+                href="/utilidades/"
+                class="block border-t border-white/10 mt-1 px-3 py-2.5 text-xs text-gray-400 hover:text-secondary"
+                >Ver todas las utilidades →</a
+              >
+            </div>
           </li>
 
           <ul class="flex space-x-6 items-center ml-4">
             <li>
               <a
                 href="/soporte"
-                class="text-lg font-poppins font-extrabold px-3 py-1 text-white"
+                class="text-lg font-poppins font-extrabold px-3 py-1 text-white inline-flex items-center"
                 >SOPORTE</a
               >
             </li>
@@ -304,6 +393,7 @@ const currentPath = Astro.url.pathname;
           <li>
             <button
               id="mobile-tienda-toggle"
+              data-submenu="tienda"
               class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
             >
               TIENDA
@@ -370,6 +460,63 @@ const currentPath = Astro.url.pathname;
             >
           </li>
           <li>
+            <button
+              id="mobile-utilidades-toggle"
+              data-submenu="utilidades"
+              class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
+            >
+              UTILIDADES
+              <svg
+                class="w-4 h-4 transition-transform"
+                id="mobile-utilidades-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <ul
+              id="mobile-utilidades-submenu"
+              class="overflow-hidden transition-all duration-300"
+              style="max-height: 0px"
+            >
+              <li>
+                <a
+                  href="/utilidades/comprobador-mods/"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Comprobador de mods</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/utilidades/calculadora-ram/"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Calculadora de RAM</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/utilidades/registros-dns/"
+                  class="block py-2 pl-4 text-sm text-white hover:bg-white/10"
+                  >Registros DNS</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/utilidades/"
+                  class="block py-2 pl-4 text-sm text-white border-b border-secondary/10 hover:bg-white/10"
+                  >Ver todas</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li>
             <a
               href="/soporte"
               class="block py-3 text-white font-bold border-b border-secondary/10"
@@ -379,6 +526,7 @@ const currentPath = Astro.url.pathname;
           <li>
             <button
               id="mobile-clientes-toggle"
+              data-submenu="clientes"
               class="w-full flex items-center justify-between py-3 text-white font-bold border-b border-secondary/10"
             >
               CLIENTES
@@ -473,7 +621,9 @@ const currentPath = Astro.url.pathname;
         menuOpen = !menuOpen;
 
         if (menuOpen) {
-          mobileMenu.style.maxHeight = "800px";
+          // Altura real del contenido: con una cifra fija, al añadir una
+          // pestaña más el menú se cortaba por abajo sin que nadie se diera cuenta.
+          mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
           mobileMenu.style.paddingTop = "8px";
           mobileMenu.style.paddingBottom = "8px";
         } else {
@@ -495,45 +645,46 @@ const currentPath = Astro.url.pathname;
       });
     }
 
-    // Submenú móvil - Tienda
-    const tiendaToggle = document.getElementById("mobile-tienda-toggle");
-    const tiendaSubmenu = document.getElementById("mobile-tienda-submenu");
-    const tiendaArrow = document.getElementById("mobile-tienda-arrow");
+    // Submenús móviles (Tienda, Utilidades, Clientes).
+    //
+    // Un único bloque para todos: antes había uno copiado por menú, cada uno
+    // con su altura máxima escrita a mano, así que añadir una pestaña obligaba
+    // a duplicar código y a acertar un número. Ahora la altura se mide del
+    // contenido y añadir un submenú es solo poner data-submenu en el botón.
+    const submenus = document.querySelectorAll("[data-submenu]");
 
-    if (tiendaToggle && tiendaSubmenu) {
-      tiendaToggle.addEventListener("click", () => {
-        if (
-          tiendaSubmenu.style.maxHeight === "0px" ||
-          tiendaSubmenu.style.maxHeight === ""
-        ) {
-          tiendaSubmenu.style.maxHeight = "300px";
-          if (tiendaArrow) tiendaArrow.style.transform = "rotate(180deg)";
-        } else {
-          tiendaSubmenu.style.maxHeight = "0px";
-          if (tiendaArrow) tiendaArrow.style.transform = "rotate(0deg)";
+    submenus.forEach((toggle) => {
+      const nombre = toggle.getAttribute("data-submenu");
+      const submenu = document.getElementById(`mobile-${nombre}-submenu`);
+      const flecha = document.getElementById(`mobile-${nombre}-arrow`);
+      if (!submenu) return;
+
+      // El menú padre recorta lo que sobresale, así que al abrir un submenú hay
+      // que ampliarlo o el último enlace queda cortado. No se puede medir el
+      // padre en el momento del clic porque el submenú aún está a cero y sigue
+      // animándose: primero se le da una cota amplia y luego, cuando la
+      // transición acaba, se ajusta a la altura real.
+      const ajustarPadre = () => {
+        if (mobileMenu && menuOpen) {
+          mobileMenu.style.maxHeight = `${mobileMenu.scrollHeight}px`;
+        }
+      };
+      submenu.addEventListener("transitionend", ajustarPadre);
+
+      toggle.addEventListener("click", () => {
+        const cerrado =
+          submenu.style.maxHeight === "0px" || submenu.style.maxHeight === "";
+        const alto = submenu.scrollHeight;
+        submenu.style.maxHeight = cerrado ? `${alto}px` : "0px";
+        if (flecha) {
+          flecha.style.transform = cerrado ? "rotate(180deg)" : "rotate(0deg)";
+        }
+        if (cerrado && mobileMenu && menuOpen) {
+          mobileMenu.style.maxHeight = `${mobileMenu.scrollHeight + alto}px`;
         }
       });
-    }
+    });
 
-    // Submenú móvil - Clientes
-    const clientesToggle = document.getElementById("mobile-clientes-toggle");
-    const clientesSubmenu = document.getElementById("mobile-clientes-submenu");
-    const clientesArrow = document.getElementById("mobile-clientes-arrow");
-
-    if (clientesToggle && clientesSubmenu) {
-      clientesToggle.addEventListener("click", () => {
-        if (
-          clientesSubmenu.style.maxHeight === "0px" ||
-          clientesSubmenu.style.maxHeight === ""
-        ) {
-          clientesSubmenu.style.maxHeight = "250px";
-          if (clientesArrow) clientesArrow.style.transform = "rotate(180deg)";
-        } else {
-          clientesSubmenu.style.maxHeight = "0px";
-          if (clientesArrow) clientesArrow.style.transform = "rotate(0deg)";
-        }
-      });
-    }
   </script>
 
   <style>

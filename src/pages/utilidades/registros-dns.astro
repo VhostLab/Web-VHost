@@ -1,0 +1,324 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import { breadcrumbSchema } from "@data/seo";
+import CabeceraUtilidad from "@components/utilidades/CabeceraUtilidad.astro";
+import EnlaceGuia from "@components/utilidades/EnlaceGuia.astro";
+import Icono from "@components/utilidades/Icono.astro";
+---
+
+<MainLayout
+  title="Generador de registros DNS para tu servidor"
+  description="Genera los registros A y SRV para conectar tu dominio propio a tu servidor de Minecraft: nombre y contenido exactos, listos para copiar, con la nota de Cloudflare."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Utilidades", path: "/utilidades" },
+      { name: "Registros DNS", path: "/utilidades/registros-dns" },
+    ]),
+  ]}
+>
+  <div class="bg-[#0b0b0b] text-[#f3f1ef]">
+    <div class="mx-auto max-w-[1080px] px-6 pt-12 pb-20 md:px-10 md:pt-14">
+      <CabeceraUtilidad
+        miga="Registros DNS"
+        titulo="Generador de registros DNS"
+        descripcion="Conecta tu dominio propio a tu servidor para que tus jugadores entren escribiendo un nombre en vez de una IP con puerto. Te damos los dos registros exactos que hay que crear."
+      />
+
+      <div class="mt-9 grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
+        <!-- Entradas -->
+        <div
+          class="flex flex-col gap-5 rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6 md:p-7"
+        >
+          <div>
+            <label
+              for="dominio"
+              class="block font-inter text-[14.5px] font-semibold text-[#f3f1ef]"
+            >
+              Dominio o subdominio
+            </label>
+            <input
+              id="dominio"
+              type="text"
+              value="play.midominio.com"
+              autocomplete="off"
+              spellcheck="false"
+              class="campo mt-2"
+            />
+            <p class="mt-2 font-karla text-[12.5px] text-[#6f6f6f]">
+              El que escribirán tus jugadores al conectarse.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_140px]">
+            <div>
+              <label
+                for="ip"
+                class="block font-inter text-[14.5px] font-semibold text-[#f3f1ef]"
+              >
+                IP del servidor
+              </label>
+              <input
+                id="ip"
+                type="text"
+                inputmode="numeric"
+                value=""
+                placeholder="123.45.67.89"
+                autocomplete="off"
+                spellcheck="false"
+                class="campo mt-2"
+              />
+            </div>
+            <div>
+              <label
+                for="puerto"
+                class="block font-inter text-[14.5px] font-semibold text-[#f3f1ef]"
+              >
+                Puerto
+              </label>
+              <input
+                id="puerto"
+                type="text"
+                inputmode="numeric"
+                value="25565"
+                autocomplete="off"
+                class="campo mt-2"
+              />
+            </div>
+          </div>
+
+          <p id="aviso-datos" class="hidden font-karla text-[13px] text-[#ef5350]">
+          </p>
+
+          <p class="font-karla text-[13.5px] leading-relaxed text-[#6f6f6f]">
+            Los dos los tienes en el panel, en la barra de estado de tu
+            servidor. Ojo: <strong class="font-semibold text-[#9a9a9a]"
+              >usa la IP pública</strong
+            >, no el <code class="text-[#9a9a9a]">0.0.0.0</code> que aparece en
+            algunos sitios, que es la dirección interna y no resuelve desde
+            fuera.
+          </p>
+        </div>
+
+        <!-- Resultado -->
+        <div
+          class="rounded-[14px] border border-[#242424] bg-gradient-to-br from-[#1a1a1a] to-[#111111] p-6 lg:sticky lg:top-24"
+        >
+          <p
+            class="font-karla text-[11px] uppercase tracking-[0.14em] text-secondary"
+          >
+            Resultado
+          </p>
+          <p class="mt-1.5 font-karla text-[13.5px] leading-relaxed text-[#9a9a9a]">
+            Crea estos dos registros en el panel DNS de tu proveedor de dominio.
+          </p>
+
+          <div class="mt-4 flex flex-col gap-3">
+            <div class="rounded-[11px] border border-[#242424] bg-[#0f0f0f] p-4">
+              <div class="flex items-center justify-between gap-3">
+                <span
+                  class="rounded-[5px] bg-secondary px-2.5 py-1 font-inter text-[12.5px] font-semibold text-[#0b0b0b]"
+                  >A</span
+                >
+                <button
+                  type="button"
+                  data-copiar="a"
+                  class="boton-copiar inline-flex items-center gap-1.5 rounded-[7px] border border-[#2a2a2a] px-2.5 py-1.5 font-inter text-[12.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary"
+                >
+                  <Icono nombre="copiar" tamano={13} />
+                  <span>Copiar</span>
+                </button>
+              </div>
+              <p
+                class="mt-3 font-karla text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f]"
+              >
+                Nombre
+              </p>
+              <p id="a-nombre" class="mono"></p>
+              <p
+                class="mt-3 font-karla text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f]"
+              >
+                Contenido
+              </p>
+              <p id="a-valor" class="mono"></p>
+            </div>
+
+            <div
+              id="tarjeta-srv"
+              class="rounded-[11px] border border-[#242424] bg-[#0f0f0f] p-4"
+            >
+              <div class="flex items-center justify-between gap-3">
+                <span
+                  class="rounded-[5px] bg-secondary px-2.5 py-1 font-inter text-[12.5px] font-semibold text-[#0b0b0b]"
+                  >SRV</span
+                >
+                <button
+                  type="button"
+                  data-copiar="srv"
+                  class="boton-copiar inline-flex items-center gap-1.5 rounded-[7px] border border-[#2a2a2a] px-2.5 py-1.5 font-inter text-[12.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary"
+                >
+                  <Icono nombre="copiar" tamano={13} />
+                  <span>Copiar</span>
+                </button>
+              </div>
+              <p
+                class="mt-3 font-karla text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f]"
+              >
+                Nombre
+              </p>
+              <p id="srv-nombre" class="mono"></p>
+              <p
+                class="mt-3 font-karla text-[11px] uppercase tracking-[0.1em] text-[#6f6f6f]"
+              >
+                Contenido
+              </p>
+              <p id="srv-valor" class="mono"></p>
+              <p
+                id="srv-nota"
+                class="mt-3 font-karla text-[12.5px] leading-relaxed text-[#6f6f6f]"
+              >
+              </p>
+            </div>
+          </div>
+
+          <p class="mt-4 font-karla text-[12.5px] leading-relaxed text-[#6f6f6f]">
+            Algunos paneles añaden tu dominio solos al guardar. Si al hacerlo te
+            queda repetido, deja en el nombre solo la parte de delante.
+          </p>
+        </div>
+      </div>
+
+      <!-- Aviso de Cloudflare -->
+      <div
+        class="mt-5 flex gap-3.5 rounded-xl border border-secondary/30 bg-secondary/[0.06] p-5 md:px-6"
+      >
+        <Icono nombre="aviso" tamano={20} class="mt-0.5 shrink-0 text-secondary" />
+        <div>
+          <p class="font-inter text-[14.5px] font-semibold text-secondary">
+            Si tu dominio está en Cloudflare
+          </p>
+          <p class="mt-1.5 font-karla text-sm leading-relaxed text-[#c9c7c4]">
+            Pon el registro A en <strong class="font-semibold text-[#f3f1ef]"
+              >DNS only</strong
+            >, con la nube gris y el proxy desactivado. Con el proxy naranja
+            Cloudflare solo deja pasar tráfico web, y el de un servidor de juego
+            no lo es, así que la conexión no llegará. El registro SRV no se
+            puede proxiar: déjalo tal cual.
+          </p>
+        </div>
+      </div>
+
+      <EnlaceGuia
+        titulo="¿Primera vez con registros DNS?"
+        descripcion="La guía explica qué hace cada registro, dónde crearlos y qué mirar cuando el dominio no resuelve."
+        enlace="/blog/subdominio-dominio-propio-servidor/"
+        texto="Leer la guía de dominios"
+      />
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .campo {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid #242424;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #f3f1ef;
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    outline: none;
+  }
+  .campo:focus-visible {
+    border-color: #fc7c04;
+    box-shadow: none;
+  }
+  .campo::placeholder {
+    color: #6f6f6f;
+  }
+  .mono {
+    margin-top: 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13.5px;
+    color: #f3f1ef;
+    word-break: break-all;
+  }
+</style>
+
+<script>
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const campo = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+  const dominio = campo("dominio");
+  const ip = campo("ip");
+  const puerto = campo("puerto");
+  const aviso = $("aviso-datos");
+
+  const PUERTO_POR_DEFECTO = "25565";
+
+  const limpiarDominio = (valor: string) =>
+    valor
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/\/.*$/, "")
+      .replace(/\.$/, "");
+
+  const ipValida = (valor: string) =>
+    /^(\d{1,3}\.){3}\d{1,3}$/.test(valor) &&
+    valor.split(".").every((n) => Number(n) <= 255);
+
+  function pintar() {
+    const host = limpiarDominio(dominio.value) || "play.midominio.com";
+    const direccion = ip.value.trim();
+    const p = puerto.value.trim() || PUERTO_POR_DEFECTO;
+
+    // Solo avisamos de lo que está mal escrito, no de lo que aún está vacío.
+    const problemas: string[] = [];
+    if (direccion && !ipValida(direccion)) problemas.push("La IP no tiene un formato válido.");
+    if (p && (Number(p) < 1 || Number(p) > 65535)) problemas.push("El puerto debe estar entre 1 y 65535.");
+    aviso.textContent = problemas.join(" ");
+    aviso.classList.toggle("hidden", problemas.length === 0);
+
+    $("a-nombre").textContent = host;
+    $("a-valor").textContent = direccion || "(escribe la IP de tu servidor)";
+
+    $("srv-nombre").textContent = `_minecraft._tcp.${host}`;
+    $("srv-valor").textContent = `0 5 ${p} ${host}`;
+    $("srv-nota").textContent =
+      p === PUERTO_POR_DEFECTO
+        ? `Tu servidor está en el puerto por defecto, así que este registro es opcional: con el A basta para que entren escribiendo solo ${host}. Créalo igualmente si algún día cambias de puerto.`
+        : `Prioridad 0, peso 5, puerto ${p}. Es el que permite entrar escribiendo solo ${host}, sin el puerto detrás.`;
+  }
+
+  const textoRegistro = (cual: string) => {
+    const nombre = $(`${cual}-nombre`).textContent ?? "";
+    const valor = $(`${cual}-valor`).textContent ?? "";
+    return `${cual.toUpperCase()}\t${nombre}\t${valor}`;
+  };
+
+  for (const boton of document.querySelectorAll<HTMLButtonElement>(".boton-copiar")) {
+    boton.addEventListener("click", async () => {
+      const cual = boton.dataset.copiar ?? "a";
+      const etiqueta = boton.querySelector("span");
+      try {
+        await navigator.clipboard.writeText(textoRegistro(cual));
+        if (etiqueta) etiqueta.textContent = "Copiado";
+      } catch {
+        if (etiqueta) etiqueta.textContent = "Cópialo a mano";
+      }
+      setTimeout(() => {
+        if (etiqueta) etiqueta.textContent = "Copiar";
+      }, 1800);
+    });
+  }
+
+  for (const c of [dominio, ip, puerto]) c.addEventListener("input", pintar);
+  puerto.addEventListener("input", () => {
+    puerto.value = puerto.value.replace(/[^0-9]/g, "");
+  });
+
+  pintar();
+</script>
