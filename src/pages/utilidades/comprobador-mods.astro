@@ -1,0 +1,908 @@
+---
+import MainLayout from "@layouts/MainLayout.astro";
+import "@/styles/global.css";
+import { breadcrumbSchema } from "@data/seo";
+import CabeceraUtilidad from "@components/utilidades/CabeceraUtilidad.astro";
+import Icono from "@components/utilidades/Icono.astro";
+
+const PASOS = [
+  { n: 1, titulo: "Añade tus archivos" },
+  { n: 2, titulo: "Revisa la lista" },
+  { n: 3, titulo: "Mira el resultado" },
+];
+
+const GUIAS = [
+  {
+    url: "/blog/paper-spigot-forge-fabric-cual-elegir/",
+    tema: "Mods y plugins",
+    titulo: "Paper, Spigot, Forge o Fabric: qué software elegir",
+  },
+  {
+    url: "/blog/gestor-archivos-panel-plugins-mods/",
+    tema: "Panel",
+    titulo: "Subir plugins y mods desde el gestor de archivos",
+  },
+  {
+    url: "/blog/subir-tps-quitar-lag-servidor-minecraft/",
+    tema: "Rendimiento",
+    titulo: "Cómo subir los TPS y quitar el lag de tu servidor",
+  },
+];
+---
+
+<MainLayout
+  title="Comprobador de mods: cliente o servidor"
+  description="Sube tus .jar y descubre si tu carpeta de mods funciona en un servidor de Minecraft. Se analizan en tu navegador: los archivos no se suben a ningún sitio."
+  schemas={[
+    breadcrumbSchema([
+      { name: "Inicio", path: "/" },
+      { name: "Utilidades", path: "/utilidades" },
+      { name: "Comprobador de mods", path: "/utilidades/comprobador-mods" },
+    ]),
+  ]}
+>
+  <div class="bg-[#0b0b0b] text-[#f3f1ef]">
+    <div class="mx-auto max-w-[1080px] px-6 pt-12 pb-20 md:px-10 md:pt-14">
+      <CabeceraUtilidad
+        miga="Comprobador de mods"
+        titulo="Comprobador de mods de Minecraft"
+        descripcion="Añade hasta 300 archivos .jar —una carpeta de mods entera— y te decimos si tu servidor va a funcionar con ellos. Si algo falla, verás qué es y cómo se arregla."
+        privacidad="Tus archivos no salen del navegador: se leen en tu equipo y no se suben a ningún servidor."
+      />
+
+      <!-- Barra del asistente: los pasos solo avanzan con los botones de cada
+           pantalla, y de volver al principio se encarga este botón. -->
+      <div class="mt-9 flex items-center justify-between gap-4">
+        <p class="font-karla text-[13px] text-[#6f6f6f]">
+          Paso <span id="paso-actual">1</span> de {PASOS.length}
+        </p>
+        <button
+          type="button"
+          id="empezar-de-nuevo"
+          class="invisible inline-flex items-center gap-2 rounded-lg border border-[#242424] px-3.5 py-2 font-inter text-[13.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary"
+        >
+          <Icono nombre="reiniciar" tamano={14} />
+          Empezar de nuevo
+        </button>
+      </div>
+
+      <ol class="mt-3 flex flex-col gap-2 sm:flex-row sm:gap-3">
+        {
+          PASOS.map((p) => (
+            <li
+              class="paso flex flex-1 items-center gap-3 rounded-xl border px-4 py-3"
+              data-indicador={p.n}
+              aria-current="false"
+            >
+              <span class="numero inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-inter text-[13px] font-semibold">
+                {p.n}
+              </span>
+              <span class="rotulo font-inter text-[14px] font-medium">
+                {p.titulo}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <!-- Paso 1: añadir -->
+      <section data-paso="1" class="mt-6">
+        <div
+          id="zona"
+          class="cursor-pointer rounded-[14px] border border-dashed border-[#2a2a2a] bg-[#111111] px-6 py-16 text-center transition-colors hover:border-secondary hover:bg-[#160f06]"
+          role="button"
+          tabindex="0"
+          aria-label="Añadir archivos .jar"
+        >
+          <Icono nombre="paquete" tamano={30} class="mx-auto text-[#6f6f6f]" />
+          <p class="mt-3.5 font-poppins text-xl font-semibold">
+            Arrastra aquí tus .jar o la carpeta mods entera
+          </p>
+          <p class="mt-2 font-karla text-[14.5px] text-[#9a9a9a]">
+            o <span class="font-medium text-secondary">selecciónalos desde tu equipo</span>
+            · hasta 300 archivos
+          </p>
+          <input id="fichero" type="file" multiple accept=".jar" class="hidden" />
+          <!-- Este es el de carpetas: se le pone webkitdirectory desde el
+               script, porque convierte el selector en uno de carpetas y un
+               mismo campo no puede hacer las dos cosas. -->
+          <input id="carpeta" type="file" multiple class="hidden" />
+        </div>
+
+        <button
+          type="button"
+          id="elegir-carpeta"
+          class="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#242424] px-3.5 py-2 font-inter text-[13.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary"
+        >
+          <Icono nombre="carpeta" tamano={15} />
+          Elegir la carpeta mods entera
+        </button>
+
+        <section id="errores" class="mt-4 hidden"></section>
+      </section>
+
+      <!-- Paso 2: revisar -->
+      <section data-paso="2" class="mt-6 hidden">
+        <div class="overflow-hidden rounded-[14px] border border-[#1f1f1f] bg-[#111111]">
+          <div
+            class="flex flex-wrap items-center justify-between gap-3 border-b border-[#1f1f1f] px-5 py-4"
+          >
+            <span class="font-inter text-[14.5px] font-semibold">
+              Archivos añadidos <span id="contador" class="font-normal text-[#6f6f6f]"
+              ></span>
+            </span>
+            <div class="flex flex-wrap gap-2.5">
+              <button
+                type="button"
+                id="anadir-mas"
+                class="rounded-lg border border-[#242424] px-3.5 py-2 font-inter text-[13.5px] text-[#9a9a9a] transition-colors hover:border-[#3a3a3a] hover:text-[#f3f1ef]"
+              >
+                Añadir más
+              </button>
+              <button
+                type="button"
+                id="vaciar"
+                class="rounded-lg border border-[#242424] px-3.5 py-2 font-inter text-[13.5px] text-[#9a9a9a] transition-colors hover:border-[#3a3a3a] hover:text-[#f3f1ef]"
+              >
+                Vaciar lista
+              </button>
+            </div>
+          </div>
+          <div id="filas" class="max-h-[420px] overflow-y-auto"></div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <p id="limite" class="font-karla text-[13.5px] text-[#9a9a9a]"></p>
+          <button
+            type="button"
+            id="analizar"
+            class="rounded-[10px] bg-secondary px-6 py-3 font-inter text-[15px] font-semibold text-[#0b0b0b] transition-colors hover:bg-[#ff9a3c]"
+          >
+            Analizar
+          </button>
+        </div>
+
+        <!-- Progreso -->
+        <div
+          id="progreso"
+          class="mt-4 hidden rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-6"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <span class="font-inter text-[14.5px] font-semibold">Analizando…</span>
+            <span id="progreso-texto" class="font-karla text-[13px] text-[#6f6f6f]"
+            ></span>
+          </div>
+          <div class="mt-3.5 h-1.5 overflow-hidden rounded-full bg-[#1f1f1f]">
+            <div
+              id="progreso-barra"
+              class="h-full rounded-full bg-secondary transition-[width] duration-200"
+              style="width:0%"
+            >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Paso 3: resultado.
+           Solo se enseña lo que da problema y cómo se arregla; los archivos
+           que están bien se resumen en una línea. Con una carpeta de 300 mods,
+           una ficha por archivo sería una página imposible de leer. -->
+      <section data-paso="3" class="mt-6 hidden">
+        <div id="veredicto" class="rounded-[14px] border p-6 md:p-7"></div>
+        <div id="arreglos" class="mt-4 flex flex-col gap-3"></div>
+        <div id="resto" class="mt-4 hidden"></div>
+        <p
+          id="nota-forge"
+          class="mt-5 hidden font-karla text-[13px] leading-relaxed text-[#6f6f6f]"
+        >
+        </p>
+
+        <div class="mt-6">
+          <button
+            type="button"
+            id="volver-lista"
+            class="rounded-[10px] border border-[#2a2a2a] px-6 py-3 font-inter text-[15px] font-medium text-[#f3f1ef] transition-colors hover:border-secondary hover:text-secondary"
+          >
+            Añadir o quitar archivos
+          </button>
+        </div>
+
+        <!-- Para volver a subir un archivo ilegible sin repetir toda la tanda. -->
+        <input id="reemplazo" type="file" accept=".jar" class="hidden" />
+      </section>
+
+      <!-- Guías -->
+      <section class="mt-14 border-t border-[#1f1f1f] pt-9">
+        <h2 class="font-poppins text-xl font-semibold">Guías relacionadas</h2>
+        <div class="mt-4 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            GUIAS.map((g) => (
+              <a
+                href={g.url}
+                class="rounded-xl border border-[#1f1f1f] bg-[#111111] p-5 transition-colors hover:border-secondary"
+              >
+                <span class="font-karla text-[11px] uppercase tracking-[0.12em] text-secondary">
+                  {g.tema}
+                </span>
+                <h3 class="mt-2.5 font-poppins text-[16.5px] font-semibold leading-[1.3] text-[#f3f1ef]">
+                  {g.titulo}
+                </h3>
+              </a>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  /* Estado de cada paso del asistente. */
+  .paso {
+    border-color: #1f1f1f;
+    background: #0f0f0f;
+    color: #6f6f6f;
+  }
+  .paso .numero {
+    border-color: #2a2a2a;
+    color: #6f6f6f;
+  }
+  /* Paso en curso. */
+  .paso[aria-current="step"] {
+    border-color: rgba(252, 124, 4, 0.4);
+    background: rgba(252, 124, 4, 0.07);
+    color: #f3f1ef;
+  }
+  .paso[aria-current="step"] .numero {
+    border-color: #fc7c04;
+    background: #fc7c04;
+    color: #0b0b0b;
+  }
+</style>
+
+<script>
+  import { analizarJar, type Analisis } from "@utils/jar";
+  import { TRAZOS, type NombreIcono } from "@components/utilidades/iconos";
+
+  // Un modpack grande ronda los 200-400 mods, así que el tope tiene que dar
+  // para una carpeta entera. Cada archivo cuesta unos KB de lectura, no el
+  // fichero completo, así que subirlo no encarece el análisis.
+  const MAXIMO = 300;
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+
+  const zona = $("zona");
+  const entrada = $("fichero") as HTMLInputElement;
+  const carpeta = $("carpeta") as HTMLInputElement;
+  const reemplazo = $("reemplazo") as HTMLInputElement;
+  let archivos: File[] = [];
+  let analisis: Analisis[] = [];
+  let aReemplazar = -1;
+
+  const escapar = (t: string) =>
+    t.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+
+  const peso = (b: number) =>
+    b >= 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.round(b / 1024)} KB`;
+
+  const svg = (nombre: NombreIcono, tamano: number) =>
+    `<svg width="${tamano}" height="${tamano}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TRAZOS[nombre]}</svg>`;
+
+  // --- navegación entre pasos ---------------------------------------------
+
+  function irA(n: number) {
+    for (const seccion of document.querySelectorAll<HTMLElement>("[data-paso]")) {
+      seccion.classList.toggle("hidden", Number(seccion.dataset.paso) !== n);
+    }
+    for (const ind of document.querySelectorAll<HTMLElement>("[data-indicador]")) {
+      ind.setAttribute("aria-current", Number(ind.dataset.indicador) === n ? "step" : "false");
+    }
+    $("paso-actual").textContent = String(n);
+    $("empezar-de-nuevo").classList.toggle("invisible", n === 1);
+    document.querySelector("[data-paso]")?.scrollIntoView({ block: "nearest" });
+  }
+
+  function empezarDeNuevo() {
+    archivos = [];
+    analisis = [];
+    mostrarErrores([]);
+    pintarLista();
+    irA(1);
+  }
+
+  // --- añadir y quitar archivos -------------------------------------------
+
+  const esJar = (f: File) => /\.jar$/i.test(f.name);
+
+  /**
+   * Añade archivos a la tanda.
+   *
+   * `deCarpeta` cambia lo que se cuenta como problema: una carpeta mods trae
+   * config, subcarpetas y mods desactivados, y avisar de cada cosa que no es
+   * un .jar sería ruido. Al elegir archivos a mano, en cambio, colar algo que
+   * no es un .jar sí es un despiste que conviene decir.
+   */
+  function anadir(nuevos: FileList | File[] | null, deCarpeta = false) {
+    if (!nuevos) return;
+    const entrantes = Array.from(nuevos);
+    const jars = entrantes.filter(esJar);
+    const noJar = entrantes.length - jars.length;
+
+    const hueco = MAXIMO - archivos.length;
+    archivos = archivos.concat(jars.slice(0, Math.max(hueco, 0)));
+    analisis = [];
+
+    const problemas: string[] = [];
+    if (deCarpeta && !jars.length) {
+      problemas.push("En esa carpeta no hay ningún .jar.");
+    } else if (!deCarpeta && noJar) {
+      problemas.push(
+        `${noJar === 1 ? "Un archivo no es" : `${noJar} archivos no son`} .jar y se ${noJar === 1 ? "ha" : "han"} descartado.`
+      );
+    }
+    if (jars.length > hueco && hueco >= 0) {
+      problemas.push(`Solo caben ${MAXIMO} archivos: los de más se han dejado fuera.`);
+    }
+    mostrarErrores(problemas);
+    pintarLista();
+    if (archivos.length) irA(2);
+  }
+
+  // --- carpetas arrastradas ------------------------------------------------
+
+  /** Recoge los .jar de una carpeta soltada, entrando en sus subcarpetas. */
+  async function recorrer(entrada: FileSystemEntry, salida: File[], hondura = 0) {
+    if (salida.length > MAXIMO) return;
+
+    if (entrada.isFile) {
+      const f = await new Promise<File>((ok, mal) =>
+        (entrada as FileSystemFileEntry).file(ok, mal)
+      );
+      if (esJar(f)) salida.push(f);
+      return;
+    }
+    // Una carpeta mods no anida mucho; el tope evita quedarse dando vueltas
+    // si alguien suelta media unidad de disco.
+    if (hondura >= 4) return;
+
+    const lector = (entrada as FileSystemDirectoryEntry).createReader();
+    for (;;) {
+      // readEntries devuelve como mucho 100 entradas por llamada: hay que
+      // seguir pidiendo hasta que conteste vacío o una carpeta de 300 mods
+      // se quedaría en los 100 primeros.
+      const lote = await new Promise<FileSystemEntry[]>((ok, mal) =>
+        lector.readEntries(ok, mal)
+      );
+      if (!lote.length) break;
+      for (const e of lote) await recorrer(e, salida, hondura + 1);
+    }
+  }
+
+  async function soltado(dt: DataTransfer): Promise<{ archivos: File[]; deCarpeta: boolean }> {
+    // webkitGetAsEntry hay que llamarlo antes de cualquier await: en cuanto se
+    // cede el turno, el DataTransfer deja de ser válido.
+    const entradas = [...dt.items]
+      .map((it) => (it.kind === "file" ? it.webkitGetAsEntry?.() : null))
+      .filter((e): e is FileSystemEntry => Boolean(e));
+
+    if (!entradas.some((e) => e.isDirectory)) {
+      return { archivos: [...dt.files], deCarpeta: false };
+    }
+
+    const salida: File[] = [];
+    for (const e of entradas) await recorrer(e, salida);
+    return { archivos: salida, deCarpeta: true };
+  }
+
+  function mostrarErrores(mensajes: string[]) {
+    const caja = $("errores");
+    caja.classList.toggle("hidden", mensajes.length === 0);
+    caja.innerHTML = mensajes.length
+      ? `<div class="flex items-start gap-3 rounded-xl border border-[#402020] bg-[#170f0f] px-5 py-4">
+           <span class="mt-0.5 shrink-0 text-[#ef5350]">${svg("cerrar", 16)}</span>
+           <p class="font-karla text-sm leading-relaxed text-[#c9c7c4]">${mensajes.map(escapar).join(" ")}</p>
+         </div>`
+      : "";
+  }
+
+  // --- qué falla en el conjunto -------------------------------------------
+
+  // Lo que aporta el propio servidor: no tiene sentido pedir que esté en la
+  // lista de archivos del usuario.
+  const PLATAFORMA = new Set([
+    "minecraft",
+    "java",
+    "fabricloader",
+    "fabric-loader",
+    "forge",
+    "neoforge",
+    "quilt_loader",
+    "quilt_base",
+    "mixinextras",
+  ]);
+
+  // Los ids de los metadatos no son nombres: así el aviso dice "Fabric API" y
+  // no "fabric-api".
+  const NOMBRE_DEPENDENCIA: Record<string, string> = {
+    "fabric-api": "Fabric API",
+    "fabric-language-kotlin": "Fabric Language Kotlin",
+    architectury: "Architectury API",
+    "cloth-config": "Cloth Config",
+    geckolib: "GeckoLib",
+    curios: "Curios API",
+    jei: "JEI",
+    patchouli: "Patchouli",
+    terrablender: "TerraBlender",
+    balm: "Balm",
+    puzzleslib: "Puzzles Lib",
+    kotlinforforge: "Kotlin for Forge",
+  };
+  const bonito = (id: string) =>
+    NOMBRE_DEPENDENCIA[id] ?? id.replace(/[-_]/g, " ").replace(/^./, (c) => c.toUpperCase());
+
+  const ES_MOD = (c: string) =>
+    c === "Fabric" || c === "Forge" || c === "NeoForge" || c === "Quilt";
+
+  interface Grupo {
+    /** "bloquea" impide que el servidor funcione; "revisar" solo pide mirarlo. */
+    gravedad: "bloquea" | "revisar";
+    titulo: string;
+    arreglo: string;
+    enlace?: { url: string; texto: string };
+    /** Detalle escrito, para lo que no es una lista de archivos. */
+    lineas?: string[];
+    /** Archivos afectados, por su posición en la tanda. */
+    indices?: number[];
+    /** Deja volver a subir cada archivo del grupo. */
+    reintentable?: boolean;
+  }
+
+  /**
+   * Los problemas de la tanda, agrupados por problema y no por archivo.
+   *
+   * Es la diferencia entre "necesita Fabric API" repetido treinta veces y una
+   * sola línea que dice qué hay que descargar: lo que el usuario tiene que
+   * hacer es una cosa, así que se cuenta una vez.
+   */
+  function agrupar(res: Analisis[]): Grupo[] {
+    const grupos: Grupo[] = [];
+    const todos = res.map((_, i) => i);
+
+    const rotos = todos.filter((i) => res[i].error);
+    if (rotos.length) {
+      grupos.push({
+        gravedad: "revisar",
+        titulo:
+          rotos.length === 1
+            ? "Un archivo no se ha podido leer"
+            : `${rotos.length} archivos no se han podido leer`,
+        arreglo: `Casi siempre es una descarga que se cortó a medias. Vuelve a ${rotos.length === 1 ? "bajarlo y súbelo" : "bajarlos y súbelos"} aquí mismo, sin repetir toda la tanda.`,
+        indices: rotos,
+        reintentable: true,
+      });
+    }
+
+    const validos = todos.filter((i) => !res[i].error);
+    // Cuenta todo lo que aporta cada archivo, no solo su id: los mods traen
+    // sus dependencias empaquetadas dentro y responden por varios nombres.
+    const provistos = new Set(validos.flatMap((i) => res[i].provee));
+    const conFabricApi = provistos.has("fabric-api") || provistos.has("fabric");
+
+    // 1. Mods que solo funcionan en el cliente.
+    const cliente = validos.filter((i) => res[i].lado === "cliente");
+    if (cliente.length) {
+      grupos.push({
+        gravedad: "bloquea",
+        titulo:
+          cliente.length === 1
+            ? "Un mod es solo de cliente"
+            : `${cliente.length} mods son solo de cliente`,
+        arreglo:
+          "Sácalos de la carpeta del servidor: allí no hacen nada y algunos impiden que arranque. En tu Minecraft siguen funcionando igual.",
+        indices: cliente,
+      });
+    }
+
+    // 2. Dependencias que faltan, todas en un solo aviso: lo que hay que hacer
+    //    es descargar esos archivos, y da igual cuántos mods los pidan.
+    const cuenta = new Map<string, number>();
+    const conFalta: number[] = [];
+    for (const i of validos) {
+      const vistas = new Set<string>();
+      for (const dep of res[i].dependencias) {
+        if (!dep || PLATAFORMA.has(dep) || provistos.has(dep)) continue;
+        if (conFabricApi && /^fabric($|-)/.test(dep)) continue;
+        // Los módulos fabric-* los trae la propia Fabric API: es un archivo,
+        // no veinte.
+        const clave = /^fabric($|-)/.test(dep) ? "fabric-api" : dep;
+        if (vistas.has(clave)) continue;
+        vistas.add(clave);
+        cuenta.set(clave, (cuenta.get(clave) ?? 0) + 1);
+      }
+      if (vistas.size) conFalta.push(i);
+    }
+    if (cuenta.size) {
+      const ordenadas = [...cuenta].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      const sola = cuenta.size === 1;
+      grupos.push({
+        gravedad: "bloquea",
+        titulo: sola ? `Falta ${bonito(ordenadas[0][0])}` : `Faltan ${cuenta.size} dependencias`,
+        arreglo: sola
+          ? `Sin ella no arranca${ordenadas[0][1] === 1 ? " un mod" : `n ${ordenadas[0][1]} mods`} de la lista. Descárgala en la misma versión de Minecraft y ponla en la carpeta con los demás.`
+          : "Son archivos que otros mods necesitan para arrancar. Descárgalos en la misma versión de Minecraft y ponlos en la carpeta junto a los demás.",
+        lineas: sola
+          ? undefined
+          : ordenadas.map(
+              ([id, n]) => `${bonito(id)} — la ${n === 1 ? "pide 1 mod" : `piden ${n} mods`}`
+            ),
+        // Los mods que se quedan cojos no pueden contarse luego entre los que
+        // están bien: sin su dependencia no arrancan.
+        indices: conFalta,
+      });
+    }
+
+    // 3. Cargadores mezclados.
+    const porCargador = new Map<string, number[]>();
+    for (const i of validos) {
+      const c = res[i].cargador;
+      if (!ES_MOD(c) || res[i].universal) continue;
+      porCargador.set(c, [...(porCargador.get(c) ?? []), i]);
+    }
+    const sobranPorCargador = new Set<number>();
+    if (porCargador.size > 1) {
+      const orden = [...porCargador].sort((a, b) => b[1].length - a[1].length);
+      const sobran = orden.slice(1).flatMap(([, l]) => l);
+      for (const i of sobran) sobranPorCargador.add(i);
+      grupos.push({
+        gravedad: "bloquea",
+        titulo: `Hay mods de ${orden.map(([c]) => c).join(" y de ")} mezclados`,
+        arreglo: `Un servidor carga un cargador y solo uno. La mayoría son de ${orden[0][0]} (${orden[0][1].length}), así que lo rápido es quitar ${sobran.length === 1 ? "el que sobra" : `los ${sobran.length} que sobran`}.`,
+        indices: sobran,
+      });
+    }
+
+    // 4. Versiones de Minecraft que no casan. Se comparan solo hasta la rama
+    //    (1.20, 1.21): dentro de una misma rama cada mod declara el rango a su
+    //    manera, y avisar de eso sería un aviso falso.
+    const porVersion = new Map<string, number[]>();
+    for (const i of validos) {
+      const r = res[i];
+      if (!ES_MOD(r.cargador) || !r.minecraft) continue;
+      const v = r.minecraft.split(".").slice(0, 2).join(".");
+      porVersion.set(v, [...(porVersion.get(v) ?? []), i]);
+    }
+    const sobranPorVersion = porVersion.size > 1
+      ? [...porVersion].sort((a, b) => b[1].length - a[1].length).slice(1).flatMap(([, l]) => l)
+      : [];
+    // Si son exactamente los mismos archivos que ya sobran por el cargador, el
+    // arreglo es el mismo y decirlo dos veces solo alarga la página.
+    if (sobranPorVersion.length && !sobranPorVersion.every((i) => sobranPorCargador.has(i))) {
+      const orden = [...porVersion].sort((a, b) => b[1].length - a[1].length);
+      const sobran = sobranPorVersion;
+      const otras = orden
+        .slice(1)
+        .map(([v]) => v)
+        .join(" y la ");
+      grupos.push({
+        gravedad: "bloquea",
+        titulo: "Hay mods de versiones distintas de Minecraft",
+        arreglo: `La mayoría son para la ${orden[0][0]} (${orden[0][1].length}). ${sobran.length === 1 ? "Uno es" : `${sobran.length} son`} para la ${otras}: cámbia${sobran.length === 1 ? "lo" : "los"} por la versión que use tu servidor.`,
+        indices: sobran,
+      });
+    }
+
+    // 5. Plugins y mods en la misma carpeta.
+    const plugins = validos.filter((i) => res[i].cargador === "Bukkit" && !res[i].universal);
+    const mods = validos.filter((i) => ES_MOD(res[i].cargador) && !res[i].universal);
+    if (plugins.length && mods.length) {
+      grupos.push({
+        gravedad: "bloquea",
+        titulo: "Hay plugins y mods en la misma carpeta",
+        arreglo: `${plugins.length} ${plugins.length === 1 ? "es un plugin" : "son plugins"} y ${mods.length} ${mods.length === 1 ? "es un mod" : "son mods"}. Un servidor normal carga una cosa o la otra: para las dos a la vez hace falta un servidor híbrido.`,
+        enlace: {
+          url: "/blog/paper-spigot-forge-fabric-cual-elegir/",
+          texto: "Ver qué software elegir",
+        },
+        indices: plugins.length <= mods.length ? plugins : mods,
+      });
+    }
+
+    // 6. Plugins de proxy colados entre lo demás.
+    const proxy = validos.filter((i) => res[i].lado === "proxy" && !res[i].universal);
+    if (proxy.length && (plugins.length || mods.length)) {
+      grupos.push({
+        gravedad: "revisar",
+        titulo:
+          proxy.length === 1
+            ? "Un archivo es un plugin de proxy"
+            : `${proxy.length} archivos son plugins de proxy`,
+        arreglo:
+          "Van en la carpeta de plugins del proxy (BungeeCord o Velocity), no en la del servidor de juego: ahí no se cargarían.",
+        indices: proxy,
+      });
+    }
+
+    // 7. Archivos que no se identifican como nada.
+    const raros = validos.filter((i) => res[i].cargador === "?");
+    if (raros.length) {
+      grupos.push({
+        gravedad: "revisar",
+        titulo:
+          raros.length === 1
+            ? "Un archivo no parece un mod ni un plugin"
+            : `${raros.length} archivos no parecen mods ni plugins`,
+        arreglo:
+          "Sin los datos que los mods y los plugins llevan dentro no hay forma de saber qué son. Suele ser una librería suelta, el .jar del propio servidor o algo que no va en esa carpeta.",
+        indices: raros,
+      });
+    }
+
+    return grupos;
+  }
+
+  // --- pintado -------------------------------------------------------------
+
+  function pintarLista() {
+    $("contador").textContent = `${archivos.length}/${MAXIMO}`;
+    const anadirMas = $("anadir-mas") as HTMLButtonElement;
+    anadirMas.disabled = archivos.length >= MAXIMO;
+    anadirMas.classList.toggle("opacity-40", archivos.length >= MAXIMO);
+    $("limite").textContent =
+      archivos.length >= MAXIMO
+        ? `Has llegado al máximo de ${MAXIMO} archivos. Analiza estos y repite con el resto.`
+        : "";
+
+    $("filas").innerHTML = archivos
+      .map(
+        (f, i) => `
+        <div class="flex items-center justify-between gap-4 border-b border-[#161616] px-5 py-3">
+          <div class="flex min-w-0 items-center gap-3">
+            <span class="shrink-0 text-[#6f6f6f]">${svg("documento", 16)}</span>
+            <span class="truncate font-inter text-sm">${escapar(f.name)}</span>
+            <span class="shrink-0 font-karla text-[12.5px] text-[#6f6f6f]">${peso(f.size)}</span>
+          </div>
+          <button type="button" data-quitar="${i}" aria-label="Quitar ${escapar(f.name)}" class="shrink-0 rounded p-1.5 text-[#6f6f6f] transition-colors hover:text-[#ef5350]">
+            ${svg("cerrar", 15)}
+          </button>
+        </div>`
+      )
+      .join("");
+
+    for (const b of document.querySelectorAll<HTMLButtonElement>("[data-quitar]")) {
+      b.addEventListener("click", () => {
+        archivos = archivos.filter((_, j) => j !== Number(b.dataset.quitar));
+        analisis = [];
+        pintarLista();
+        if (!archivos.length) irA(1);
+      });
+    }
+  }
+
+  /** Una línea por archivo: nombre y, debajo, qué es o por qué falló. */
+  const filaArchivo = (i: number, conBoton: boolean) => {
+    const r = analisis[i];
+    const detalle = r.error
+      ? r.error
+      : [r.tipo, r.minecraft && `Minecraft ${r.minecraft}`].filter(Boolean).join(" · ");
+    // En móvil el botón baja debajo del nombre: en una columna estrecha, a su
+    // lado, el mensaje de error queda en un hilo de dos palabras por línea.
+    return `<li class="flex flex-col items-start gap-2 py-2 sm:flex-row sm:justify-between sm:gap-3">
+        <span class="min-w-0">
+          <span class="block break-all font-inter text-[13.5px] text-[#c9c7c4]">${escapar(r.archivo)}</span>
+          <span class="block font-karla text-[12.5px] ${r.error ? "text-[#ef5350]" : "text-[#6f6f6f]"}">${escapar(detalle)}</span>
+        </span>
+        ${
+          conBoton
+            ? `<button type="button" data-reintentar="${i}" class="shrink-0 rounded-lg border border-[#2a2a2a] px-3 py-1.5 font-inter text-[12.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary">Volver a subirlo</button>`
+            : ""
+        }
+      </li>`;
+  };
+
+  const listaArchivos = (indices: number[], conBoton = false) =>
+    `<ul class="flex flex-col divide-y divide-[#181818]">${indices.map((i) => filaArchivo(i, conBoton)).join("")}</ul>`;
+
+  /** Lista plegada: con cientos de archivos, desplegada sería la página entera. */
+  const listaPlegable = (indices: number[], rotulo: string) =>
+    `<details class="mt-3.5 border-t border-[#1f1f1f] pt-3">
+       <summary class="cursor-pointer font-inter text-[13.5px] text-secondary">${rotulo}</summary>
+       <div class="mt-1">${listaArchivos(indices)}</div>
+     </details>`;
+
+  function tarjetaGrupo(g: Grupo) {
+    const bloquea = g.gravedad === "bloquea";
+    const indices = g.indices ?? [];
+    const detalle = g.lineas?.length
+      ? `<ul class="mt-3.5 flex flex-col gap-1.5 border-t border-[#1f1f1f] pt-3.5">
+           ${g.lineas.map((l) => `<li class="font-karla text-[13.5px] text-[#c9c7c4]">${escapar(l)}</li>`).join("")}
+         </ul>`
+      : "";
+    // Cuando el aviso ya trae su propio detalle escrito, la lista de archivos
+    // sobra: lo que hay que hacer está en el detalle, no en quién lo pide.
+    const lista = !indices.length || detalle
+      ? ""
+      : g.reintentable || indices.length <= 6
+        ? `<div class="mt-3 border-t border-[#1f1f1f] pt-1">${listaArchivos(indices, Boolean(g.reintentable))}</div>`
+        : listaPlegable(indices, `Ver los ${indices.length} archivos`);
+    const enlace = g.enlace
+      ? ` <a href="${g.enlace.url}" class="font-medium text-secondary underline-offset-2 hover:underline">${escapar(g.enlace.texto)}</a>.`
+      : "";
+
+    return `<div class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-5">
+        <div class="flex items-start gap-3.5">
+          <span class="mt-0.5 shrink-0 ${bloquea ? "text-[#ef5350]" : "text-secondary"}">${svg(bloquea ? "cerrar" : "aviso", 18)}</span>
+          <div class="min-w-0 flex-1">
+            <p class="font-inter text-[15px] font-semibold text-[#f3f1ef]">${escapar(g.titulo)}</p>
+            <p class="mt-1.5 font-karla text-[14px] leading-relaxed text-[#9a9a9a]">${escapar(g.arreglo)}${enlace}</p>
+            ${detalle}
+            ${lista}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const CAJA = {
+    bien: "border-[#2f5d31] bg-[#4caf50]/[0.07]",
+    mal: "border-[#5d3130] bg-[#ef5350]/[0.07]",
+    ojo: "border-secondary/40 bg-secondary/[0.06]",
+  };
+  const TINTE = { bien: "text-[#4caf50]", mal: "text-[#ef5350]", ojo: "text-secondary" };
+  const MARCA = { bien: "check", mal: "cerrar", ojo: "aviso" } as const;
+
+  function pintarResultados() {
+    const res = analisis;
+    if (!res.length) return;
+
+    const grupos = agrupar(res);
+    const bloquean = grupos.filter((g) => g.gravedad === "bloquea").length;
+    const senalados = new Set(grupos.flatMap((g) => g.indices ?? []));
+    const limpios = res.map((_, i) => i).filter((i) => !senalados.has(i));
+
+    // Solo hay dos respuestas: funciona o no funciona. El matiz va en la lista
+    // de arreglos, no en el titular.
+    const estado = grupos.length === 0 ? "bien" : bloquean ? "mal" : "ojo";
+    const titulo =
+      estado === "bien"
+        ? "Tu carpeta de mods funciona en un servidor"
+        : `${grupos.length === 1 ? "Hay una cosa" : `Hay ${grupos.length} cosas`} que ${estado === "mal" ? "arreglar" : "mirar"}`;
+    const bajada =
+      estado === "bien"
+        ? `${res.length === 1 ? "El archivo está" : `Los ${res.length} archivos están`} bien. Súbe${res.length === 1 ? "lo" : "los"} tal cual a la carpeta del servidor.`
+        : estado === "mal"
+          ? "Tal y como está, el servidor no va a cargar bien estos mods. Arregla esto y vuelve a comprobarlo."
+          : "Nada impide que el servidor arranque, pero conviene que le eches un ojo a esto.";
+
+    const veredicto = $("veredicto");
+    veredicto.className = `rounded-[14px] border p-6 md:p-7 ${CAJA[estado]}`;
+    veredicto.innerHTML = `
+      <div class="flex items-start gap-4">
+        <span class="mt-0.5 shrink-0 ${TINTE[estado]}">${svg(MARCA[estado], 26)}</span>
+        <div class="min-w-0 flex-1">
+          <p class="font-poppins text-[22px] font-semibold leading-[1.2] tracking-[-0.01em] text-[#f3f1ef] md:text-[26px]">${titulo}</p>
+          <p class="mt-2 font-karla text-[15px] leading-relaxed text-[#c9c7c4]">${bajada}</p>
+          ${grupos.length === 0 ? listaPlegable(limpios, "Ver los archivos analizados") : ""}
+        </div>
+      </div>`;
+
+    $("arreglos").innerHTML = grupos.map(tarjetaGrupo).join("");
+
+    const caja = $("resto");
+    const hayResto = grupos.length > 0 && limpios.length > 0;
+    caja.classList.toggle("hidden", !hayResto);
+    caja.innerHTML = hayResto
+      ? `<div class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-5">
+           <div class="flex items-start gap-3.5">
+             <span class="mt-0.5 shrink-0 text-[#4caf50]">${svg("check", 18)}</span>
+             <div class="min-w-0 flex-1">
+               <p class="font-inter text-[15px] font-semibold text-[#f3f1ef]">${limpios.length === 1 ? "El otro archivo está bien" : `Los otros ${limpios.length} archivos están bien`}</p>
+               <p class="mt-1.5 font-karla text-[14px] leading-relaxed text-[#9a9a9a]">No hace falta tocar nada: ${limpios.length === 1 ? "funciona" : "funcionan"} en un servidor tal y como ${limpios.length === 1 ? "está" : "están"}.</p>
+               ${listaPlegable(limpios, "Ver la lista")}
+             </div>
+           </div>
+         </div>`
+      : "";
+
+    // Con Forge no se puede saber el lado mirando el archivo, y callarlo sería
+    // vender más certeza de la que hay.
+    const conForge = res.some(
+      (r) =>
+        !r.error &&
+        (r.cargador === "Forge" || r.cargador === "NeoForge") &&
+        r.lado === "sin-declarar"
+    );
+    const nota = $("nota-forge");
+    nota.classList.toggle("hidden", !conForge);
+    nota.textContent = conForge
+      ? "Los mods de Forge y NeoForge no llevan escrito en qué lado funcionan: el cargador los pone en los dos salvo que el propio mod lo impida, así que aquí cuentan como válidos. Si el servidor no arranca, el registro de la consola dice cuál ha fallado."
+      : "";
+
+    for (const b of document.querySelectorAll<HTMLElement>("[data-reintentar]")) {
+      b.addEventListener("click", () => {
+        aReemplazar = Number(b.dataset.reintentar);
+        reemplazo.click();
+      });
+    }
+  }
+
+  // --- análisis ------------------------------------------------------------
+
+  async function analizar() {
+    if (!archivos.length) return;
+    analisis = [];
+    $("progreso").classList.remove("hidden");
+    ($("analizar") as HTMLButtonElement).disabled = true;
+
+    for (let i = 0; i < archivos.length; i++) {
+      $("progreso-texto").textContent = `${i + 1} de ${archivos.length}`;
+      $("progreso-barra").style.width = `${Math.round((i / archivos.length) * 100)}%`;
+      // Deja respirar al navegador para que la barra se vea avanzar.
+      await new Promise((r) => setTimeout(r, 0));
+      analisis.push(await analizarJar(archivos[i]));
+    }
+
+    $("progreso-barra").style.width = "100%";
+    $("progreso").classList.add("hidden");
+    ($("analizar") as HTMLButtonElement).disabled = false;
+    pintarResultados();
+    irA(3);
+  }
+
+  // --- eventos -------------------------------------------------------------
+
+  const elegir = () => entrada.click();
+  zona.addEventListener("click", elegir);
+  zona.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      elegir();
+    }
+  });
+  $("anadir-mas").addEventListener("click", elegir);
+  entrada.addEventListener("change", () => {
+    anadir(entrada.files);
+    entrada.value = "";
+  });
+
+  // No va en el HTML porque no está en los tipos estándar del atributo, pero
+  // lo entienden todos los navegadores de escritorio.
+  carpeta.setAttribute("webkitdirectory", "");
+  $("elegir-carpeta").addEventListener("click", () => carpeta.click());
+  carpeta.addEventListener("change", () => {
+    anadir(carpeta.files, true);
+    carpeta.value = "";
+  });
+
+  for (const evento of ["dragenter", "dragover"] as const) {
+    zona.addEventListener(evento, (e) => {
+      e.preventDefault();
+      zona.classList.add("border-secondary", "bg-[#160f06]");
+    });
+  }
+  for (const evento of ["dragleave", "drop"] as const) {
+    zona.addEventListener(evento, () => zona.classList.remove("border-secondary", "bg-[#160f06]"));
+  }
+  zona.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    if (!e.dataTransfer) return;
+    const { archivos: sueltos, deCarpeta } = await soltado(e.dataTransfer);
+    anadir(sueltos, deCarpeta);
+  });
+
+  reemplazo.addEventListener("change", async () => {
+    const nuevo = reemplazo.files?.[0];
+    reemplazo.value = "";
+    if (!nuevo || aReemplazar < 0) return;
+    archivos[aReemplazar] = nuevo;
+    analisis[aReemplazar] = await analizarJar(nuevo);
+    aReemplazar = -1;
+    pintarLista();
+    pintarResultados();
+  });
+
+  $("vaciar").addEventListener("click", empezarDeNuevo);
+  $("empezar-de-nuevo").addEventListener("click", empezarDeNuevo);
+  $("analizar").addEventListener("click", analizar);
+  $("volver-lista").addEventListener("click", () => irA(2));
+
+  pintarLista();
+  irA(1);
+</script>

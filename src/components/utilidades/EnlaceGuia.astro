@@ -1,0 +1,29 @@
+---
+// Cierre de una utilidad: la guía del blog que explica de dónde sale el
+// resultado. La herramienta responde rápido; la guía explica el porqué.
+export interface Props {
+  titulo: string;
+  descripcion: string;
+  enlace: string;
+  texto: string;
+}
+
+const { titulo, descripcion, enlace, texto } = Astro.props as Props;
+---
+
+<aside
+  class="mt-5 flex flex-wrap items-center justify-between gap-6 rounded-xl border border-[#1f1f1f] bg-[#111111] px-6 py-5"
+>
+  <div>
+    <p class="font-inter text-[14.5px] font-semibold text-[#f3f1ef]">{titulo}</p>
+    <p class="mt-1.5 font-karla text-sm leading-relaxed text-[#9a9a9a]">
+      {descripcion}
+    </p>
+  </div>
+  <a
+    href={enlace}
+    class="whitespace-nowrap font-karla text-[14.5px] font-medium text-secondary hover:text-[#ff9a3c]"
+  >
+    {texto} →
+  </a>
+</aside>

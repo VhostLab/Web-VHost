@@ -1,0 +1,46 @@
+---
+// Cabecera común de una utilidad: migas, título, para qué sirve y, cuando la
+// herramienta trabaja con archivos del usuario, el aviso de que no salen del
+// navegador.
+import Icono from "./Icono.astro";
+
+export interface Props {
+  titulo: string;
+  descripcion: string;
+  miga: string;
+  privacidad?: string;
+}
+
+const { titulo, descripcion, miga, privacidad } = Astro.props as Props;
+---
+
+<nav
+  class="flex flex-wrap items-center gap-2 font-karla text-[13px] text-[#6f6f6f]"
+  aria-label="Migas de pan"
+>
+  <a href="/" class="hover:text-secondary">Inicio</a>
+  <span class="text-[#3a3a3a]">/</span>
+  <a href="/utilidades/" class="hover:text-secondary">Utilidades</a>
+  <span class="text-[#3a3a3a]">/</span>
+  <span class="text-[#5a5a5a]">{miga}</span>
+</nav>
+
+<h1
+  class="mt-5 max-w-[20ch] font-poppins text-[30px] font-semibold leading-[1.1] tracking-[-0.025em] md:text-[42px]"
+>
+  {titulo}
+</h1>
+<p
+  class="mt-4 max-w-[62ch] font-karla text-[16px] leading-relaxed text-[#9a9a9a] md:text-[17px]"
+>
+  {descripcion}
+</p>
+
+{
+  privacidad && (
+    <p class="mt-5 inline-flex items-start gap-2.5 rounded-xl border border-[#1f1f1f] bg-[#111111] px-4 py-3 font-karla text-[13.5px] leading-relaxed text-[#9a9a9a]">
+      <Icono nombre="candado" tamano={17} class="mt-px shrink-0 text-secondary" />
+      {privacidad}
+    </p>
+  )
+}

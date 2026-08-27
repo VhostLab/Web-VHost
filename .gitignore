@@ -59,3 +59,8 @@ Thumbs.db
 .vscode/
 # Salida generada por /design-sync
 ds-bundle/
+
+# Impeccable: la config compartida SI se versiona; la cache de sesion y los
+# ajustes personales, no.
+.impeccable/hook.cache.json
+.impeccable/config.local.json
