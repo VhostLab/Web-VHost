@@ -96,14 +96,28 @@ const GUIAS = [
         >
           <Icono nombre="paquete" tamano={30} class="mx-auto text-[#6f6f6f]" />
           <p class="mt-3.5 font-poppins text-xl font-semibold">
-            Arrastra aquí tus .jar
+            Arrastra aquí tus .jar o la carpeta mods entera
           </p>
           <p class="mt-2 font-karla text-[14.5px] text-[#9a9a9a]">
             o <span class="font-medium text-secondary">selecciónalos desde tu equipo</span>
             · hasta 300 archivos
           </p>
           <input id="fichero" type="file" multiple accept=".jar" class="hidden" />
+          <!-- Este es el de carpetas: se le pone webkitdirectory desde el
+               script, porque convierte el selector en uno de carpetas y un
+               mismo campo no puede hacer las dos cosas. -->
+          <input id="carpeta" type="file" multiple class="hidden" />
         </div>
+
+        <button
+          type="button"
+          id="elegir-carpeta"
+          class="mt-3 inline-flex items-center gap-2 rounded-lg border border-[#242424] px-3.5 py-2 font-inter text-[13.5px] text-[#9a9a9a] transition-colors hover:border-secondary hover:text-secondary"
+        >
+          <Icono nombre="carpeta" tamano={15} />
+          Elegir la carpeta mods entera
+        </button>
+
         <section id="errores" class="mt-4 hidden"></section>
       </section>
 
@@ -258,6 +272,7 @@ const GUIAS = [
 
   const zona = $("zona");
   const entrada = $("fichero") as HTMLInputElement;
+  const carpeta = $("carpeta") as HTMLInputElement;
   const reemplazo = $("reemplazo") as HTMLInputElement;
   let archivos: File[] = [];
   let analisis: Analisis[] = [];
@@ -296,20 +311,32 @@ const GUIAS = [
 
   // --- añadir y quitar archivos -------------------------------------------
 
-  function anadir(nuevos: FileList | null) {
+  const esJar = (f: File) => /\.jar$/i.test(f.name);
+
+  /**
+   * Añade archivos a la tanda.
+   *
+   * `deCarpeta` cambia lo que se cuenta como problema: una carpeta mods trae
+   * config, subcarpetas y mods desactivados, y avisar de cada cosa que no es
+   * un .jar sería ruido. Al elegir archivos a mano, en cambio, colar algo que
+   * no es un .jar sí es un despiste que conviene decir.
+   */
+  function anadir(nuevos: FileList | File[] | null, deCarpeta = false) {
     if (!nuevos) return;
     const entrantes = Array.from(nuevos);
-    const noJar = entrantes.filter((f) => !/\.jar$/i.test(f.name));
-    const jars = entrantes.filter((f) => /\.jar$/i.test(f.name));
+    const jars = entrantes.filter(esJar);
+    const noJar = entrantes.length - jars.length;
 
     const hueco = MAXIMO - archivos.length;
     archivos = archivos.concat(jars.slice(0, Math.max(hueco, 0)));
     analisis = [];
 
     const problemas: string[] = [];
-    if (noJar.length) {
+    if (deCarpeta && !jars.length) {
+      problemas.push("En esa carpeta no hay ningún .jar.");
+    } else if (!deCarpeta && noJar) {
       problemas.push(
-        `${noJar.length === 1 ? "Un archivo no es" : `${noJar.length} archivos no son`} .jar y se ${noJar.length === 1 ? "ha" : "han"} descartado.`
+        `${noJar === 1 ? "Un archivo no es" : `${noJar} archivos no son`} .jar y se ${noJar === 1 ? "ha" : "han"} descartado.`
       );
     }
     if (jars.length > hueco && hueco >= 0) {
@@ -318,6 +345,52 @@ const GUIAS = [
     mostrarErrores(problemas);
     pintarLista();
     if (archivos.length) irA(2);
+  }
+
+  // --- carpetas arrastradas ------------------------------------------------
+
+  /** Recoge los .jar de una carpeta soltada, entrando en sus subcarpetas. */
+  async function recorrer(entrada: FileSystemEntry, salida: File[], hondura = 0) {
+    if (salida.length > MAXIMO) return;
+
+    if (entrada.isFile) {
+      const f = await new Promise<File>((ok, mal) =>
+        (entrada as FileSystemFileEntry).file(ok, mal)
+      );
+      if (esJar(f)) salida.push(f);
+      return;
+    }
+    // Una carpeta mods no anida mucho; el tope evita quedarse dando vueltas
+    // si alguien suelta media unidad de disco.
+    if (hondura >= 4) return;
+
+    const lector = (entrada as FileSystemDirectoryEntry).createReader();
+    for (;;) {
+      // readEntries devuelve como mucho 100 entradas por llamada: hay que
+      // seguir pidiendo hasta que conteste vacío o una carpeta de 300 mods
+      // se quedaría en los 100 primeros.
+      const lote = await new Promise<FileSystemEntry[]>((ok, mal) =>
+        lector.readEntries(ok, mal)
+      );
+      if (!lote.length) break;
+      for (const e of lote) await recorrer(e, salida, hondura + 1);
+    }
+  }
+
+  async function soltado(dt: DataTransfer): Promise<{ archivos: File[]; deCarpeta: boolean }> {
+    // webkitGetAsEntry hay que llamarlo antes de cualquier await: en cuanto se
+    // cede el turno, el DataTransfer deja de ser válido.
+    const entradas = [...dt.items]
+      .map((it) => (it.kind === "file" ? it.webkitGetAsEntry?.() : null))
+      .filter((e): e is FileSystemEntry => Boolean(e));
+
+    if (!entradas.some((e) => e.isDirectory)) {
+      return { archivos: [...dt.files], deCarpeta: false };
+    }
+
+    const salida: File[] = [];
+    for (const e of entradas) await recorrer(e, salida);
+    return { archivos: salida, deCarpeta: true };
   }
 
   function mostrarErrores(mensajes: string[]) {
@@ -787,6 +860,15 @@ const GUIAS = [
     entrada.value = "";
   });
 
+  // No va en el HTML porque no está en los tipos estándar del atributo, pero
+  // lo entienden todos los navegadores de escritorio.
+  carpeta.setAttribute("webkitdirectory", "");
+  $("elegir-carpeta").addEventListener("click", () => carpeta.click());
+  carpeta.addEventListener("change", () => {
+    anadir(carpeta.files, true);
+    carpeta.value = "";
+  });
+
   for (const evento of ["dragenter", "dragover"] as const) {
     zona.addEventListener(evento, (e) => {
       e.preventDefault();
@@ -796,9 +878,11 @@ const GUIAS = [
   for (const evento of ["dragleave", "drop"] as const) {
     zona.addEventListener(evento, () => zona.classList.remove("border-secondary", "bg-[#160f06]"));
   }
-  zona.addEventListener("drop", (e) => {
+  zona.addEventListener("drop", async (e) => {
     e.preventDefault();
-    anadir(e.dataTransfer?.files ?? null);
+    if (!e.dataTransfer) return;
+    const { archivos: sueltos, deCarpeta } = await soltado(e.dataTransfer);
+    anadir(sueltos, deCarpeta);
   });
 
   reemplazo.addEventListener("change", async () => {

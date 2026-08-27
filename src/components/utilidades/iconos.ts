@@ -19,7 +19,8 @@ export type NombreIcono =
   | "check"
   | "flecha"
   | "informacion"
-  | "reiniciar";
+  | "reiniciar"
+  | "carpeta";
 
 export const TRAZOS: Record<NombreIcono, string> = {
   paquete: `<path d="M21 8.5v7l-9 5-9-5v-7l9-5 9 5Z"/><path d="M3.3 7.8 12 12.6l8.7-4.8"/><path d="M12 12.6v8.4"/>`,
@@ -36,4 +37,5 @@ export const TRAZOS: Record<NombreIcono, string> = {
   flecha: `<path d="M4.5 12h15"/><path d="M13 5.5l6.5 6.5-6.5 6.5"/>`,
   informacion: `<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.8h.01"/>`,
   reiniciar: `<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5V9H15"/>`,
+  carpeta: `<path d="M3 7a2 2 0 0 1 2-2h3.8l2 2.5H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/>`,
 };
