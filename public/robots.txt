@@ -1,42 +1,61 @@
 # Buscadores tradicionales
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 # Crawlers de IA (permitidos explícitamente: visibilidad en respuestas de IA)
+#
+# Content-Signal dice qué se puede hacer con el contenido:
+#   search=yes    indexarlo y enlazarlo desde un buscador
+#   ai-input=yes  citarlo al responderle a alguien que pregunta
+#   ai-train=no   no usarlo para entrenar modelos
+#
+# La línea se repite en cada grupo a propósito: en robots.txt un bot solo
+# obedece al grupo más específico que le nombra, así que GPTBot nunca llega a
+# leer el grupo "*" y sin repetirla se quedaría sin la declaración.
 User-agent: GPTBot
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: OAI-SearchBot
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: ChatGPT-User
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: ClaudeBot
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: Claude-User
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: Claude-SearchBot
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: PerplexityBot
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: Perplexity-User
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
 User-agent: Google-Extended
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /api/
 
