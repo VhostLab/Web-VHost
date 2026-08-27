@@ -13,11 +13,10 @@
         "rule": "side-tab",
         "value": "*",
         "files": [
-          "src/components/blog/ResumenRapido.astro",
-          "src/pages/utilidades/comprobador-mods.astro"
+          "src/components/blog/ResumenRapido.astro"
         ],
         "createdAt": "2026-08-27T10:04:49.180Z",
-        "reason": "El borde lateral viene del diseno aprobado en Claude Design; en el comprobador ademas codifica el veredicto por color (verde sirve, rojo no sirve, naranja revisar)"
+        "reason": "El borde lateral del bloque \"Resumen rapido\" viene del diseno aprobado en Claude Design"
       }
     ]
   }
