@@ -41,8 +41,14 @@ export interface Analisis {
   nombreMod: string;
   /** Ids obligatorios de los que depende, para detectar los que faltan. */
   dependencias: string[];
-  /** Id propio, para saber si otro archivo lo aporta. */
+  /** Id propio. */
   id: string;
+  /**
+   * Todo lo que este archivo aporta: su id, los alias que declara y los mods
+   * que lleva empaquetados dentro. Es lo que hay que mirar para saber si una
+   * dependencia falta de verdad.
+   */
+  provee: string[];
   /** Trae metadatos de varias plataformas: vale para todas, no para una. */
   universal: boolean;
   error?: string;
@@ -50,14 +56,44 @@ export interface Analisis {
 
 // Un ZIP sano no necesita nada de esto, pero un archivo manipulado sí: son los
 // topes que evitan que un fichero pequeño nos haga reservar memoria sin fin.
-const MAX_ENTRADAS = 20000;
+// El de entradas va holgado a propósito: un mod de bloques como Chipped pasa
+// de las 38.000, y tratarlo como sospechoso sería acusar a un mod normal.
+const MAX_ENTRADAS = 300_000;
+const MAX_INDICE = 64 * 1024 * 1024;
 const MAX_METADATO = 2 * 1024 * 1024;
+const MAX_ANIDADO = 48 * 1024 * 1024;
+const MAX_ANIDADOS = 80;
 const TAM_COLA = 66_000; // 64 KB de comentario máximo + la cabecera del índice
+
+const METADATOS = new Set([
+  "fabric.mod.json",
+  "quilt.mod.json",
+  "META-INF/mods.toml",
+  "META-INF/neoforge.mods.toml",
+  "mcmod.info",
+  "plugin.yml",
+  "paper-plugin.yml",
+  "bungee.yml",
+  "velocity-plugin.json",
+]);
+
+/** Los mods empaquetan sus dependencias aquí dentro (Jar-in-Jar). */
+const ES_ANIDADO = /^META-INF\/(?:jars|jarjar)\/[^/]+\.jar$/;
 
 const leer = async (trozo: Blob) => new DataView(await trozo.arrayBuffer());
 
-/** Localiza el índice del ZIP leyendo solo la cola del fichero. */
-async function indice(fichero: File): Promise<Entrada[]> {
+/**
+ * Localiza el índice del ZIP leyendo solo la cola del fichero y devuelve las
+ * entradas que pide `quiero`.
+ *
+ * Se filtra mientras se recorre, no después: un mod puede traer decenas de
+ * miles de entradas, y guardarlas todas para quedarnos con seis sería gastar
+ * memoria a lo tonto.
+ */
+async function indice(
+  fichero: Blob,
+  quiero: (nombre: string) => boolean
+): Promise<Entrada[]> {
   const colaDesde = Math.max(0, fichero.size - TAM_COLA);
   const cola = await leer(fichero.slice(colaDesde));
 
@@ -70,40 +106,45 @@ async function indice(fichero: File): Promise<Entrada[]> {
   }
   if (eocd < 0) throw new Error("no-es-zip");
 
-  const total = cola.getUint16(eocd + 10, true);
   const tamIndice = cola.getUint32(eocd + 12, true);
   const offIndice = cola.getUint32(eocd + 16, true);
   if (offIndice === 0xffffffff) throw new Error("zip64");
-  if (total > MAX_ENTRADAS) throw new Error("demasiadas-entradas");
+  if (tamIndice > MAX_INDICE) throw new Error("demasiadas-entradas");
 
   const bruto = await leer(fichero.slice(offIndice, offIndice + tamIndice));
   const decodificador = new TextDecoder();
   const entradas: Entrada[] = [];
   let p = 0;
+  let vistas = 0;
 
-  for (let i = 0; i < total && p + 46 <= bruto.byteLength; i++) {
-    if (bruto.getUint32(p, true) !== 0x02014b50) break;
+  // Se recorre hasta que se acaba el índice, sin hacer caso al número de
+  // entradas que declara la cabecera: es un campo de 16 bits y en los ZIP
+  // grandes se queda corto.
+  while (p + 46 <= bruto.byteLength && bruto.getUint32(p, true) === 0x02014b50) {
+    if (++vistas > MAX_ENTRADAS) throw new Error("demasiadas-entradas");
     const lonNombre = bruto.getUint16(p + 28, true);
     const lonExtra = bruto.getUint16(p + 30, true);
     const lonComent = bruto.getUint16(p + 32, true);
     const nombre = decodificador.decode(
       new Uint8Array(bruto.buffer, bruto.byteOffset + p + 46, lonNombre)
     );
-    entradas.push({
-      nombre,
-      metodo: bruto.getUint16(p + 10, true),
-      comprimido: bruto.getUint32(p + 20, true),
-      descomprimido: bruto.getUint32(p + 24, true),
-      offsetLocal: bruto.getUint32(p + 42, true),
-    });
+    if (quiero(nombre)) {
+      entradas.push({
+        nombre,
+        metodo: bruto.getUint16(p + 10, true),
+        comprimido: bruto.getUint32(p + 20, true),
+        descomprimido: bruto.getUint32(p + 24, true),
+        offsetLocal: bruto.getUint32(p + 42, true),
+      });
+    }
     p += 46 + lonNombre + lonExtra + lonComent;
   }
   return entradas;
 }
 
-/** Saca una entrada concreta como texto. Solo se llama con ficheros pequeños. */
-async function texto(fichero: File, e: Entrada): Promise<string> {
-  if (e.descomprimido > MAX_METADATO) throw new Error("metadato-enorme");
+/** Saca una entrada concreta del ZIP, ya descomprimida. */
+async function datos(fichero: Blob, e: Entrada, tope: number): Promise<Blob> {
+  if (e.descomprimido > tope) throw new Error("metadato-enorme");
 
   // La cabecera local repite el nombre y el campo extra, y sus longitudes no
   // tienen por qué coincidir con las del índice: hay que leerla para saber
@@ -112,14 +153,17 @@ async function texto(fichero: File, e: Entrada): Promise<string> {
   if (cab.getUint32(0, true) !== 0x04034b50) throw new Error("cabecera-invalida");
   const inicio =
     e.offsetLocal + 30 + cab.getUint16(26, true) + cab.getUint16(28, true);
-  const datos = fichero.slice(inicio, inicio + e.comprimido);
+  const trozo = fichero.slice(inicio, inicio + e.comprimido);
 
-  if (e.metodo === 0) return await datos.text();
+  if (e.metodo === 0) return trozo;
   if (e.metodo !== 8) throw new Error("compresion-no-soportada");
 
-  const flujo = datos.stream().pipeThrough(new DecompressionStream("deflate-raw"));
-  return await new Response(flujo).text();
+  const flujo = trozo.stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return await new Response(flujo).blob();
 }
+
+const texto = async (fichero: Blob, e: Entrada) =>
+  await (await datos(fichero, e, MAX_METADATO)).text();
 
 // --- Lectores de metadatos -------------------------------------------------
 // No son parsers completos de TOML ni de YAML: buscan los campos concretos que
@@ -205,8 +249,8 @@ function deFabric(json: string, a: Analisis) {
     id?: string;
     name?: string;
     depends?: Record<string, unknown>;
+    provides?: string[];
     environment?: string;
-    entrypoints?: Record<string, unknown>;
   };
   a.cargador = "Fabric";
   a.tipo = "Mod de Fabric";
@@ -214,31 +258,39 @@ function deFabric(json: string, a: Analisis) {
   a.nombreMod = d.name ?? d.id ?? "";
   a.dependencias = Object.keys(d.depends ?? {});
   a.minecraft = versionMinecraft(String(d.depends?.minecraft ?? ""));
+  // Un mod puede responder también por otros ids: sin mirarlos, sus
+  // dependientes parecen cojos cuando no lo están.
+  a.provee.push(...(d.provides ?? []));
 
+  // "environment" es lo único que dice el lado, y lo dice el autor del mod.
+  // Deducirlo de otra cosa —de que solo tenga punto de entrada de cliente, por
+  // ejemplo— se equivoca con todos los que actúan por mixins. Si el mod dice
+  // que vale para los dos, vale para los dos.
   const entorno = d.environment ?? "*";
   a.lado = entorno === "client" ? "cliente" : entorno === "server" ? "servidor" : "ambos";
-
-  // Un mod que solo registra puntos de entrada de cliente casi nunca hace nada
-  // en un servidor, aunque su "environment" diga que vale para los dos.
-  const puntos = Object.keys(d.entrypoints ?? {});
-  if (puntos.length && puntos.every((p) => p === "client") && a.lado === "ambos") {
-    a.lado = "cliente";
-  }
 }
 
 function deQuilt(json: string, a: Analisis) {
   const d = jsonTolerante(json) as {
-    quilt_loader?: { id?: string; metadata?: { name?: string }; depends?: unknown[] };
+    quilt_loader?: {
+      id?: string;
+      metadata?: { name?: string };
+      depends?: unknown[];
+      provides?: unknown[];
+    };
     minecraft?: { environment?: string };
   };
   const q = d.quilt_loader ?? {};
+  const idDe = (x: unknown) =>
+    typeof x === "string" ? x : String((x as { id?: string }).id ?? "");
+
   a.cargador = "Quilt";
   a.tipo = "Mod de Quilt";
   a.id = q.id ?? "";
   a.nombreMod = q.metadata?.name ?? q.id ?? "";
-  a.dependencias = (q.depends ?? []).map((x: unknown) =>
-    typeof x === "string" ? x : String((x as { id?: string }).id ?? "")
-  );
+  a.dependencias = (q.depends ?? []).map(idDe);
+  a.provee.push(...(q.provides ?? []).map(idDe));
+
   const entorno = d.minecraft?.environment ?? "*";
   a.lado =
     entorno === "client" ? "cliente" : entorno === "dedicated_server" ? "servidor" : "ambos";
@@ -304,6 +356,51 @@ function deProxy(a: Analisis, cual: string) {
   a.lado = "proxy";
 }
 
+/**
+ * Ids de los mods que un .jar lleva empaquetados dentro.
+ *
+ * Meter las dependencias dentro del propio mod es lo normal en Fabric y en
+ * NeoForge. Sin mirar ahí, media carpeta parece que le falta algo cuando lo
+ * tiene todo.
+ */
+async function idsAnidados(fichero: Blob, entradas: Entrada[]): Promise<string[]> {
+  const ids: string[] = [];
+  const dentro = entradas.filter((e) => ES_ANIDADO.test(e.nombre)).slice(0, MAX_ANIDADOS);
+
+  for (const e of dentro) {
+    try {
+      const sub = await datos(fichero, e, MAX_ANIDADO);
+      const suyas = await indice(
+        sub,
+        (n) =>
+          n === "fabric.mod.json" ||
+          n === "META-INF/mods.toml" ||
+          n === "META-INF/neoforge.mods.toml"
+      );
+
+      const fabric = suyas.find((x) => x.nombre === "fabric.mod.json");
+      if (fabric) {
+        const d = jsonTolerante(await texto(sub, fabric)) as {
+          id?: string;
+          provides?: string[];
+        };
+        if (d.id) ids.push(d.id);
+        ids.push(...(d.provides ?? []));
+        continue;
+      }
+
+      const toml = suyas[0];
+      if (toml) {
+        const id = campoToml(await texto(sub, toml), "modId");
+        if (id) ids.push(id);
+      }
+    } catch {
+      // Un anidado ilegible no invalida al archivo que lo lleva dentro.
+    }
+  }
+  return ids;
+}
+
 const MENSAJES: Record<string, string> = {
   "no-es-zip": "No parece un .jar. Puede que la descarga se cortara a medias.",
   "cabecera-invalida": "El archivo está dañado por dentro. Vuelve a descargarlo.",
@@ -326,11 +423,12 @@ export async function analizarJar(fichero: File): Promise<Analisis> {
     nombreMod: "",
     dependencias: [],
     id: "",
+    provee: [],
     universal: false,
   };
 
   try {
-    const entradas = await indice(fichero);
+    const entradas = await indice(fichero, (n) => METADATOS.has(n) || ES_ANIDADO.test(n));
     const mapa = new Map(entradas.map((e) => [e.nombre, e]));
     const leerSi = async (n: string) => {
       const e = mapa.get(n);
@@ -376,6 +474,9 @@ export async function analizarJar(fichero: File): Promise<Analisis> {
       a.lado = "ambos";
     }
 
+    a.provee = [
+      ...new Set([a.id, ...a.provee, ...(await idsAnidados(fichero, entradas))].filter(Boolean)),
+    ];
     if (!a.nombreMod) a.nombreMod = fichero.name.replace(/\.jar$/i, "");
   } catch (e) {
     const clave = e instanceof Error ? e.message : "error";

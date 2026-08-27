@@ -482,7 +482,9 @@ const GUIAS = [
     }
 
     const validos = todos.filter((i) => !res[i].error);
-    const provistos = new Set(validos.map((i) => res[i].id).filter(Boolean));
+    // Cuenta todo lo que aporta cada archivo, no solo su id: los mods traen
+    // sus dependencias empaquetadas dentro y responden por varios nombres.
+    const provistos = new Set(validos.flatMap((i) => res[i].provee));
     const conFabricApi = provistos.has("fabric-api") || provistos.has("fabric");
 
     // 1. Mods que solo funcionan en el cliente.
