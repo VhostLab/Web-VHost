@@ -46,7 +46,7 @@ const GUIAS = [
       <CabeceraUtilidad
         miga="Comprobador de mods"
         titulo="Comprobador de mods de Minecraft"
-        descripcion="Añade hasta 10 archivos .jar y te decimos cuáles funcionan en un servidor, cuáles son solo de cliente y qué incompatibilidades hay entre ellos."
+        descripcion="Añade hasta 300 archivos .jar —una carpeta de mods entera— y te decimos cuáles funcionan en un servidor, cuáles son solo de cliente y qué incompatibilidades hay entre ellos."
         privacidad="Tus archivos no salen del navegador: se leen en tu equipo y no se suben a ningún servidor."
       />
 
@@ -85,7 +85,7 @@ const GUIAS = [
           </p>
           <p class="mt-2 font-karla text-[14.5px] text-[#9a9a9a]">
             o <span class="font-medium text-secondary">selecciónalos desde tu equipo</span>
-            · máximo 10 archivos
+            · hasta 300 archivos
           </p>
           <input id="fichero" type="file" multiple accept=".jar" class="hidden" />
         </div>
@@ -119,7 +119,7 @@ const GUIAS = [
               </button>
             </div>
           </div>
-          <div id="filas"></div>
+          <div id="filas" class="max-h-[420px] overflow-y-auto"></div>
         </div>
 
         <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
@@ -156,53 +156,23 @@ const GUIAS = [
 
       <!-- Paso 3: resultado -->
       <section data-paso="3" class="mt-6 hidden">
+        <!-- Con cientos de archivos, poder quedarse solo con los que fallan es
+             lo que hace usable el resultado: cada recuento filtra la lista. -->
         <div class="grid gap-3 sm:grid-cols-3">
-          <div class="rounded-xl border border-[#1f1f1f] bg-[#111111] p-5">
-            <p
-              id="n-si"
-              class="font-poppins text-[30px] font-semibold leading-none text-[#4caf50]"
-            >
-              0
-            </p>
-            <p class="mt-2 font-karla text-[13.5px] text-[#9a9a9a]">
-              Sirven en el servidor
-            </p>
-          </div>
-          <div class="rounded-xl border border-[#1f1f1f] bg-[#111111] p-5">
-            <p
-              id="n-no"
-              class="font-poppins text-[30px] font-semibold leading-none text-[#ef5350]"
-            >
-              0
-            </p>
-            <p class="mt-2 font-karla text-[13.5px] text-[#9a9a9a]">No sirven</p>
-          </div>
-          <div class="rounded-xl border border-[#1f1f1f] bg-[#111111] p-5">
-            <p
-              id="n-duda"
-              class="font-poppins text-[30px] font-semibold leading-none text-secondary"
-            >
-              0
-            </p>
-            <p class="mt-2 font-karla text-[13.5px] text-[#9a9a9a]">
-              Hay que mirarlos
-            </p>
-          </div>
+          <button type="button" class="filtro rounded-xl border p-5 text-left" data-filtro="si" aria-pressed="false">
+            <span id="n-si" class="block font-poppins text-[30px] font-semibold leading-none text-[#4caf50]">0</span>
+            <span class="mt-2 block font-karla text-[13.5px] text-[#9a9a9a]">Sirven en el servidor</span>
+          </button>
+          <button type="button" class="filtro rounded-xl border p-5 text-left" data-filtro="no" aria-pressed="false">
+            <span id="n-no" class="block font-poppins text-[30px] font-semibold leading-none text-[#ef5350]">0</span>
+            <span class="mt-2 block font-karla text-[13.5px] text-[#9a9a9a]">No sirven</span>
+          </button>
+          <button type="button" class="filtro rounded-xl border p-5 text-left" data-filtro="duda" aria-pressed="false">
+            <span id="n-duda" class="block font-poppins text-[30px] font-semibold leading-none text-secondary">0</span>
+            <span class="mt-2 block font-karla text-[13.5px] text-[#9a9a9a]">Hay que mirarlos</span>
+          </button>
         </div>
-
-        <div
-          id="avisos"
-          class="mt-4 hidden rounded-[14px] border border-secondary/30 bg-secondary/[0.06] p-6"
-        >
-          <p class="font-inter text-[14.5px] font-semibold text-secondary">
-            Avisos del conjunto
-          </p>
-          <p class="mt-1 font-karla text-[13.5px] text-[#9a9a9a]">
-            Problemas que aparecen al juntar estos archivos, aunque cada uno sea
-            válido por separado.
-          </p>
-          <div id="avisos-lista" class="mt-4 flex flex-col gap-3"></div>
-        </div>
+        <p id="filtro-activo" class="mt-3 hidden font-karla text-[13.5px] text-[#9a9a9a]"></p>
 
         <div id="tarjetas" class="mt-5 flex flex-col gap-3"></div>
 
@@ -271,6 +241,20 @@ const GUIAS = [
     background: #fc7c04;
     color: #0b0b0b;
   }
+  .filtro {
+    border-color: #1f1f1f;
+    background: #111111;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .filtro:hover {
+    border-color: #3a3a3a;
+  }
+  .filtro[aria-pressed="true"] {
+    border-color: #fc7c04;
+    background: rgba(252, 124, 4, 0.06);
+  }
+
   /* Pasos ya superados: se puede volver a ellos. */
   .paso[data-hecho="si"] {
     color: #c9c7c4;
@@ -288,7 +272,10 @@ const GUIAS = [
 <script>
   import { analizarJar, sirveEnServidor, type Analisis } from "@utils/jar";
 
-  const MAXIMO = 10;
+  // Un modpack grande ronda los 200-400 mods, así que el tope tiene que dar
+  // para una carpeta entera. Cada archivo cuesta unos KB de lectura, no el
+  // fichero completo, así que subirlo no encarece el análisis.
+  const MAXIMO = 300;
   const $ = (id: string) => document.getElementById(id) as HTMLElement;
 
   const zona = $("zona");
@@ -296,6 +283,7 @@ const GUIAS = [
   let archivos: File[] = [];
   let analisis: Analisis[] = [];
   let paso = 1;
+  let filtro: "si" | "no" | "duda" | null = null;
 
   const escapar = (t: string) =>
     t.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
@@ -388,26 +376,25 @@ const GUIAS = [
     "mixinextras",
   ]);
 
-  function avisosDelConjunto(res: Analisis[]) {
-    const avisos: { etiqueta: string; titulo: string; detalle: string }[] = [];
+  /**
+   * Problemas de cada archivo respecto a los demás de la lista.
+   *
+   * Van pegados al archivo que los tiene, no en un bloque aparte: si a un mod
+   * le falta una dependencia, lo útil es verlo en su propia ficha y no tener
+   * que cruzar una lista de avisos con la de archivos.
+   */
+  function problemasPorArchivo(res: Analisis[]): string[][] {
     const validos = res.filter((r) => !r.error);
+    const provistos = new Set(validos.map((r) => r.id).filter(Boolean));
+    const conFabricApi = provistos.has("fabric-api") || provistos.has("fabric");
 
-    const cargadores = [
+    const cargadoresMod = [
       ...new Set(
-        validos.map((r) => r.cargador).filter((c) => ["Fabric", "Forge", "NeoForge", "Quilt"].includes(c))
+        validos
+          .map((r) => r.cargador)
+          .filter((c) => ["Fabric", "Forge", "NeoForge", "Quilt"].includes(c))
       ),
     ];
-    if (cargadores.length > 1) {
-      avisos.push({
-        etiqueta: "Cargadores",
-        titulo: "Mezcla de cargadores incompatibles",
-        detalle: `Hay archivos de ${cargadores.join(" y ")} en la misma lista. Un servidor solo puede ejecutar uno: elige cargador y deja fuera el resto.`,
-      });
-    }
-
-    // Solo se comparan mods entre sí. El api-version de un plugin es un
-    // mínimo ("de 1.13 en adelante"), no la versión del servidor, así que
-    // cruzarlo con la de un mod daría un aviso falso.
     const versiones = [
       ...new Set(
         validos
@@ -416,70 +403,55 @@ const GUIAS = [
           .filter(Boolean)
       ),
     ];
-    if (versiones.length > 1) {
-      avisos.push({
-        etiqueta: "Versiones",
-        titulo: "Versiones de Minecraft que no casan",
-        detalle: `Conviven mods para ${versiones.join(" y ")}. Todos tienen que coincidir con la versión del servidor o el arranque fallará.`,
-      });
-    }
-
-    // Dependencias: Fabric API se reparte en módulos (fabric-rendering-v1,
-    // fabric-resource-loader-v0...), así que si está el jar principal, todos
-    // los que empiezan por "fabric" quedan cubiertos.
-    const provistos = new Set(validos.map((r) => r.id).filter(Boolean));
-    const conFabricApi = provistos.has("fabric-api") || provistos.has("fabric");
-    const faltan = new Set<string>();
-    for (const r of validos) {
-      for (const dep of r.dependencias) {
-        if (!dep || PLATAFORMA.has(dep) || provistos.has(dep)) continue;
-        if (conFabricApi && dep.startsWith("fabric")) continue;
-        faltan.add(dep);
-      }
-    }
-    if (faltan.size) {
-      const lista = [...faltan];
-      const deFabric = lista.filter((d) => d.startsWith("fabric"));
-      const otras = lista.filter((d) => !d.startsWith("fabric"));
-
-      if (deFabric.length && !conFabricApi) {
-        avisos.push({
-          etiqueta: "Dependencias",
-          titulo: "Falta Fabric API",
-          detalle: `Hay mods que necesitan módulos de Fabric API (${deFabric.slice(0, 3).join(", ")}${deFabric.length > 3 ? "…" : ""}) y no está en la lista. Se instala como un .jar más, en la misma versión de Minecraft que el resto.`,
-        });
-      }
-      if (otras.length) {
-        avisos.push({
-          etiqueta: "Dependencias",
-          titulo: otras.length === 1 ? "Falta una dependencia" : "Faltan dependencias",
-          detalle: `Estos archivos piden ${otras.slice(0, 6).join(", ")}${otras.length > 6 ? " y alguna más" : ""}, y no ${otras.length === 1 ? "está" : "están"} en la lista. Sin ${otras.length === 1 ? "ella" : "ellas"} el servidor no arrancará.`,
-        });
-      }
-    }
-
     const hayPlugin = validos.some((r) => r.cargador === "Bukkit");
-    const hayMod = validos.some((r) => ["Fabric", "Forge", "NeoForge", "Quilt"].includes(r.cargador));
-    if (hayPlugin && hayMod) {
-      avisos.push({
-        etiqueta: "Plugins y mods",
-        titulo: "Plugins y mods mezclados",
-        detalle:
-          "Paper no carga mods y Fabric o Forge no cargan plugins. Necesitas un servidor híbrido, o separar los archivos en dos servidores.",
-      });
-    }
+    const hayMod = cargadoresMod.length > 0;
 
-    const hayProxy = validos.some((r) => r.cargador === "Proxy");
-    if (hayProxy && (hayPlugin || hayMod)) {
-      avisos.push({
-        etiqueta: "Proxy",
-        titulo: "Hay plugins de proxy en la lista",
-        detalle:
-          "Los plugins de proxy van en BungeeCord o Velocity, que es una pieza aparte delante de los servidores. En el servidor de juego no hacen nada.",
-      });
-    }
+    return res.map((r) => {
+      if (r.error) return [];
+      const problemas: string[] = [];
+      const esMod = ["Fabric", "Forge", "NeoForge", "Quilt"].includes(r.cargador);
 
-    return avisos;
+      // Dependencias que este archivo pide y no están en la lista.
+      const faltan = r.dependencias.filter((dep) => {
+        if (!dep || PLATAFORMA.has(dep) || provistos.has(dep)) return false;
+        if (conFabricApi && dep.startsWith("fabric")) return false;
+        return true;
+      });
+      if (faltan.length) {
+        const soloFabric = faltan.every((d) => d.startsWith("fabric"));
+        problemas.push(
+          soloFabric && !conFabricApi
+            ? "Necesita Fabric API y no está en la lista: añádela en la misma versión de Minecraft."
+            : `Necesita ${faltan.slice(0, 4).join(", ")}${faltan.length > 4 ? " y alguna más" : ""}, que no ${faltan.length === 1 ? "está" : "están"} en la lista.`
+        );
+      }
+
+      // Choques con el resto de archivos.
+      if (esMod && cargadoresMod.length > 1) {
+        const otros = cargadoresMod.filter((c) => c !== r.cargador);
+        problemas.push(
+          `Es de ${r.cargador} y en la lista hay mods de ${otros.join(" y ")}. Un servidor solo carga un cargador.`
+        );
+      }
+      if (esMod && r.minecraft && versiones.length > 1) {
+        const otras = versiones.filter((v) => v !== r.minecraft);
+        problemas.push(
+          `Es para Minecraft ${r.minecraft} y en la lista hay mods para ${otras.join(" y ")}.`
+        );
+      }
+      if (hayPlugin && hayMod) {
+        if (r.cargador === "Bukkit") {
+          problemas.push("Es un plugin y en la lista hay mods: un servidor normal no carga las dos cosas.");
+        } else if (esMod) {
+          problemas.push("Es un mod y en la lista hay plugins: un servidor normal no carga las dos cosas.");
+        }
+      }
+      if (r.cargador === "Proxy" && (hayPlugin || hayMod)) {
+        problemas.push("Va en el proxy (BungeeCord o Velocity), no en el servidor de juego.");
+      }
+
+      return problemas;
+    });
   }
 
   // --- pintado -------------------------------------------------------------
@@ -531,23 +503,33 @@ const GUIAS = [
     $("n-no").textContent = String(veredictos.filter((v) => v === "no").length);
     $("n-duda").textContent = String(veredictos.filter((v) => v === "duda").length);
 
-    const avisos = avisosDelConjunto(res);
-    $("avisos").classList.toggle("hidden", avisos.length === 0);
-    $("avisos-lista").innerHTML = avisos
-      .map(
-        (a) => `
-        <div class="flex flex-col gap-1 border-t border-secondary/20 pt-3 sm:flex-row sm:gap-4">
-          <span class="shrink-0 font-karla text-[11px] uppercase tracking-[0.1em] text-secondary sm:w-32 sm:pt-0.5">${escapar(a.etiqueta)}</span>
-          <div>
-            <p class="font-inter text-[14.5px] font-medium text-[#f3f1ef]">${escapar(a.titulo)}</p>
-            <p class="mt-1 font-karla text-sm leading-relaxed text-[#9a9a9a]">${escapar(a.detalle)}</p>
-          </div>
-        </div>`
-      )
-      .join("");
+    const problemas = problemasPorArchivo(res);
 
-    $("tarjetas").innerHTML = res
-      .map((r) => {
+    // Los que fallan primero. Con una carpeta de 300 mods, el que necesita
+    // atención no puede quedar sepultado entre los que están bien.
+    const ORDEN = { no: 0, duda: 1, si: 2 } as const;
+    const ordenados = res
+      .map((r, i) => ({ r, problemas: problemas[i] ?? [], v: r.error ? "duda" : sirveEnServidor(r) }))
+      .sort(
+        (a, b) =>
+          ORDEN[a.v as keyof typeof ORDEN] - ORDEN[b.v as keyof typeof ORDEN] ||
+          b.problemas.length - a.problemas.length ||
+          a.r.archivo.localeCompare(b.r.archivo, "es")
+      );
+
+    const visibles = filtro ? ordenados.filter((x) => x.v === filtro) : ordenados;
+
+    for (const b of document.querySelectorAll<HTMLElement>("[data-filtro]")) {
+      b.setAttribute("aria-pressed", String(b.dataset.filtro === filtro));
+    }
+    const rotulo = $("filtro-activo");
+    rotulo.classList.toggle("hidden", !filtro);
+    rotulo.textContent = filtro
+      ? `Mostrando ${visibles.length} de ${res.length} archivos. Vuelve a pulsar el recuento para verlos todos.`
+      : "";
+
+    $("tarjetas").innerHTML = visibles
+      .map(({ r, problemas: suyos }) => {
         const v = r.error ? "duda" : sirveEnServidor(r);
         const insignia =
           v === "si"
@@ -562,10 +544,6 @@ const GUIAS = [
             <p class="mt-0.5 font-karla text-[13.5px] text-[#c9c7c4]">${escapar(valor || "—")}</p>
           </div>`;
 
-        // El motivo va a la vista, no escondido tras un desplegable: un
-        // veredicto sin explicación no sirve de nada, sobre todo un "míralo".
-        const motivo = r.error ?? r.evidencias[0] ?? "";
-
         const cuerpo = r.error
           ? `<p class="mt-3 font-karla text-sm leading-relaxed text-[#ef5350]">${escapar(r.error)}</p>`
           : `<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -574,7 +552,20 @@ const GUIAS = [
                ${celda("Minecraft", r.minecraft)}
                ${celda("Cargador", r.cargador === "?" ? "" : r.cargador)}
              </div>
-             ${motivo ? `<p class="mt-3.5 border-t border-[#1f1f1f] pt-3 font-karla text-[13.5px] leading-relaxed text-[#6f6f6f]">${escapar(motivo)}</p>` : ""}`;
+             ${
+               suyos.length
+                 ? `<ul class="mt-4 flex flex-col gap-2 border-t border-[#1f1f1f] pt-3.5">
+                      ${suyos
+                        .map(
+                          (m) => `<li class="flex gap-2.5 font-karla text-[13.5px] leading-relaxed text-secondary">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0" aria-hidden="true"><path d="M12 4.2 21 19.2H3L12 4.2Z"/><path d="M12 10v4"/><path d="M12 16.8h.01"/></svg>
+                            <span>${escapar(m)}</span>
+                          </li>`
+                        )
+                        .join("")}
+                    </ul>`
+                 : ""
+             }`;
 
         return `
           <div class="rounded-[14px] border border-[#1f1f1f] bg-[#111111] p-5">
@@ -596,6 +587,7 @@ const GUIAS = [
   async function analizar() {
     if (!archivos.length) return;
     analisis = [];
+    filtro = null;
     $("progreso").classList.remove("hidden");
     ($("analizar") as HTMLButtonElement).disabled = true;
 
@@ -651,6 +643,14 @@ const GUIAS = [
     pintarLista();
     irA(1);
   });
+  for (const b of document.querySelectorAll<HTMLElement>("[data-filtro]")) {
+    b.addEventListener("click", () => {
+      const suyo = b.dataset.filtro as "si" | "no" | "duda";
+      filtro = filtro === suyo ? null : suyo;
+      pintarResultados();
+    });
+  }
+
   $("analizar").addEventListener("click", analizar);
   $("volver-lista").addEventListener("click", () => irA(2));
   $("reiniciar").addEventListener("click", () => {
