@@ -11,14 +11,14 @@ summary:
   - "Todo cuelga de /home/container: lo que ves al abrir la pestaña Files es la raíz de tu servidor."
   - "Puedes subir arrastrando, o pegar una URL directa y que el panel descargue el archivo por ti."
   - "El menú de cada fila trae renombrar, mover, permisos, copiar, comprimir, descargar y borrar."
-  - "El botón Advanced esconde dos atajos útiles: un editor de server.properties y la subida del icono del servidor."
+  - "Para lo repetitivo hay atajos mejores: las pestañas Mods, Plugins y Properties hacen el mismo trabajo sin tocar archivos."
 faqs:
   - question: "¿Dónde tengo que dejar los plugins?"
     answer: "En la carpeta plugins de la raíz del servidor. Si no existe, es que tu servidor no usa Paper, Spigot ni Purpur: en Forge, NeoForge o Fabric la carpeta correcta es mods, y los plugins no funcionan ahí. Después de copiar el archivo hay que reiniciar el servidor para que lo cargue."
   - question: "¿Puedo subir un modpack entero desde el navegador?"
     answer: "Puedes, pero es lento y una conexión inestable te obliga a empezar de cero. Para cientos de archivos es mejor subir el zip y descomprimirlo ya en el servidor, o conectarte por SFTP con FileZilla o WinSCP."
   - question: "¿Cómo edito server.properties sin descargarlo?"
-    answer: "Pulsa sobre el nombre del archivo y se abre el editor del panel. También tienes un atajo en el botón Advanced, con la opción Server Properties, que te presenta los mismos ajustes en un formulario. Guarda y reinicia el servidor para que los cambios se apliquen."
+    answer: "Pulsa sobre el nombre del archivo y se abre el editor del panel. Si prefieres no pelearte con el texto plano, la pestaña Properties presenta los mismos ajustes en un formulario con interruptores y desplegables. Guarda y reinicia el servidor para que los cambios se apliquen."
   - question: "¿Qué hago si un archivo da error de permisos?"
     answer: "Abre el menú de los tres puntos de esa fila y entra en Permissions. Ahí puedes ajustar los permisos del archivo o la carpeta sin salir del navegador, igual que harías con un chmod por consola."
   - question: "¿Se puede recuperar un archivo borrado por error?"
@@ -34,7 +34,7 @@ mover y cambiar permisos, sin instalar nada.
 
 ![Gestor de archivos del panel, con la barra de herramientas arriba y el listado de archivos de un servidor de Minecraft](../../images/blog/panel/archivos-gestor.webp)
 
-La barra superior tiene cinco herramientas:
+La barra superior tiene cuatro herramientas:
 
 - **Search**: busca por nombre dentro de la carpeta en la que estés.
 - **Create Directory**: crea una carpeta.
@@ -43,7 +43,8 @@ La barra superior tiene cinco herramientas:
   **Upload from URL**, donde pegas el enlace directo a un archivo y lo descarga
   el propio servidor, sin pasar por tu conexión.
 - **New file**: crea un archivo vacío y lo abre en el editor.
-- **Advanced**: dos atajos que merece la pena conocer, y que vemos más abajo.
+
+![Menú del botón Upload desplegado, con las opciones Upload Files, Upload Folders y Upload from URL](../../images/blog/panel/archivos-subir.webp)
 
 Justo debajo hay una miga de pan (`home / container`) que te dice dónde estás y
 te deja volver atrás de un clic.
@@ -95,17 +96,32 @@ Las casillas de la izquierda permiten seleccionar varios archivos a la vez y
 aplicarles la misma acción en bloque, que es lo práctico cuando hay que limpiar
 una carpeta de plugins.
 
-## Los dos atajos del botón Advanced
+## Cuándo no hace falta el gestor
 
-**Advanced** despliega dos herramientas que no están en un Pterodactyl normal:
+Buena parte de lo que antes se hacía aquí a mano tiene ahora pestaña propia, y
+sale más rápido:
 
-![Menú del botón Advanced, con las opciones Server Properties y Upload Minecraft Icon](../../images/blog/panel/archivos-avanzado.webp)
+| Si quieres… | Usa | En vez de |
+| --- | --- | --- |
+| Instalar un mod | Pestaña **Mods** | Subir el `.jar` a `mods/` |
+| Instalar un plugin | Pestaña **Plugins** | Subir el `.jar` a `plugins/` |
+| Instalar un modpack | Pestaña **Modpacks** | Subir el server pack |
+| Poner un mapa | Pestaña **Worlds** | Subir la carpeta del mundo |
+| Cambiar `server.properties` | Pestaña **Properties** | Editar el archivo |
+| Cambiar de software o versión | Pestaña **Versions** | Sustituir `server.jar` |
 
-- **Server Properties**: presenta los ajustes de `server.properties` en un
-  formulario, en vez de dejarte a solas con el archivo de texto. Va bien para
-  los cambios de siempre sin miedo a romper la sintaxis.
-- **Upload Minecraft Icon**: sube el icono que se ve junto a tu servidor en la
-  lista de servidores del juego. Necesita un PNG de 64 × 64 píxeles.
+Las tienes explicadas en
+[instalar mods desde el panel](/blog/instalar-mods-panel-automatico/),
+[instalar plugins](/blog/instalar-plugins-panel/),
+[instalar un modpack](/blog/instalar-modpack-panel/),
+[poner un mapa](/blog/instalar-mapa-mundo-panel/),
+[configurar server.properties](/blog/editar-server-properties-panel/) y
+[cambiar la versión o el software](/blog/cambiar-version-software-servidor/).
+
+El gestor de archivos sigue siendo imprescindible para todo lo demás: editar
+el `config.yml` de un plugin, mover carpetas, revisar `logs/` cuando algo falla
+o subir un `.jar` que no está en ningún repositorio, como cuenta
+[instalar mods manualmente](/blog/instalar-mods-manualmente-jar/).
 
 ## Cuándo dejar el navegador
 

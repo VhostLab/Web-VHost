@@ -9,14 +9,14 @@ category: "Panel"
 level: "Intermedio"
 summary:
   - "Las tareas se crean en la pestaña Schedules, y el modo fácil las configura con desplegables, sin saber cron."
-  - "Una tarea programada puede enviar un comando, ejecutar una acción de encendido o crear una copia de seguridad."
+  - "Una tarea puede enviar un comando, encender o parar el servidor, crear una copia, avisar por Discord o borrar archivos."
   - "El retraso entre tareas es lo que permite avisar a los jugadores un minuto antes de reiniciar."
   - "Un reinicio diario de madrugada arregla la mayoría de las fugas de memoria sin que nadie lo note."
 faqs:
   - question: "¿Hace falta saber cron para programar una tarea?"
     answer: "No. El formulario se abre en modo fácil, con desplegables del tipo Cada día a medianoche o Días laborables, y una vista previa en texto de cuándo se ejecutará. El modo avanzado, con los cinco campos de cron, está ahí para quien lo necesite, y el panel incluye una chuleta de ejemplos."
   - question: "¿Qué puede hacer una tarea programada?"
-    answer: "Tres cosas: enviar un comando a la consola, ejecutar una acción de encendido (arrancar, reiniciar, parar o matar el proceso) o crear una copia de seguridad. Una misma tarea puede encadenar varias acciones en orden."
+    answer: "Cinco cosas: enviar un comando a la consola, ejecutar una acción de encendido (arrancar, reiniciar, parar o matar el proceso), crear una copia de seguridad, mandar un aviso a Discord por webhook o borrar archivos. Una misma tarea puede encadenar varias acciones en orden."
   - question: "¿Cómo aviso a los jugadores antes de un reinicio?"
     answer: "Encadenando dos acciones dentro de la misma tarea: primero un comando say con el aviso, y después la acción de reinicio con un retraso de 60 segundos. Ese retraso es el que da tiempo a la gente a ponerse a salvo."
   - question: "¿Se ejecuta la tarea si el servidor está apagado?"
@@ -64,6 +64,14 @@ Una tarea vacía no hace nada: hay que darle acciones. Entra en ella y pulsa
 | **Send command** | Envía un comando a la consola, igual que si lo escribieras |
 | **Send power action** | Arranca, reinicia, para o mata el proceso del servidor |
 | **Create backup** | Lanza una copia de seguridad |
+| **Discord webhook** | Manda un aviso a un canal de tu Discord |
+| **Delete files** | Borra archivos o carpetas que indiques |
+
+Las dos últimas son las más recientes. **Discord webhook** va bien para
+enterarte de que el reinicio nocturno se ha hecho sin tener que entrar al
+panel. **Delete files** sirve para limpiezas periódicas, como vaciar `logs/`
+una vez por semana, y conviene usarla con cuidado: borra sin preguntar y no hay
+papelera.
 
 Cada acción tiene además dos ajustes importantes:
 

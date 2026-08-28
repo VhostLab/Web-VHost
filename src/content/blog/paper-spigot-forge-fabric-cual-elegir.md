@@ -145,5 +145,19 @@ Ten en cuenta el consumo: un servidor de mods parte de una base de memoria
 muy superior a uno de plugins. Puedes calcular lo que necesitas con la guía
 de [cuánta RAM necesita un servidor de Minecraft](/blog/cuanta-ram-servidor-minecraft/),
 y si aún no tienes servidor, empezar por los
-[planes de Minecraft de Vhost](/tienda/minecraft/), donde puedes instalar
-cualquiera de estos desde el panel y cambiar de uno a otro cuando quieras.
+[planes de Minecraft de Vhost](/tienda/minecraft/).
+
+## Y si te equivocas, se cambia en un clic
+
+Esta decisión pesa menos de lo que parece. Los catorce softwares de esta guía
+están en la pestaña **Versions** del panel y se instalan pulsando un botón,
+**sin borrar tu mundo**: puedes empezar en Paper, probar Fabric un fin de
+semana y volver.
+
+Cómo se hace, y lo único que hay que mirar antes, está en
+[cambiar la versión o el software de tu servidor](/blog/cambiar-version-software-servidor/).
+
+Después, para llenarlo: [instalar plugins](/blog/instalar-plugins-panel/) si
+te has quedado en la rama de Paper, o
+[instalar mods](/blog/instalar-mods-panel-automatico/) y
+[modpacks](/blog/instalar-modpack-panel/) si te has ido a la de Fabric o Forge.
