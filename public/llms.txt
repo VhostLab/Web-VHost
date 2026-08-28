@@ -16,9 +16,40 @@
 - [Tienda completa](https://vhost.tech/tienda/tienda/): todos los juegos con planes propios, por gama y precio.
 - [Juegos compatibles](https://vhost.tech/juegos/): catálogo completo de juegos alojables (todo lo compatible con el panel Pterodactyl).
 
+## Herramientas gratuitas
+
+Funcionan enteras en el navegador: los archivos no se suben a ningún servidor.
+
+- [Comprobador de mods](https://vhost.tech/utilidades/comprobador-mods/): sube tus .jar y te dice si el modpack sirve para un servidor, qué dependencias faltan y qué mods son de solo cliente.
+- [Calculadora de RAM](https://vhost.tech/utilidades/calculadora-ram/): cuánta memoria necesita tu servidor según jugadores, plugins y mods.
+- [Generador de registros DNS](https://vhost.tech/utilidades/registros-dns/): los registros A y SRV listos para copiar en tu proveedor de dominios.
+
 ## Guías
 
+### Empezar
+
+- [Cómo crear un servidor de Minecraft para jugar con amigos](https://vhost.tech/blog/como-crear-servidor-minecraft-amigos/): las tres vías (LAN, Realms o servidor alojado) y cuál conviene en cada caso.
+- [Paper, Spigot, Forge o Fabric: qué software elegir](https://vhost.tech/blog/paper-spigot-forge-fabric-cual-elegir/): diferencias entre vanilla, plugins, mods e híbridos.
 - [¿Cuánta RAM necesita un servidor de Minecraft?](https://vhost.tech/blog/cuanta-ram-servidor-minecraft/): tabla de RAM recomendada por número de jugadores, plugins y modpacks.
+
+### Mods, plugins y contenido
+
+- [Cómo instalar mods desde el panel](https://vhost.tech/blog/instalar-mods-panel-automatico/): buscar en Modrinth y CurseForge e instalar sin descargar nada; incluye el detalle del desplegable de versión y las dependencias.
+- [Cómo instalar mods manualmente subiendo el .jar](https://vhost.tech/blog/instalar-mods-manualmente-jar/): dónde va cada archivo, cómo subir la carpeta mods entera y cuándo usar SFTP.
+- [Cómo instalar plugins desde el panel](https://vhost.tech/blog/instalar-plugins-panel/): buscador con Modrinth, CurseForge, Spigot y Hangar.
+- [Cómo instalar un modpack con un clic](https://vhost.tech/blog/instalar-modpack-panel/): qué prepara el panel, qué tiene que instalar cada jugador y cuánta RAM hace falta.
+- [Cómo poner un mapa descargado en tu servidor](https://vhost.tech/blog/instalar-mapa-mundo-panel/): la pestaña Worlds y el papel de level-name.
+
+### Administrar el servidor
+
+- [Cómo cambiar la versión o el software de tu servidor](https://vhost.tech/blog/cambiar-version-software-servidor/): los catorce softwares de la pestaña Versions y cómo cambiar sin perder el mundo.
+- [Cómo configurar server.properties desde el panel](https://vhost.tech/blog/editar-server-properties-panel/): el formulario de la pestaña Properties y los ajustes que mueven el rendimiento.
+- [El gestor de archivos del panel](https://vhost.tech/blog/gestor-archivos-panel-plugins-mods/): subir archivos, editar configuraciones y qué hace ahora cada pestaña.
+- [Copias de seguridad en el panel](https://vhost.tech/blog/copias-seguridad-backups-panel/): crear, bloquear y restaurar backups.
+- [Tareas programadas: reinicios automáticos y backups](https://vhost.tech/blog/tareas-programadas-reinicios-automaticos/): cron en modo fácil, avisos previos y encadenado de acciones.
+- [Cómo conectarte por SFTP con FileZilla o WinSCP](https://vhost.tech/blog/conectar-sftp-filezilla-winscp/): dónde están los datos, qué puerto usar y por qué fallan la mayoría de intentos.
+- [Dale un nombre a tu servidor: subdominio o dominio propio](https://vhost.tech/blog/subdominio-dominio-propio-servidor/): subdominio .vhost.tech gratis y los registros A y SRV para tu dominio.
+- [Cómo subir los TPS y quitar el lag](https://vhost.tech/blog/subir-tps-quitar-lag-servidor-minecraft/): medir con spark y los ajustes que más rendimiento recuperan.
 
 ## Soporte y empresa
 

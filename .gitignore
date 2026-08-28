@@ -64,3 +64,6 @@ ds-bundle/
 # ajustes personales, no.
 .impeccable/hook.cache.json
 .impeccable/config.local.json
+
+# Salida de Playwright MCP (capturas y logs de depuracion)
+.playwright-mcp/

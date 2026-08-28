@@ -130,13 +130,19 @@ abre el panel: llegas antes.
 ## Entrar sin escribir la contraseña
 
 Si te conectas a diario, añade una **clave SSH**. En el panel, entra en
-**Account** y abre la pestaña **SSH Key**:
+**Account**, abre la pestaña **SSH Keys** y pulsa **Create SSH Key**:
 
-![Sección SSH Key de la página Account, con los campos SSH Key Name y Public Key y el botón save](../../images/blog/panel/sftp-clave-ssh.webp)
+![Ventana Create SSH Key con el campo SSH Key Name relleno y la clave pública pegada en el campo Public Key](../../images/blog/panel/sftp-clave-ssh.webp)
 
 Ponle un nombre que reconozcas —normalmente el del ordenador desde el que te
-conectas—, pega tu **clave pública** en el campo grande y guarda. A partir de
-ahí el cliente autentica con la clave y te olvidas de escribir la contraseña.
+conectas— y pega tu **clave pública** en el campo grande. Si la tienes en un
+archivo, el botón **Upload key file** te la carga sin abrirlo.
+
+Guarda y listo: a partir de ahí el cliente autentica con la clave y te olvidas
+de escribir la contraseña.
+
+Ojo con lo que pegas: aquí va la clave **pública**, la que termina en `.pub`.
+La privada no sale nunca de tu ordenador.
 
 ## Antes de tocar archivos grandes
 
