@@ -35,10 +35,6 @@ const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-      defer
-    ></script>
     <!-- Umami Analytics -->
     <script
       defer
@@ -71,9 +67,15 @@ const fullTitle = /vhost/i.test(title) ? title : `${title} | Vhost`;
       href="/favicon/apple-touch-icon.png"
     />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+    {/* Font Awesome con SRI: si el CDN sirviera otros bytes, el navegador
+        descarta la hoja en vez de aplicarla. La URL lleva versión fija, así que
+        el contenido es inmutable y el hash no caduca. */}
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
+      integrity="sha384-5e2ESR8Ycmos6g3gAKr1Jvwye8sW4U1u/cAKulfVJnkakCcMqhOudbtPnvJ+nbv7"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

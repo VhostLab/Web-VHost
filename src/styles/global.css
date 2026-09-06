@@ -278,7 +278,3 @@ html {
   50% { opacity: 0.7; }
 }
 
-/* Alpine.js: oculta elementos hasta que Alpine inicializa (evita FOUC) */
-[x-cloak] {
-  display: none !important;
-}

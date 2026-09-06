@@ -9,12 +9,17 @@ interface Props {
 }
 
 const { name, image, link } = Astro.props;
-const target = link.startsWith("http") ? "_blank" : "_self";
+const esExterno = link.startsWith("http");
+const target = esExterno ? "_blank" : "_self";
+// Solo tiene sentido en los que abren pestaña nueva; en los internos, Astro
+// omite el atributo al recibir undefined.
+const rel = esExterno ? "noopener noreferrer" : undefined;
 ---
 
 <a
     href={link}
     target={target}
+    rel={rel}
     class="group flex flex-col w-full bg-[#111111] rounded-2xl overflow-hidden border border-white/10 transition-colors duration-200 hover:bg-[#1b1e25] hover:border-white/20"
 >
     {/* --- IMAGEN ALARGADA --- */}
