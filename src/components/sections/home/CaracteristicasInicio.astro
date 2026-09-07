@@ -3,7 +3,7 @@ export interface Caracteristica {
   icon: string;
   title: string;
   description: string;
-  color: string;
+  proof: string;
 }
 
 const caracteristicas: Caracteristica[] = [
@@ -12,42 +12,42 @@ const caracteristicas: Caracteristica[] = [
     title: "Hardware Empresarial",
     description:
       "Rendimiento fluido garantizado con hardware profesional de última generación.",
-    color: "#F59E0B",
+    proof: "NVMe + CPUs de alto rendimiento",
   },
   {
     icon: "fas fa-coins",
     title: "Económico",
     description:
       "Precios asequibles y transparentes adaptados para cualquier tipo de presupuesto.",
-    color: "#10B981",
+    proof: "Desde 0,75 €/mes",
   },
   {
     icon: "fas fa-headset",
-    title: "Soporte Gratuito",
+    title: "Soporte 24/7",
     description:
       "Asistencia técnica inmediata y experta ante cualquier incidencia disponible 24/7.",
-    color: "#60A5FA",
+    proof: "En español, por Discord y tickets",
   },
   {
     icon: "fas fa-globe",
     title: "Baja Latencia",
     description:
       "Red global de servidores con conexiones optimizadas para máxima velocidad.",
-    color: "#8B5CF6",
+    proof: "Nodos en Logroño y Barcelona",
   },
   {
     icon: "fas fa-bolt",
     title: "Activación Instantánea",
     description:
       "Tu servidor desplegado y listo para usar segundos después de confirmar el pago.",
-    color: "#F97316",
+    proof: "Online en segundos, sin esperas",
   },
   {
     icon: "fas fa-shield-alt",
     title: "Protección DDoS",
     description:
       "Blindaje perimetral automático ante ataques malintencionados sin coste añadido.",
-    color: "#F43F5E",
+    proof: "Incluida en todos los planes",
   },
 ];
 ---
@@ -55,62 +55,58 @@ const caracteristicas: Caracteristica[] = [
 <section class="py-20 md:py-24 bg-primary">
   <div class="container mx-auto px-4 sm:px-6">
     <h2
-      class="text-3xl sm:text-4xl md:text-5xl font-poppins font-bold text-white text-center mb-8"
+      class="text-3xl sm:text-4xl md:text-5xl font-poppins font-bold text-white text-center mb-4"
     >
       ¿Por qué elegirnos?
     </h2>
-    <div class="border-t-2 border-secondary w-24 mx-auto mb-12"></div>
+    <div class="border-t-2 border-secondary w-24 mx-auto mb-4"></div>
+    <p class="text-slate-400 text-center max-w-2xl mx-auto mb-12 md:mb-16">
+      Seis razones que incluiremos en tu servidor de forma predeterminada, sin
+      costes ocultos ni sorpresas.
+    </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
       {
-        caracteristicas.map((item) => (
+        caracteristicas.map((item, index) => (
           <div
-            class="feature-card group flex flex-col sm:flex-row items-start p-8 rounded-2xl bg-white/5 border border-white/10 transition-all duration-300 hover:border-[var(--feature-color)]/40"
-            style={`--feature-color: ${item.color};`}
+            class="feature-card group relative flex flex-col p-7 rounded-2xl bg-white/5 border border-white/10 transition-[border-color,transform,box-shadow] duration-150 ease-out hover:border-secondary/50 hover:-translate-y-1 hover:bg-white/[0.07]"
           >
-            {/* Icono con efecto aura/glow */}
-            <div class="flex-shrink-0 mb-4 sm:mb-0 sm:mr-6">
-              <div class="icon-wrapper w-14 h-14 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                <i class={`${item.icon} text-2xl`} />
-              </div>
+            {/* Número de serie: facilita el escaneo y ancla el orden de lectura */}
+            <span
+              class="absolute top-5 right-6 text-sm font-semibold text-white/15 font-poppins select-none"
+              aria-hidden="true"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
+
+            {/* Icono con acento unificado de marca */}
+            <div class="icon-wrapper w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-transform duration-150 ease-out group-hover:scale-110">
+              <i class={`${item.icon} text-lg text-secondary`} />
             </div>
 
-            {/* Texto */}
-            <div>
-              <h3 class="feature-title text-xl font-bold text-white mb-3 transition-colors duration-300">
-                {item.title}
-              </h3>
-              <p class="text-slate-400 leading-relaxed text-[15px]">
-                {item.description}
-              </p>
-            </div>
+            <h3 class="text-lg font-bold text-white mb-2 transition-colors duration-150 group-hover:text-secondary">
+              {item.title}
+            </h3>
+            <p class="text-slate-400 leading-relaxed text-[15px] mb-4">
+              {item.description}
+            </p>
+
+            {/* Prueba concreta: ancla numérica o dato verificable */}
+            <p class="mt-auto pt-3 border-t border-white/10 text-[13px] font-medium text-slate-300">
+              <i class="fas fa-check text-secondary mr-2 text-xs" />
+              {item.proof}
+            </p>
           </div>
         ))
       }
     </div>
+
   </div>
 </section>
 
 <style>
-  .feature-card {
-    --feature-color: #f59e0b;
-  }
-
   .icon-wrapper {
-    background-color: color-mix(in srgb, var(--feature-color) 15%, transparent);
-    border: 1px solid color-mix(in srgb, var(--feature-color) 30%, transparent);
-    color: var(--feature-color);
-    box-shadow: 
-      /* Lado izquierdo */
-      -12px 0 20px -10px
-        color-mix(in srgb, var(--feature-color) 25%, transparent),
-      /* Lado derecho */ 12px 0 20px -10px
-        color-mix(in srgb, var(--feature-color) 25%, transparent),
-      /* Abajo - más intenso */ 0 15px 25px -10px
-        color-mix(in srgb, var(--feature-color) 35%, transparent);
-  }
-
-  .group:hover .feature-title {
-    color: var(--feature-color);
+    background-color: rgba(252, 124, 4, 0.12);
+    border: 1px solid rgba(252, 124, 4, 0.25);
   }
 </style>
