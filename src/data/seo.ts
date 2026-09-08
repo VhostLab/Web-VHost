@@ -8,7 +8,7 @@ export const SITE = {
   url: "https://vhost.tech",
   email: "vhostts3@gmail.com",
   logo: "https://vhost.tech/favicon/web-app-manifest-512x512.png",
-  sameAs: ["https://discord.gg/Ykr85wevrj", "https://x.com/VhostTS3"],
+  sameAs: ["https://discord.gg/Ykr85wevrj", "https://x.com/VhostTech"],
 } as const;
 
 /** URL absoluta con trailing slash, coherente con canonical y sitemap */
