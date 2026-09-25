@@ -1,6 +1,26 @@
 // @ts-check
+import { readdirSync, readFileSync } from 'node:fs';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+
+/**
+ * Fecha de última revisión de cada guía, por slug (el nombre del archivo, que
+ * es el post.id con el que se genera /blog/<slug>/). Alimenta el <lastmod> del
+ * sitemap, que Bing usa para decidir qué volver a rastrear.
+ *
+ * ponytail: solo llevan lastmod las URLs con fecha real. Poner la del build en
+ * las páginas estáticas le diría a Bing que todo cambia en cada deploy.
+ */
+const fechasBlog = Object.fromEntries(
+  readdirSync('./src/content/blog')
+    .filter((archivo) => archivo.endsWith('.md'))
+    .map((archivo) => [
+      archivo.slice(0, -3),
+      readFileSync(`./src/content/blog/${archivo}`, 'utf8').match(/^updatedDate:\s*["']?([\d-]+)/m)?.[1],
+    ])
+    .filter(([, fecha]) => fecha),
+);
+const ultimaFechaBlog = Object.values(fechasBlog).sort().pop();
 
 /**
  * Envuelve cada <table> del markdown en un contenedor con scroll horizontal.
@@ -62,6 +82,13 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !page.includes('/404/'),
+      serialize(item) {
+        const ruta = new URL(item.url).pathname;
+        const slug = ruta.match(/^\/blog\/([^/]+)\/$/)?.[1];
+        const fecha = ruta === '/blog/' ? ultimaFechaBlog : slug && fechasBlog[slug];
+        if (fecha) item.lastmod = fecha;
+        return item;
+      },
     }),
   ],
 
