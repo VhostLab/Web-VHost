@@ -58,6 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Historial completo: el paso de IndexNow compara este push con el
+      # anterior para saber que paginas han cambiado.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       # Usamos el webhook manual de Coolify, no su API. La API filtra por IP
       # (Settings -> API -> Allowed IPs) y las de los runners de GitHub no
       # estan en la lista, asi que devolvia 403. El endpoint de webhook no
@@ -119,4 +125,61 @@ jobs:
             2*) echo "despliegue encolado en Coolify" ;;
             401|403) echo "::error::Coolify rechaza la firma ($codigo). Revisa COOLIFY_WEBHOOK_SECRET contra el secreto del webhook de GitHub en Coolify."; exit 1 ;;
             *)   echo "::error::Coolify respondio $codigo."; exit 1 ;;
+          esac
+
+      # IndexNow: le dice a Bing (y a Yandex, Seznam...) que URLs han cambiado
+      # para que las rastree ya, sin esperar a leer el sitemap. La clave vive en
+      # public/indexnow.txt; es publica por diseno, solo demuestra que el host
+      # es nuestro. Si esto falla la web ya esta desplegada, asi que no rompe
+      # el job.
+      - name: Avisar a Bing (IndexNow)
+        continue-on-error: true
+        env:
+          ANTES: ${{ github.event.before }}
+        run: |
+          # ponytail: solo se avisan los posts y las paginas tocadas. Un cambio
+          # en componentes o en src/data no se avisa; Bing lo recoge por el
+          # sitemap en su siguiente pasada.
+          rutas=$(git diff --name-only "$ANTES" "$GITHUB_SHA" -- src/content/blog src/pages \
+            | { grep -vE '\[|/404\.astro$|/api/' || true; } \
+            | sed -nE \
+                -e 's#^src/content/blog/(.+)\.md$#/blog/\1/#p' \
+                -e 's#^src/pages/(.*)index\.astro$#/\1#p' \
+                -e 's#^src/pages/(.+)\.astro$#/\1/#p')
+          if printf '%s\n' "$rutas" | grep -q '^/blog/.'; then
+            rutas=$(printf '%s\n/blog/' "$rutas")
+          fi
+          rutas=$(printf '%s\n' "$rutas" | sed '/^$/d' | sort -u)
+
+          if [ -z "$rutas" ]; then
+            echo "ningun post ni pagina cambiado: nada que avisar"
+            exit 0
+          fi
+          echo "URLs a avisar:"; echo "$rutas"
+
+          # ponytail: el webhook de Coolify solo encola el despliegue, asi que
+          # esperamos a que la version nueva este en vivo con un margen fijo.
+          # Si el build tardase mas, Bing leeria la version anterior y la
+          # corregiria en su siguiente pasada. Si Coolify llega a exponer el
+          # SHA desplegado, cambiar esto por un sondeo de ese SHA.
+          sleep 180
+
+          clave=$(tr -d '[:space:]' < public/indexnow.txt)
+          payload=$(printf '%s\n' "$rutas" | jq -Rnc --arg clave "$clave" '{
+            host: "vhost.tech",
+            key: $clave,
+            keyLocation: "https://vhost.tech/indexnow.txt",
+            urlList: [inputs | "https://vhost.tech" + .]
+          }')
+
+          codigo=$(curl --silent --show-error --output respuesta.txt \
+            --write-out '%{http_code}' \
+            --request POST https://api.indexnow.org/indexnow \
+            --header 'Content-Type: application/json; charset=utf-8' \
+            --data "$payload")
+
+          echo "HTTP $codigo"
+          case "$codigo" in
+            200|202) echo "IndexNow aceptado" ;;
+            *) echo "::warning::IndexNow respondio $codigo: $(head -c 300 respuesta.txt)" ;;
           esac
